@@ -5,5 +5,8 @@ npm_debug.log*
 # environment configuration files:
 .env
 
-#logs
+# logs
 app.log
+
+# migrations
+database.json
