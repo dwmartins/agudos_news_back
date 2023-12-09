@@ -3,6 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const logger = require("../config/logger");
 const path = require("path");
+require("../config/dbConnection");
 
 createServer = () => {
     const app = express();
