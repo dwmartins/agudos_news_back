@@ -8,7 +8,8 @@
     "start": "nodemon index.js",
     "create-tables": "node ./config/createTables.js",
     "create-migration": "db-migrate create",
-    "start-migration": "db-migrate up"
+    "start-migration": "db-migrate up",
+    "revert-migration": "db-migrate down"
   },
   "author": "Douglas Wellington Martins",
   "license": "ISC",
