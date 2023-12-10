@@ -41,6 +41,20 @@ class User {
         return await db.CustomQuery('users', action, this.field, this.values);
     }
 
+    fetchUserToken = async (id) => {
+        try {
+            let sql = `SELECT token FROM users WHERE id = ?`;
+
+            const value = [
+                id
+            ]
+            return await db.pool.query(sql, value);
+        } catch (error) {
+            logger.log(`error`, `Erro ao buscar o token do usuário: ${error}`);
+            return {error: error};
+        }
+    }
+
     existingEmail = async (email, id) => {
         try {
             let sql = `SELECT email FROM users WHERE email = ?`;
@@ -54,7 +68,7 @@ class User {
             return result[0];
         } catch (error) {
             logger.log(`error`, `Erro ao verificar se o e-mail é existente: ${error}`);
-            return {error: error}
+            return {error: error};
         }
     }
 }
