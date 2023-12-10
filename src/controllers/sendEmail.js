@@ -17,14 +17,15 @@ class sendEmail {
         });
     };
 
-    newPassword = (to, code) => {
+    newPassword = (to, password, userName) => {
         fs.readFile('src/formatEmail/newPassword.html', 'utf8', (err, data) => {
             if (err) {
                 logger.log(`error`, `Erro ao ler o aquivo 'newPassword.html': ${err}`);
                 return;
             }
     
-            const modifiedEmail = data.replace('$code', code);
+            const modifiedEmail = data.replace('$password', password)
+                                        .replace('$userName', userName)
         
             const subject = "Alteração de Senha";
     
