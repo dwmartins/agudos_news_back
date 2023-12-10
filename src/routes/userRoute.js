@@ -5,6 +5,7 @@ const userType = require("../middleware/user_type");
 const userToken = require("../middleware/user_token");
 
 route.post('/novo', userCtrl.new);
+route.post("/login", userCtrl.login);
 
 // Rotas que precisa de autenticação
 route.put("/atualiza/:id", userToken.authenticateToken, userCtrl.update);

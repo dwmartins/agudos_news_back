@@ -27,7 +27,7 @@ class Helper {
         try {
             return await bcrypt.hash(password, 10);
         } catch (error) {
-            logger.log('error', error);
+            // logger.log('error', error);
             return false;
         }
     }
@@ -36,7 +36,7 @@ class Helper {
         try {
             return await bcrypt.compare(req_password, hash);
         } catch (error) {
-            logger.log('error', error);
+            // logger.log('error', error);
             return {erro: error, msg: `Erro ao comparar a senha.`};
         }
     }

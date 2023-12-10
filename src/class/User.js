@@ -48,7 +48,8 @@ class User {
             const value = [
                 id
             ]
-            return await db.pool.query(sql, value);
+            const data = await db.pool.query(sql, value);
+            return data[0][0];
         } catch (error) {
             logger.log(`error`, `Erro ao buscar o token do usuário: ${error}`);
             return {error: error};
@@ -60,9 +61,23 @@ class User {
             let sql = `SELECT email FROM users WHERE email = ?`;
 
             if(id) {
-                sql += `AND id != ?`;
+                sql += ` AND id != ?`;
             }
             const value = [email, id]
+
+            const result = await db.pool.query(sql, value);
+            return result[0];
+        } catch (error) {
+            logger.log(`error`, `Erro ao verificar se o e-mail é existente: ${error}`);
+            return {error: error};
+        }
+    }
+
+    searchUserByEmail = async (email) => {
+        try {
+            let sql = `SELECT * FROM users WHERE email = ?`;
+
+            const value = [email];
 
             const result = await db.pool.query(sql, value);
             return result[0];

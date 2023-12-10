@@ -3,6 +3,36 @@ const user = require("../class/User");
 const helper = require("../utilities/helper");
 
 class UserCtrl {
+
+    login = async (req, res) => {
+        const { email, password } = req.body;
+
+        const userData = await user.searchUserByEmail(email);
+        
+        if(userData.error) {
+            sendResponse(res, 500, {erro: `Houve um erro ao realizar o login.`});
+        }
+
+        if(userData.length) {
+            const password_hash = await helper.comparePasswordHash(password, userData[0].password);
+
+            if(password_hash && !password.error) {
+                const payload  = { email: userData[0].email };
+                const token = jwt.sign(payload, userData[0].token);
+                delete userData[0].token;
+                delete userData[0].password; 
+
+                const response = {success: true, token: token, user: userData[0]};
+                const user_ip = req.ip.replace('::ffff:', '');
+
+                this.sendResponse(res, 200, response);
+            } else {
+                this.sendResponse(res, 200, {alert: `Usuário ou senha inválidos.`});
+            }
+        } else {
+            this.sendResponse(res, 200, {alert: `Usuário ou senha inválidos.`});
+        }
+    }
     
     new = async (req, res) => {
         const {name, lastName, email, password, photo} = req.body;
