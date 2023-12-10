@@ -12,10 +12,7 @@ class DBConnection {
     checkConnection = async () => {
         try {
             await this.pool.query('SELECT 1+1');
-            console.log("Database connection established successfully.");
-
-            // const configTables = require("./configTables");
-            // configTables.createAll();
+            console.log("Conexão com o banco de dados estabelecida com sucesso.");
         } catch (error) {
             this.getErrorConnection(error.code);
         }
@@ -24,22 +21,22 @@ class DBConnection {
     getErrorConnection = (error) => {
         switch (error) {
             case 'ER_BAD_DB_ERROR':
-                logger.log('error', `'${config.db.database}' database not found`);
+                logger.log('error', `O banco de dados '${config.db.database}' não foi encontrado.`);
                 break;
 
             case 'ER_ACCESS_DENIED_ERROR':
-                logger.log('error', `Incorrect credentials to connect to the database.`);
+                logger.log('error', `Credenciais incorretas para conexão com o banco de dados.`);
                 break;
 
             case 'ER_CONN_REFUSED':
-                logger.log('error', `MySQL server is not running or porting is not available.`);
+                logger.log('error', `O servidor MySQL não está em execução ou a portabilidade não está disponível.`);
                 break;
 
             case 'ER_UNKNOWN_ERROR':
-                logger.log('error',  `There was an unexpected error on the MySQL server.`);
+                logger.log('error',  `Ocorreu um erro inesperado no servidor MySQL.`);
                 break;
             default:
-                logger.log('error',  `There was an unexpected error on the MySQL server.`);
+                logger.log('error',  `Ocorreu um erro inesperado no servidor MySQL.`);
                 break;
         }
     }
@@ -49,23 +46,25 @@ class DBConnection {
             let sql = `INSERT INTO ${table} (`;
 
             for (let i = 0; i < field.length; i++) {
-                let += `${field[i]},`;
+                sql += `${field[i]},`;
             }
 
+            sql = sql.slice(0, -1);
             sql += `) VALUES (`;
 
             for (let i = 0; i < values.length; i++) {
                 sql += `?,`;
             }
 
+            sql = sql.slice(0, -1);
             sql += `);`
 
             try {
-                await this.pool.query(sql, values);
-                return true;
+                const data = await this.pool.query(sql, values);
+                return data;
             } catch (error) {
-                logger.log(`error`, `Erro ao inserir os dados na tabela ${table}`);
-                return false;
+                logger.log(`error`, `Erro ao inserir os dados na tabela (${table}) ${error}`);
+                return {error: error};
             }
         }
     }

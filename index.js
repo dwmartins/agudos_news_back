@@ -4,12 +4,12 @@ const port = process.env.SERVER_PORT;
 
 try {
     if(!port || !process.env) {
-        logger.log(`error`, `The .env file does not exist or a port for the server was not taken.`);
+        logger.log(`error`, `O arquivo .env não existe ou uma porta para o servidor não foi utilizada.`);
     } else {
         app.listen(port, () => {
-            console.log(`Server running on port: ${port}`);
+            console.log(`Servidor em execução na porta: ${port}`);
         });
     }
 } catch (error) {
-    logger.log(`Error during server startup: ${error}`);
+    logger.log(`Erro durante inicialização do servidor: ${error}`);
 }

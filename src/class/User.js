@@ -1,10 +1,12 @@
-const Connection = require("../../config/dbConnection");
+const db = require("../../config/dbConnection");
 
-class User extends Connection{
+class User {
 
     id;
+    createdAt;
+    updateAt;
 
-    constructor(name, lastName, email, password, token, active, user_type, photo_url, createdAt, updateAt) {
+    constructor(name, lastName, email, password, token, active, user_type, photo_url) {
 
         this.name = name;
         this.lastName = lastName;
@@ -14,8 +16,6 @@ class User extends Connection{
         this.active = active;
         this.user_type = user_type;
         this.photo_url = photo_url;
-        this.createdAt = createdAt;
-        this.updateAt = updateAt;
     }
 
     // Métodos Getters
@@ -94,11 +94,13 @@ class User extends Connection{
     }
 
     async save() {
-        field = [name, lastName, email, password, token, active, user_type, photo_url];
-        values = [this.name, this.lastName, this.email, this.password, this.token, this.active, this.photo_url];
+        const field = ["name", "lastName", "email", "password", "token", "active", "user_type", "photo_url"];
+        const values = [this.name, this.lastName, this.email, this.password, this.token, this.active, this.user_type, this.photo_url];
 
-        if(await super.query('users', 'insere', field, values)) {
-            return true;
+        const data = await db.query('users', 'insere', field, values);
+
+        if(data && !data.error) {
+            return data;
         } else {
             return false;
         }
