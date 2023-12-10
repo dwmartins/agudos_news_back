@@ -41,8 +41,8 @@ class DBConnection {
         }
     }
 
-    query = async (table, action, field, values) => {
-        if(action == "insere") {
+    CustomQuery = async (table, action, field, values) => {
+        if(action === "insert") {
             let sql = `INSERT INTO ${table} (`;
 
             for (let i = 0; i < field.length; i++) {
@@ -57,13 +57,39 @@ class DBConnection {
             }
 
             sql = sql.slice(0, -1);
-            sql += `);`
+            sql += `);`;
 
             try {
-                const data = await this.pool.query(sql, values);
-                return data;
+                await this.pool.query(sql, values);
+                return true;
             } catch (error) {
-                logger.log(`error`, `Erro ao inserir os dados na tabela (${table}) ${error}`);
+                logger.log(`error`, `Erro ao inserir os dados na tabela (${table}): ${error}`);
+                return {error: error};
+            }
+        } else if(action === "update" || action === "disable") {
+            let sql = `UPDATE ${table} SET `;
+
+            for (let i = 0; i < field.length; i++) {
+                sql += `${field[i]} = ?,`
+            }
+
+            sql = sql.slice(0, -1);
+            sql += ` WHERE id = ?;`;
+
+            try {
+                return await this.pool.query(sql, values);
+            } catch (error) {
+                logger.log(`error`, `Erro ao atualizar os dados na tabela (${table}): ${error}`);
+                return {error: error};
+            }
+
+        } else if(action === "delete") {
+            let sql = `DELETE FROM ${table} WHERE id = ?`;
+
+            try {
+                return await this.pool.query(sql, values);
+            } catch (error) {
+                logger.log(`error`, `Erro ao excluir os dados na tabela (${table}): ${error}`);
                 return {error: error};
             }
         }

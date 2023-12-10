@@ -1,110 +1,62 @@
 const db = require("../../config/dbConnection");
+const logger = require("../../config/logger");
 
+//Table "users";
 class User {
 
     id;
+    name;
+    lastName;
+    email;
+    password;
+    token;
+    active;
+    user_type;
+    photo_url;
     createdAt;
     updateAt;
 
-    constructor(name, lastName, email, password, token, active, user_type, photo_url) {
+    field;
+    values;
 
-        this.name = name;
-        this.lastName = lastName;
-        this.email = email;
-        this.password = password;
-        this.token = token;
-        this.active = active;
-        this.user_type = user_type;
-        this.photo_url = photo_url;
+    save = async (user, action) => {
+
+        if(action === "insert") {
+            this.field = ["name", "lastName", "email", "password", "token", "user_type", "photo_url"];
+            this.values = [user.name, user.lastName, user.email, user.password, user.token, user.user_type, user.photo_url];
+
+        } else if(action === "update"){
+            this.field = ["name", "lastName", "email", "password", "user_type", "photo_url"];
+            this.values = [user.name, user.lastName, user.email, user.password, user.user_type, user.photo_url, user.user_id];
+
+        } else if(action === "delete") {
+            this.field = ["id"];
+            this.values = [user.id];
+
+        } else if(action === "disable") {
+            this.field = ["active"];
+            this.values = [user.action , user.id];
+        }
+
+        return await db.CustomQuery('users', action, this.field, this.values);
     }
 
-    // Métodos Getters
-    getId() {
-        return this.id;
-    } 
+    existingEmail = async (email, id) => {
+        try {
+            let sql = `SELECT email FROM users WHERE email = ?`;
 
-    getName() {
-        return this.name;
-    }
+            if(id) {
+                sql += `AND id != ?`;
+            }
+            const value = [email, id]
 
-    getLastName() {
-        return this.lastName;
-    }
-
-    getEmail() {
-        return this.email;
-    }
-
-    getPassword() {
-        return this.password;
-    }
-
-    getToken() {
-        return this.token;
-    }
-
-    getActive() {
-        return this.active;
-    }
-
-    getUserType() {
-        return this.user_type;
-    }
-
-    getPhoto() {
-        return this.photo_url;
-    }
-
-    getCreatedAt() {
-        return this.createdAt;
-    }
-
-    getUpdateAt() {
-        return this.updateAt;
-    }
-
-    // Métodos Setters
-
-    setName(name) {
-        this.name = name;
-    }
-
-    setLastName(lastName) {
-        this.lastName = lastName;
-    }
-
-    setEmail(email) {
-        this.email = email;
-    }
-
-    setPassword(password) {
-        this.password = password;
-    }
-
-    setToken(token) {
-        this.token = token;
-    }
-
-    setActive(active) {
-        this.active = active;
-    }
-
-    setPhoto(photo) {
-        this.photo_url = photo;
-    }
-
-    async save() {
-        const field = ["name", "lastName", "email", "password", "token", "active", "user_type", "photo_url"];
-        const values = [this.name, this.lastName, this.email, this.password, this.token, this.active, this.user_type, this.photo_url];
-
-        const data = await db.query('users', 'insere', field, values);
-
-        if(data && !data.error) {
-            return data;
-        } else {
-            return false;
+            const result = await db.pool.query(sql, value);
+            return result[0];
+        } catch (error) {
+            logger.log(`error`, `Erro ao verificar se o e-mail é existente: ${error}`);
+            return {error: error}
         }
     }
 }
 
-module.exports = User;
+module.exports = new User;

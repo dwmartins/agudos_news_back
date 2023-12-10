@@ -27,7 +27,7 @@ class Helper {
         try {
             return await bcrypt.hash(password, 10);
         } catch (error) {
-            // logger.log('error', error);
+            logger.log('error', error);
             return false;
         }
     }
