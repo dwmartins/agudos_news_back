@@ -86,6 +86,18 @@ class User {
             return {error: error};
         }
     }
+
+    access = async (id, email, ip) => {
+        try {
+            let sql = `INSERT INTO user_acesso (user_id, email, ip) VALUES (?, ?, ?)`;
+            const values = [id, email, ip];
+
+            await db.pool.query(sql, values);
+        } catch (error) {
+            logger.log(`error`, `Erro ao Salvar o acesso do usuário: ${error}`);
+            return {error: error};
+        }
+    }
 }
 
 module.exports = new User;

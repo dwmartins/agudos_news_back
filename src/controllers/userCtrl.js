@@ -24,6 +24,7 @@ class UserCtrl {
 
                 const response = {success: true, token: token, user: userData[0]};
                 const user_ip = req.ip.replace('::ffff:', '');
+                await user.access(userData[0].id, userData[0].email, user_ip);
 
                 this.sendResponse(res, 200, response);
             } else {
