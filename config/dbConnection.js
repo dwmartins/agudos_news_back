@@ -43,6 +43,31 @@ class DBConnection {
                 break;
         }
     }
+
+    query = async (table, action, field, values) => {
+        if(action == "insere") {
+            let sql = `INSERT INTO ${table} (`;
+
+            for (let i = 0; i < field.length; i++) {
+                let += `${field[i]},`;
+            }
+
+            sql += `) VALUES (`;
+
+            for (let i = 0; i < values.length; i++) {
+                sql += `?,`;
+            }
+
+            sql += `);`
+
+            try {
+                await this.pool.query(sql, values);
+            } catch (error) {
+                logger.log(`error`, `Erro ao inserir os dados na tabela ${table}`);
+                return false;
+            }
+        }
+    }
 }
 
 module.exports = new DBConnection();
