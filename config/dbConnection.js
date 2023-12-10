@@ -62,6 +62,7 @@ class DBConnection {
 
             try {
                 await this.pool.query(sql, values);
+                return true;
             } catch (error) {
                 logger.log(`error`, `Erro ao inserir os dados na tabela ${table}`);
                 return false;

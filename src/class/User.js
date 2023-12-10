@@ -97,7 +97,11 @@ class User extends Connection{
         field = [name, lastName, email, password, token, active, user_type, photo_url];
         values = [this.name, this.lastName, this.email, this.password, this.token, this.active, this.photo_url];
 
-        await super.query('users', 'insere', field, values);
+        if(await super.query('users', 'insere', field, values)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 
