@@ -1,7 +1,7 @@
 {
-  "name": "o_guia_back",
+  "name": "agudos_news",
   "version": "1.0.0",
-  "description": "Back end do site Agudos o guia",
+  "description": "Back end do site Agudos News",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -22,6 +22,7 @@
     "fs": "^0.0.1-security",
     "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.6.5",
+    "nodemailer": "^6.9.7",
     "path": "^0.12.7",
     "winston": "^3.11.0"
   },

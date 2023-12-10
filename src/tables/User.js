@@ -15,6 +15,7 @@ class NewTableUser {
                     password VARCHAR(255) NOT NULL,
                     token TEXT NOT NULL,
                     active ENUM('Y', 'N') DEFAULT 'Y',
+                    user_type VARCHAR(50) NOT NULL,
                     photo_url VARCHAR(255),
                     createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
                     updateAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP);`
@@ -33,7 +34,7 @@ class NewTableUser {
                     email VARCHAR(100) NOT NULL,
                     ip VARCHAR(255) NOT NULL,
                     createdAt DATETIME  DEFAULT CURRENT_TIMESTAMP,
-                    FOREIGN KEY (user_id) REFERENCES users(id)
+                    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
                 );`
             );
         } catch (error) {
