@@ -71,6 +71,16 @@ class UserCtrl {
         }
     }
 
+    list = async (req, res) => {
+        const users = await user.listUser();
+
+        if(users.error) {
+            return this.sendResponse(res, 500, {erro: `Houve um erro ao buscar os usuários.`}); 
+        }
+        
+        this.sendResponse(res, 200, users);
+    }
+
     update = async (req, res) => {
         const {name, lastName, email, password, photo, user_type} = req.body;
         const user_id = req.params.id;

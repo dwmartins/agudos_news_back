@@ -13,5 +13,6 @@ route.delete("/deleta/:id", UserMiddleware.authenticateToken, userCtrl.delete);
 
 // Rotas de admin
 route.put("/admin/desabilita", UserMiddleware.checkUserType, userCtrl.disabled);
+route.get("/admin/users", userCtrl.list);
 
 module.exports = route;

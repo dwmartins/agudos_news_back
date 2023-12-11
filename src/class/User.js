@@ -41,6 +41,19 @@ class User {
         return await db.CustomQuery('users', action, this.field, this.values);
     }
 
+    listUser = async () => {
+        try {
+            let sql = `SELECT * FROM users WHERE active = ?`;
+            const value = ["Y"];
+
+            const users = await db.pool.query(sql, value);
+            return users[0];
+        } catch (error) {
+            logger.log(`error`, `Erro ao buscar os usuário: ${error}`);
+            return {error: error};
+        }
+    }
+
     fetchUserToken = async (id) => {
         try {
             let sql = `SELECT token FROM users WHERE id = ?`;
