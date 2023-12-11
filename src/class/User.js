@@ -98,6 +98,19 @@ class User {
             return {error: error};
         }
     }
+
+    updatePassword = async (id, password) => {
+        try {
+            let sql = `UPDATE users SET password = ? WHERE id = ?`;
+            const values = [password, id];
+
+            await db.pool.query(sql, values);
+            return true;
+        } catch (error) {
+            logger.log(`error`, `Erro ao Salvar a nova senha do usuário: ${error}`);
+            return {error: error};
+        }
+    }
 }
 
 module.exports = new User;

@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const user = require("../class/User");
 const helper = require("../utilities/helper");
+const sendEmail = require("./sendEmail");
 
 class UserCtrl {
 
@@ -16,7 +17,7 @@ class UserCtrl {
         if(userData.length) {
             const password_hash = await helper.comparePasswordHash(password, userData[0].password);
 
-            if(password_hash && !password.error) {
+            if(password_hash && !password_hash.error) {
                 const payload  = { email: userData[0].email };
                 const token = jwt.sign(payload, userData[0].token);
                 delete userData[0].token;
@@ -60,6 +61,7 @@ class UserCtrl {
             const userData = user.save(userValues, "insert");
 
             if(userData && !userData.error) {
+                await sendEmail.welcome(email, name);
                 return this.sendResponse(res, 200, {success: `Usuário criado com sucesso.`});
             } {
                 return this.sendResponse(res, 500, {erro: `Houve um erro ao criar sua conta.`});
@@ -122,6 +124,35 @@ class UserCtrl {
             return this.sendResponse(res, 200, {success: `Usuário deletado com sucesso.`});
         } else {
             return this.sendResponse(res, 500, {erro: `Houve um erro ao deletar sua conta.`});
+        }
+    }
+
+    sendNewPassword = async (req, res) => {
+        const {email} = req.body;
+        const userData = await user.searchUserByEmail(email);
+
+        if(userData.error) {
+           return this.sendNewPassword(res, 500, {error: `Houve um erro, tente novamente.`})
+        }
+
+        if(userData.length) {
+            const password = helper.generateAlphanumericCode(6);
+            const encodedPassword = await helper.encodePassword(password);
+
+            
+            const userPassword = user.updatePassword(userData[0].id, encodedPassword);
+            
+            if(userPassword.error) {
+                return this.sendResponse(res, 500, {error: `Houve um erro, tente novamente.`}) 
+            }
+
+            sendEmail.newPassword(userData[0].email, password, userData[0].name);
+            const response = `Foi envido uma nova senha temporária em seu e-mail.`;
+            
+            this.sendResponse(res, 200, {success: response});
+            
+        } else {
+            this.sendResponse(res, 200, {success: `E-mail invalido, tente novamente.`});
         }
     }
 

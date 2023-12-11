@@ -29,7 +29,9 @@ class sendEmail {
         
             const subject = "Alteração de Senha";
     
-            sendEmail.sendEmail(to, subject, modifiedEmail);
+            nodemailer.sendEmail(to, subject, modifiedEmail);
         }) 
     };
 }
+
+module.exports = new sendEmail;

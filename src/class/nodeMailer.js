@@ -4,7 +4,7 @@ require('dotenv').config();
 
 class NodeMailer {
     constructor() {
-        this.transporter = nodemailer.createTransport({
+        this.transporter = nodeMailer.createTransport({
             host: 'smtp.gmail.com',
             service: 'gmail',
             auth: {
@@ -16,7 +16,7 @@ class NodeMailer {
 
     sendEmail(to, subject, text) {
         const mailOptions = {
-            from: `Agudos o Guia <${process.env.EMAIL}>`,
+            from: `Agudos News <${process.env.EMAIL}>`,
             to: to,
             subject: subject,
             html: text

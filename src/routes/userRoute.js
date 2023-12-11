@@ -5,6 +5,7 @@ const UserMiddleware = require("../middleware/user");
 
 route.post('/novo', userCtrl.new);
 route.post("/login", userCtrl.login);
+route.post("/nova-senha", userCtrl.sendNewPassword);
 
 // Rotas que precisa de autenticação
 route.put("/atualiza/:id", UserMiddleware.authenticateToken, userCtrl.update);
