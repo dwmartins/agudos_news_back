@@ -31,7 +31,7 @@ class UserMiddleware {
     }
 
     checkUserType = (req, res, next) => {
-        const { user_type } = req.query;
+        const { user_type } = req.headers;
     
         if(user_type === 'admin') {
             next();
