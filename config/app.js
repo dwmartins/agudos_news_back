@@ -6,6 +6,7 @@ const path = require("path");
 require("../config/dbConnection");
 
 const userRoutes = require("../src/routes/userRoute");
+const listingRoute = require("../src/routes/listingRoute");
 
 createServer = () => {
     const app = express();
@@ -15,6 +16,7 @@ createServer = () => {
 
     // Routes
     app.use('/usuario', userRoutes);
+    app.use('/listing', listingRoute);
 
     app.get('/', (req, res) => {
         res.status(200).sendFile(path.resolve('index.html'));

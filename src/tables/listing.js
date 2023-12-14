@@ -17,18 +17,36 @@ class NewTableListing {
                     url VARCHAR(255),
                     phone VARCHAR(20),
                     address VARCHAR(255),
+                    number VARCHAR(50),
+                    city VARCHAR(100),
                     complement VARCHAR(255),
                     zipCode VARCHAR(20),
-                    Country VARCHAR(50),
+                    country VARCHAR(50),
+                    status VARCHAR(50),
                     facebook VARCHAR(255),
                     instagram VARCHAR(255),
                     twitter VARCHAR(255),
                     linkedIn VARCHAR(255),
-                    openingHours LONGTEXT NOT NULL
+                    openingHours LONGTEXT NOT NULL,
+                    promotionalCode VARCHAR(50),
+                    payment VARCHAR(50),
+                    image LONGTEXT,
+                    logoImage LONGTEXT,
+                    coverImage LONGTEXT,
+                    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
                 );
             `);
         } catch (error) {
-            
+            logger.log(`error`, `Erro ao criar a tabela (listing): ${error}`);
         }
     }
+
+    // Criar as tabelas em ordem para não houver erro de chaves estrangeras por não existir as tabelas;
+    createAll = async () => {
+        console.log(`${helper.getDateTime()} - Criando tabela de (listing)...`)
+        await this.listing();
+    }
 }
+
+module.exports = new NewTableListing;
