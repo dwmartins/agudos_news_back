@@ -5,7 +5,7 @@ class ListingCtrl {
         const listingBody = req.body;
 
         const listing = new Listing(listingBody);
-        const result = await listing.insert();
+        const result = await listing.save();
 
         if(result.error) {
             return this.sendResponse(res, 500, {error: 'Houve um erro ao criar o anuncio.'});

@@ -6,7 +6,7 @@ const path = require("path");
 require("../config/dbConnection");
 
 const userRoutes = require("../src/routes/userRoute");
-const listingRoute = require("../src/routes/listingRoute");
+const listingRoute = require("../src/routes/listing/listingRoute");
 
 createServer = () => {
     const app = express();
