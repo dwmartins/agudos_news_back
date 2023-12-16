@@ -1,36 +1,10 @@
-const db = require("../../config/dbConnection");
-const logger = require("../../config/logger");
 const listingDAO = require("../models/listingDAO");
 
 class Listing {
-    id;
-    name;
-    category;
-    summary;
-    description;
-    keywords;
-    email;
-    url;
-    phone;
-    address;
-    number;
-    complement;
-    city;
-    zipCode;
-    status; // Pendente, ativo, finalizado
-    facebook;
-    instagram;
-    twitter;
-    linkedIn;
-    openingHours;
-    promotionalCode;
-    payment; // fatura, cartão credito
-    image; // 1024px x 768px (JPG, GIF or PNG) max 5MB
-    logoImage; // 250 x 250 px (JPG, GIF or PNG) max 5MB
-    coverImage; // 1920 x 480 px (JPG, GIF or PNG) max 5MB
 
     constructor(listing){
         this.id                 = listing.id;
+        this.user_id            = listing.user_id
         this.name               = listing.name;
         this.category           = listing.category;
         this.summary            = listing.summary;
@@ -46,6 +20,7 @@ class Listing {
         this.zipCode            = listing.zipCode;
         this.country            = listing.country
         this.status             = listing.status;
+        this.fromEntries        = listing.notes;
         this.facebook           = listing.facebook;
         this.instagram          = listing.instagram;
         this.twitter            = listing.twitter;
@@ -58,6 +33,18 @@ class Listing {
         this.coverImage         = listing.coverImage;
         this.createdAt          = listing.createdAt;
         this.updatedAt          = listing.updatedAt;
+    }
+
+    getId = () => {
+        return this.id;
+    }
+
+    getUserId = () => {
+        return this.user_id;
+    }
+
+    setUserId = (user_id) => {
+        this.user_id = user_id;
     }
 
     getName = () => {
@@ -174,6 +161,10 @@ class Listing {
         this.zipCode = zipCode;
     }
 
+    /**
+     * // Pendente, ativo, finalizado
+     * @returns String
+     */
     getStatus = () => {
         return this.status;
     }
@@ -238,6 +229,10 @@ class Listing {
         this.payment = payment;
     }
 
+    /**
+     * 1024px x 768px (JPG, GIF or PNG) max 5MB
+     * @returns String/ image URL
+     */
     getImage = () => {
         return this.image;
     }
@@ -246,6 +241,10 @@ class Listing {
         this.image = image;
     }
 
+    /**
+     * // 250 x 250 px (JPG, GIF or PNG) max 5MB
+     * @returns String/ image URL
+     */
     getLogoImage = () => {
         return this.logoImage;
     }
@@ -254,6 +253,10 @@ class Listing {
         this.logoImage = logoImage;
     }
 
+    /**
+     * // 1920 x 480 px (JPG, GIF or PNG) max 5MB
+     * @returns  String/ image URL
+     */
     getCoverImage = () => {
         return this.coverImage;
     }
@@ -262,7 +265,7 @@ class Listing {
         this.coverImage = coverImage;
     }
 
-    insert = async () => {
+    save = async () => {
 
         let plainObject = Object.fromEntries(
             Object.entries(this).filter(([key, value]) => typeof value !== 'function')
@@ -272,7 +275,23 @@ class Listing {
         delete plainObject.updatedAt;
         delete plainObject.id;
 
-        return await listingDAO.insert(plainObject);
+        return await listingDAO.saveDAO(plainObject);
+    }
+
+
+    update = async () => {
+        let plainObject = Object.fromEntries(
+            Object.entries(this).filter(([key, value]) => typeof value !== 'function')
+        );
+
+        delete plainObject.createdAt;
+        delete plainObject.updatedAt;
+
+        return await listingDAO.updateDAO(plainObject);
+    }
+
+    delete = async () => {
+        return await listingDAO.deleteDAO(this.getId);
     }
 }
 
