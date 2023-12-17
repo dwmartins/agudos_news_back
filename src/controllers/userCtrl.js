@@ -69,7 +69,7 @@ class UserCtrl {
     }
 
     list = async (req, res) => {
-        const users = await user.listUser();
+        const users = await userDAO.findAll();
 
         if(users.error) {
             return this.sendResponse(res, 500, {erro: `Houve um erro ao buscar os usuários.`}); 

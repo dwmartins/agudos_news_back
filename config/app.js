@@ -5,7 +5,7 @@ const logger = require("../config/logger");
 const path = require("path");
 require("../config/dbConnection");
 
-const userRoutes = require("../src/routes/userRoute");
+const userRoutes = require("../src/routes/users/userRoute");
 const listingRoute = require("../src/routes/listing/listingRoute");
 const categoryRoute = require("../src/routes/listing/categoryRoute");
 
