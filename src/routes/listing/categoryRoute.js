@@ -3,10 +3,11 @@ const route = express.Router();
 const categoryCtrl = require("../../controllers/categoryListingCtrl");
 const userMiddleware = require("../../middleware/user");
 
-route.post("/categoria/nova", categoryCtrl.new);
+route.post("/", categoryCtrl.new);
+route.get("/", categoryCtrl.list);
 
 // Apenas admin
-route.post("/categoria/atualiza", userMiddleware.checkUserType, categoryCtrl.updateCategory);
-route.post("/categoria/deleta", userMiddleware.checkUserType, categoryCtrl.deleteCategory);
+route.put("/", userMiddleware.checkUserType, categoryCtrl.updateCategory);
+route.delete("/:id", userMiddleware.checkUserType, categoryCtrl.deleteCategory);
 
 module.exports = route;

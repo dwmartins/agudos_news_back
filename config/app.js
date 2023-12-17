@@ -7,6 +7,7 @@ require("../config/dbConnection");
 
 const userRoutes = require("../src/routes/userRoute");
 const listingRoute = require("../src/routes/listing/listingRoute");
+const categoryRoute = require("../src/routes/listing/categoryRoute");
 
 createServer = () => {
     const app = express();
@@ -16,7 +17,8 @@ createServer = () => {
 
     // Routes
     app.use('/usuario', userRoutes);
-    app.use('/listing', listingRoute);
+    app.use('/anuncios', listingRoute);
+    app.use('/anuncios/categorias', categoryRoute);
 
     app.get('/', (req, res) => {
         res.status(200).sendFile(path.resolve('index.html'));

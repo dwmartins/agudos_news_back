@@ -32,16 +32,53 @@ class ListingCategoryDAO {
         }
     }
 
-    deleteDAO = async (category) => {
+    deleteDAO = async (id) => {
         try {
-            const sql = `DELETE INTO listing_category WHERE id = ?`;
-            const value = [category.id];
+            const sql = `DELETE FROM listing_category WHERE id = ?`;
+            const value = [id];
 
             await this.conn.query(sql, value);
             return true;
         } catch (error) {
             logger.log(`error`, `Houve um erro ao delete a categoria: ${error}`);
             return {error: error}   
+        }
+    }
+
+    findAll = async () => {
+        try {
+            const sql = `SELECT * FROM listing_category`;
+            const result = await this.conn.query(sql);
+            return result[0];
+        } catch (error) {
+            logger.log(`error`, `Houve um erro ao buscar as categorias: ${error}`);
+            return {error: error}   
+        }
+    }
+
+    findById = async (id) => {
+        try {
+            const sql = `SELECT * FROM listing_category WHERE id = ?`;
+            const value = [id];
+
+            const result = await this.conn.query(sql, value);
+            return result[0];
+        } catch (error) {
+            logger.log(`error`, `Houve um erro ao buscar as categorias por ID: ${error}`);
+            return {error: error}
+        }
+    }
+
+    findByName = async (cat_name) => {
+        try {
+            const sql = `SELECT cat_name FROM listing_category WHERE cat_name = ?`;
+            const value = [cat_name];
+
+            const result = await this.conn.query(sql, value);
+            return result[0];
+        } catch (error) {
+            logger.log(`error`, `Houve um erro ao buscar as categorias pelo campo cat_name: ${error}`);
+            return {error: error}
         }
     }
 }

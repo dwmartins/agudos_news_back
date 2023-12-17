@@ -29,15 +29,11 @@ class ListingCategory {
     }
 
     save = async () => {
-        return await categoryDAO.saveDAO(this.getCategoryName);
+        return await categoryDAO.saveDAO(this.getCategoryName());
     }
 
     update = async () => {
         return await categoryDAO.updateDAO(this);
-    }
-
-    delete = async () => {
-        return await categoryDAO.deleteDAO(this);
     }
 }
 
