@@ -119,15 +119,20 @@ class UserCtrl {
     }
 
     disabled = async (req, res) => {
-        let action = req.query.action === "N" ? "desabilitado" : "habilitado";
+        const { id, action } = req.query;
 
-        const userData = await user.save(req.query, "disable");
-        
-        if(userData && !userData.error) {
-            return this.sendResponse(res, 200, {success: `Usuário ${action} com sucesso.`});
-        } else {
-            return this.sendResponse(res, 500, {erro: `Houve um erro ao mudar o status do usuário.`});
+        let userAction = action === "N" ? "desabilitado" : "habilitado";
+        const userId = await userDAO.findById(id);
+
+        const user = new User(userId[0]);
+        user.setActive(action);
+        const result = await user.update();
+
+        if(result && !result.error) {
+            return this.sendResponse(res, 200, {success: `Usuário ${userAction} com sucesso.`});
         }
+        
+        return this.sendResponse(res, 500, {erro: `Houve um erro ao mudar o status do usuário.`});
     }
 
     sendNewPassword = async (req, res) => {
