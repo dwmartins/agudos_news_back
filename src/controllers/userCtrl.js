@@ -9,32 +9,29 @@ class UserCtrl {
     login = async (req, res) => {
         const { email, password } = req.body;
 
-        const userData = await user.searchUserByEmail(email);
-        
-        if(userData.error) {
-            sendResponse(res, 500, {erro: `Houve um erro ao realizar o login.`});
-        }
+        const userData = await userDAO.findByEmail(email);
 
-        if(userData.length) {
-            const password_hash = await helper.comparePasswordHash(password, userData[0].password);
+        if(userData.length && !userData.error) {
+            const user = new User(userData[0]);
+            const password_hash = await helper.comparePasswordHash(password, user.password); 
 
             if(password_hash && !password_hash.error) {
-                const payload  = { email: userData[0].email };
-                const token = jwt.sign(payload, userData[0].token);
-                delete userData[0].token;
-                delete userData[0].password; 
+                const payload  = { email: user.getEmail() };
+                const token = jwt.sign(payload, user.getToken());
+                delete user.token;
+                delete user.password;
 
-                const response = {success: true, token: token, user: userData[0]};
-                const user_ip = req.ip.replace('::ffff:', '');
-                await user.access(userData[0].id, userData[0].email, user_ip);
-
-                this.sendResponse(res, 200, response);
+                const response = {success: true, token: token, user: user};
+                return this.sendResponse(res, 200, response);
             } else {
-                this.sendResponse(res, 200, {alert: `Usuário ou senha inválidos.`});
+                return this.sendResponse(res, 200, {alert: `Usuário ou senha inválidos.`});
             }
-        } else {
-            this.sendResponse(res, 200, {alert: `Usuário ou senha inválidos.`});
+
+        } else if(!userData.length && !userData.error) {
+            return this.sendResponse(res, 200, {alert: `Usuário ou senha inválidos.`});
         }
+
+        return this.sendResponse(res, 500, {erro: `Houve um erro ao realizar o login.`});
     }
     
     new = async (req, res) => {
