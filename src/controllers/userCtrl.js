@@ -136,32 +136,26 @@ class UserCtrl {
     }
 
     sendNewPassword = async (req, res) => {
-        const {email} = req.body;
-        const userData = await user.searchUserByEmail(email);
+        const { email } = req.body;
+        const userData = await userDAO.findByEmail(email);
 
-        if(userData.error) {
-           return this.sendNewPassword(res, 500, {error: `Houve um erro, tente novamente.`})
-        }
-
-        if(userData.length) {
+        if(userData.length && !userData.error) {
             const password = helper.generateAlphanumericCode(6);
             const encodedPassword = await helper.encodePassword(password);
 
-            
-            const userPassword = user.updatePassword(userData[0].id, encodedPassword);
-            
-            if(userPassword.error) {
-                return this.sendResponse(res, 500, {error: `Houve um erro, tente novamente.`}) 
-            }
+            const user = new User(userData[0]);
+            user.setPassword(encodedPassword);
+            const result = await user.update();
 
-            sendEmail.newPassword(userData[0].email, password, userData[0].name);
-            const response = `Foi envido uma nova senha temporária em seu e-mail.`;
-            
-            this.sendResponse(res, 200, {success: response});
-            
-        } else {
-            this.sendResponse(res, 200, {success: `E-mail invalido, tente novamente.`});
+            await sendEmail.newPassword(user.getEmail(), password, user.getName());
+
+            if(result && !result.error) {
+                const response = `Foi envido uma nova senha temporária em seu e-mail.`;
+                return this.sendResponse(res, 200, {success: response});
+            }
         }
+
+        return this.sendNewPassword(res, 500, {error: `Houve um erro, tente novamente ou entre em contato com o suporte.`});
     }
 
     sendResponse = (res, statusCode, msg) => {
