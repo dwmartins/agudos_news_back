@@ -40,7 +40,7 @@ class ListingDAO {
 
     deleteDAO = async (id) => { 
         try {
-            const sql = `DELETE INTO listing WHERE id = ?`;
+            const sql = `DELETE FROM listing WHERE id = ?`;
             const value = [id];
 
             await this.conn.query(sql, value);

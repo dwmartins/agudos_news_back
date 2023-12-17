@@ -18,7 +18,7 @@ class NewTableUser {
                     user_type VARCHAR(50) NOT NULL,
                     photo_url VARCHAR(255),
                     createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-                    updateAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP);`
+                    updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP);`
                 );
         } catch (error) {
             logger.log(`error`, `Erro ao criar a tabela (users): ${error}`);

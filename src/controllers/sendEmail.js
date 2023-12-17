@@ -11,7 +11,7 @@ class sendEmail {
             }
 
             const modifiedEmail = data.replace('$userName', name);
-            const subject = "Bem vindo ao Agudos o guia";
+            const subject = "Bem vindo ao noticias Agudos";
 
             nodemailer.sendEmail(to, subject, modifiedEmail);
         });

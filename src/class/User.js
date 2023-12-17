@@ -1,129 +1,118 @@
-const db = require("../../config/dbConnection");
-const logger = require("../../config/logger");
+const userDAO = require("../models/userDAO");
 
 //Table "users";
 class User {
+    constructor(user) {
+        this.id         = user.id;
+        this.name       = user.name;
+        this.lastName   = user.lastName;
+        this.email      = user.email;
+        this.password   = user.password;
+        this.token      = user.token;
+        this.active     = user.active;
+        this.user_type  = user.user_type;
+        this.photo_url  = user.photo_url;
+        this.createdAt  = user.createdAt;
+        this.updatedAt   = user.updatedAt;
+    }
 
-    id;
-    name;
-    lastName;
-    email;
-    password;
-    token;
-    active;
-    user_type;
-    photo_url;
-    createdAt;
-    updateAt;
+    getId = () => {
+        return this.id;
+    }
 
-    field;
-    values;
+    getName = () => {
+        return this.name;
+    }
+
+    setName = (name) => {
+        this.name = name;
+    }
+
+    getLastName = () => {
+        return this.lastName;
+    }
+
+    setLastName = (lastName) => {
+        this.lastName = lastName;
+    }
+
+    getEmail = () => {
+        return this.email;
+    }
+
+    setEmail = (email) => {
+        this.email = email;
+    }
+
+    getPassword = () => {
+        return this.password;
+    }
+
+    setPassword = (password) => {
+        this.password = password;
+    }
+
+    getToken = () => {
+        return this.token;
+    }
+
+    setToken = (token) => {
+        this.token = token;
+    }
+
+    getActive = () => {
+        return this.active;
+    }
+
+    setActive = (active) => {
+        this.active = active;
+    }
+
+    getUserType = () => {
+        return this.user_type;
+    }
+
+    setUserType = (user_type) => {
+        this.user_type = user_type;
+    }
+
+    getPhoto_url = () => {
+        return this.photo_url;
+    }
+
+    setPhoto_url = (photo_url) => {
+        this.photo_url = photo_url;
+    }
+
+    getCreatedAt = () => {
+        return this.createdAt
+    }
+
+    getUpdateAt = () => {
+        return this.updatedAt;
+    }
 
     save = async (user, action) => {
+        let plainObject = Object.fromEntries(
+            Object.entries(this).filter(([key, value]) => typeof value !== 'function')
+        );
 
-        if(action === "insert") {
-            this.field = ["name", "lastName", "email", "password", "token", "user_type", "photo_url"];
-            this.values = [user.name, user.lastName, user.email, user.password, user.token, user.user_type, user.photo_url];
-
-        } else if(action === "update"){
-            this.field = ["name", "lastName", "email", "password", "user_type", "photo_url"];
-            this.values = [user.name, user.lastName, user.email, user.password, user.user_type, user.photo_url, user.user_id];
-
-        } else if(action === "delete") {
-            this.field = ["id"];
-            this.values = [user.id];
-
-        } else if(action === "disable") {
-            this.field = ["active"];
-            this.values = [user.action , user.id];
-        }
-
-        return await db.CustomQuery('users', action, this.field, this.values);
+        delete plainObject.createdAt;
+        delete plainObject.updatedAt;
+        
+        return await userDAO.saveDAO(plainObject);
     }
 
-    listUser = async () => {
-        try {
-            let sql = `SELECT * FROM users WHERE active = ?`;
-            const value = ["Y"];
+    update = async () => {
+        let plainObject = Object.fromEntries(
+            Object.entries(this).filter(([key, value]) => typeof value !== 'function')
+        );
 
-            const users = await db.pool.query(sql, value);
-            return users[0];
-        } catch (error) {
-            logger.log(`error`, `Erro ao buscar os usuário: ${error}`);
-            return {error: error};
-        }
-    }
+        delete plainObject.createdAt;
+        delete plainObject.updatedAt;
 
-    fetchUserToken = async (id) => {
-        try {
-            let sql = `SELECT token FROM users WHERE id = ?`;
-
-            const value = [
-                id
-            ]
-            const data = await db.pool.query(sql, value);
-            return data[0][0];
-        } catch (error) {
-            logger.log(`error`, `Erro ao buscar o token do usuário: ${error}`);
-            return {error: error};
-        }
-    }
-
-    existingEmail = async (email, id) => {
-        try {
-            let sql = `SELECT email FROM users WHERE email = ?`;
-
-            if(id) {
-                sql += ` AND id != ?`;
-            }
-            const value = [email, id]
-
-            const result = await db.pool.query(sql, value);
-            return result[0];
-        } catch (error) {
-            logger.log(`error`, `Erro ao verificar se o e-mail é existente: ${error}`);
-            return {error: error};
-        }
-    }
-
-    searchUserByEmail = async (email) => {
-        try {
-            let sql = `SELECT * FROM users WHERE email = ?`;
-
-            const value = [email];
-
-            const result = await db.pool.query(sql, value);
-            return result[0];
-        } catch (error) {
-            logger.log(`error`, `Erro ao verificar se o e-mail é existente: ${error}`);
-            return {error: error};
-        }
-    }
-
-    access = async (id, email, ip) => {
-        try {
-            let sql = `INSERT INTO user_acesso (user_id, email, ip) VALUES (?, ?, ?)`;
-            const values = [id, email, ip];
-
-            await db.pool.query(sql, values);
-        } catch (error) {
-            logger.log(`error`, `Erro ao Salvar o acesso do usuário: ${error}`);
-            return {error: error};
-        }
-    }
-
-    updatePassword = async (id, password) => {
-        try {
-            let sql = `UPDATE users SET password = ? WHERE id = ?`;
-            const values = [password, id];
-
-            await db.pool.query(sql, values);
-            return true;
-        } catch (error) {
-            logger.log(`error`, `Erro ao Salvar a nova senha do usuário: ${error}`);
-            return {error: error};
-        }
+        return await userDAO.updateDAO(plainObject);
     }
 }
 
-module.exports = new User;
+module.exports = User;

@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
-const user = require("../class/User");
+const User = require("../class/User");
+const userDAO = require("../models/userDAO");
 const helper = require("../utilities/helper");
 const sendEmail = require("./sendEmail");
 
@@ -37,38 +38,34 @@ class UserCtrl {
     }
     
     new = async (req, res) => {
-        const {name, lastName, email, password, photo} = req.body;
-        const thereEmail = await user.existingEmail(email); 
-        const token = helper.newCrypto();
+        const userBody = req.body;
+        const newUser = new User(userBody);
 
-        if(thereEmail.error) {
-           return this.sendResponse(res, 500, {erro: `Houve um erro ao criar sua conta.`})
+        const emailExists = await userDAO.findByEmail(newUser.getEmail());
+
+        if(emailExists.error) {
+            return this.sendResponse(res, 500, {erro: `Houve um erro ao criar o usuário.`});
         }
 
-        if(!thereEmail.length) {
-            const encodedPassword = await helper.encodePassword(password);
+        if(!emailExists.length) {
+            const encodedPassword = await helper.encodePassword(newUser.getPassword());
+            const token = helper.newCrypto();
 
-            const userValues = {
-                name: name,
-                lastName: lastName,
-                email: email,
-                password: encodedPassword,
-                photo_url: photo,
-                token: token,
-                user_type: 'common'
-            };
+            newUser.setPassword(encodedPassword);
+            newUser.setToken(token);
+            newUser.setUserType("common");
+            newUser.setActive("Y");
+            const result = newUser.save();
 
-            const userData = user.save(userValues, "insert");
-
-            if(userData && !userData.error) {
-                await sendEmail.welcome(email, name);
-                return this.sendResponse(res, 200, {success: `Usuário criado com sucesso.`});
-            } {
-                return this.sendResponse(res, 500, {erro: `Houve um erro ao criar sua conta.`});
+            if(result && !result.error) {
+                await sendEmail.welcome(newUser.getEmail(), newUser.getName());
+                return this.sendResponse(res, 201, {success: 'Usuário criado com sucesso.'})
             }
-        } else {
-            return this.sendResponse(res, 409, {alert: `Este e-mail já está em uso.`});
+
+            return this.sendResponse(res, 500, {error: 'Houve um erro ao criar o usuário'});
         }
+
+        return this.sendResponse(res, 200, {alert: 'Este e-mail já está em uso.'});
     }
 
     list = async (req, res) => {

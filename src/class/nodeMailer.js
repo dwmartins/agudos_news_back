@@ -16,7 +16,7 @@ class NodeMailer {
 
     sendEmail(to, subject, text) {
         const mailOptions = {
-            from: `Agudos News <${process.env.EMAIL}>`,
+            from: `Noticias Agudos <${process.env.EMAIL}>`,
             to: to,
             subject: subject,
             html: text
