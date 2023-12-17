@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const User = require("../class/User");
+const UserAccess = require("../class/UserAccess");
 const userDAO = require("../models/userDAO");
 const helper = require("../utilities/helper");
 const sendEmail = require("./sendEmail");
@@ -22,6 +23,16 @@ class UserCtrl {
                 delete user.password;
 
                 const response = {success: true, token: token, user: user};
+
+                const userAccess = {
+                    user_id: user.getId(),
+                    email: user.getEmail(),
+                    ip: req.ip.replace('::ffff:', '')
+                }
+
+                const access = new UserAccess(userAccess);
+                await access.save();
+                
                 return this.sendResponse(res, 200, response);
             } else {
                 return this.sendResponse(res, 200, {alert: `Usuário ou senha inválidos.`});

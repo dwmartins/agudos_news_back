@@ -92,7 +92,7 @@ class User {
         return this.updatedAt;
     }
 
-    save = async (user, action) => {
+    save = async () => {
         let plainObject = Object.fromEntries(
             Object.entries(this).filter(([key, value]) => typeof value !== 'function')
         );
