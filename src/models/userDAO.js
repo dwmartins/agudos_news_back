@@ -24,7 +24,8 @@ class UserDAO {
 
     updateDAO = async (user) => {
         const userId = user.id;
-        const fields = Object.keys(user).join(' = ?, ');
+        delete user.id;
+        const fields = Object.keys(user).join(' = ?, ') + ' = ?';
         
         const sql = `UPDATE users SET ${fields} WHERE id = ?`;
         let values = [...Object.values(user), userId];

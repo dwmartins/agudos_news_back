@@ -68,6 +68,34 @@ class UserCtrl {
         return this.sendResponse(res, 200, {alert: 'Este e-mail já está em uso.'});
     }
 
+    updateUser = async (req, res) => {
+        const userBody = req.body;
+        const user = new User(userBody);
+
+        const emailExists = await userDAO.findByEmail(user.getEmail());
+
+        if(emailExists.error) {
+            return this.sendResponse(res, 500, {erro: `Houve um erro ao atualizar o usuário.`});
+        }
+
+        if(emailExists.length) {
+            if(emailExists[0].email != user.getEmail()) {
+                return this.sendResponse(res, 200, {alert: 'Este e-mail já está em uso.'});
+            }
+        }
+
+        const encodedPassword = await helper.encodePassword(user.getPassword());
+        user.setPassword(encodedPassword);
+
+        const result = await user.update();
+
+        if(result && !result.error) {
+            return this.sendResponse(res, 201, {success: 'Usuário atualizado com sucesso.'})
+        }
+
+        return this.sendResponse(res, 500, {erro: `Houve um erro ao atualizar o usuário.`});
+    }
+
     list = async (req, res) => {
         const users = await userDAO.findAll();
 
@@ -78,7 +106,7 @@ class UserCtrl {
         this.sendResponse(res, 200, users);
     }
 
-    update = async (req, res) => {
+    updates = async (req, res) => {
         const {name, lastName, email, password, photo, user_type} = req.body;
         const user_id = req.params.id;
         const thereEmail = await user.existingEmail(email, user_id);

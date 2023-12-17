@@ -8,7 +8,7 @@ route.post("/login", userCtrl.login);
 route.post("/nova-senha", userCtrl.sendNewPassword);
 
 // Rotas que precisa de autenticação
-route.put("/atualiza", UserMiddleware.authenticateToken, userCtrl.update);
+route.put("/atualiza", userCtrl.updateUser);
 route.delete("/deleta/:id", UserMiddleware.authenticateToken, userCtrl.delete);
 
 // Rotas de admin
