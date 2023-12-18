@@ -20,7 +20,7 @@ class Listing {
         this.zipCode            = listing.zipCode;
         this.country            = listing.country
         this.status             = listing.status;
-        this.fromEntries        = listing.notes;
+        this.observation        = listing.observation;
         this.facebook           = listing.facebook;
         this.instagram          = listing.instagram;
         this.twitter            = listing.twitter;
@@ -171,6 +171,14 @@ class Listing {
 
     setStatus = (status) => {
         this.status = status;
+    }
+
+    getObservation = () => {
+        return this.observation;
+    }
+
+    setObservation = (observation) => {
+        this.observation = observation;
     }
 
     getFacebook = () => {
