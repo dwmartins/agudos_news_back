@@ -12,7 +12,7 @@ route.put("/atualiza", UserMiddleware.authenticateToken, userCtrl.updateUser);
 route.delete("/deleta/:id", UserMiddleware.authenticateToken, userCtrl.deleteUser);
 
 // Rotas de admin
-route.put("/admin/desabilita", UserMiddleware.authenticateToken, UserMiddleware.checkUserType, userCtrl.disabled);
-route.get("/admin/users", UserMiddleware.authenticateToken, UserMiddleware.checkUserType, userCtrl.list);
+route.put("/admin/desabilita", UserMiddleware.authenticateToken, UserMiddleware.checkUserAdmin, userCtrl.disabled);
+route.get("/admin/users", UserMiddleware.authenticateToken, UserMiddleware.checkUserAdmin, userCtrl.list);
 
 module.exports = route;

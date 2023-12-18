@@ -7,7 +7,7 @@ route.post("/", categoryCtrl.new);
 route.get("/", categoryCtrl.list);
 
 // Apenas admin
-route.put("/", userMiddleware.checkUserType, categoryCtrl.updateCategory);
-route.delete("/:id", userMiddleware.checkUserType, categoryCtrl.deleteCategory);
+route.put("/", userMiddleware.checkUserAdmin, categoryCtrl.updateCategory);
+route.delete("/:id", userMiddleware.checkUserAdmin, categoryCtrl.deleteCategory);
 
 module.exports = route;
