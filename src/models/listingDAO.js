@@ -24,7 +24,8 @@ class ListingDAO {
 
     updateDAO = async (listing) => {
         const listingId = listing.id;
-        const fields = Object.keys(listing).join(' = ?, ');
+        delete listing.id;
+        const fields = Object.keys(listing).join(' = ?, ') + ' = ?';
         
         const sql = `UPDATE listing SET ${fields} WHERE id = ?`;
         let values = [...Object.values(listing), listingId];
@@ -61,6 +62,24 @@ class ListingDAO {
             return result[0];
         } catch (error) {
             logger.log(`error`, `Houve um erro buscar o anuncio por id: ${error}`);
+            return {error: error}
+        }
+    }
+
+    findAllByStatus = async (status) => {
+        let sql = `SELECT * FROM listing`;
+
+        if(status) {
+            sql += ` WHERE status = ?`;
+        }
+        
+        const value = [status];
+
+        try {
+            const result = await this.conn.query(sql, value);
+            return result[0];
+        } catch (error) {
+            logger.log(`error`, `Houve um erro buscar os anuncios: ${error}`);
             return {error: error}
         }
     }

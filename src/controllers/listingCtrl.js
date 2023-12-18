@@ -1,4 +1,5 @@
 const Listing = require("../class/Listing");
+const listingDAO = require("../models/listingDAO");
 
 class ListingCtrl {
     new = async (req, res) => {
@@ -11,7 +12,7 @@ class ListingCtrl {
             return this.sendResponse(res, 500, {error: 'Houve um erro ao criar o anuncio.'});
         }
 
-        return this.sendResponse(res, 200, {success: 'Anuncio inserido com sucesso.'});
+        return this.sendResponse(res, 200, {success: 'Anuncio criado com sucesso.'});
     }
 
     updateListing = async (req, res) => {
@@ -28,16 +29,26 @@ class ListingCtrl {
     }
 
     deleteListing = async (req, res) => {
-        const listingBody = req.body;
+        const { id } = req.params;
 
-        const listing = new Listing(listingBody);
-        const result = await listing.delete();
+        const result = await listingDAO.deleteDAO(id);
 
         if(result.error) {
             return this.sendResponse(res, 500, {error: 'Houve um erro ao delete o anuncio.'});
         }
 
         return this.sendResponse(res, 200, {success: 'Anuncio deletado com sucesso.'});
+    }
+
+    listListings = async (req, res) => {
+        const { status } = req.query;
+        const result = await listingDAO.findAllByStatus(status);
+
+        if(result.error) {
+            return this.sendResponse(res, 500, {error: 'Houve um erro ao buscar os anuncios.'});
+        }
+
+        return this.sendResponse(res, 200, result);        
     }
 
     sendResponse = (res, statusCode, msg) => {

@@ -162,7 +162,7 @@ class Listing {
     }
 
     /**
-     * // Pendente, ativo, finalizado
+     * // Pendente, Ativo, Finalizado
      * @returns String
      */
     getStatus = () => {
