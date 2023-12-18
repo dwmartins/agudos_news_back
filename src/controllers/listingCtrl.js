@@ -6,6 +6,7 @@ class ListingCtrl {
         const listingBody = req.body;
 
         const listing = new Listing(listingBody);
+        listing.setStatus("Pendente");
         const result = await listing.save();
 
         if(result.error) {
