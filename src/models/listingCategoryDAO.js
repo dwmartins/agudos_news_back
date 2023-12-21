@@ -6,9 +6,9 @@ class ListingCategoryDAO {
         this.conn = db.pool;
     }
 
-    saveDAO = async (name) => {
-        const sql = `INSERT INTO listing_category (cat_name) VALUES (?)`;
-        const value = [name];
+    saveDAO = async (name, icon) => {
+        const sql = `INSERT INTO listing_category (cat_name, icon) VALUES (?,?)`;
+        const value = [name, icon];
 
         try {
             await this.conn.query(sql, value);
@@ -20,8 +20,8 @@ class ListingCategoryDAO {
     }
 
     updateDAO = async (category) => {
-        const sql = `UPDATE listing_category SET cat_name = ? WHERE id = ?`;
-        const values = [category.cat_name, category.id];
+        const sql = `UPDATE listing_category SET cat_name = ?, icon = ? WHERE id = ?`;
+        const values = [category.cat_name, category.icon, category.id];
 
         try {
             await this.conn.query(sql, values);
@@ -45,10 +45,18 @@ class ListingCategoryDAO {
         }
     }
 
-    findAll = async () => {
+    findAll = async (limit) => {
+
+        let sql = `SELECT * FROM listing_category`;
+
+        if(limit) {
+            sql += ` LIMIT ?`;
+        }
+
+        const value = limit ? [parseInt(limit)] : [];
+
         try {
-            const sql = `SELECT * FROM listing_category`;
-            const result = await this.conn.query(sql);
+            const result = await this.conn.query(sql, value);
             return result[0];
         } catch (error) {
             logger.log(`error`, `Houve um erro ao buscar as categorias: ${error}`);

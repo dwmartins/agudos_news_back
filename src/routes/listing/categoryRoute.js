@@ -3,8 +3,8 @@ const route = express.Router();
 const categoryCtrl = require("../../controllers/categoryListingCtrl");
 const userMiddleware = require("../../middleware/user");
 
+route.get("/", categoryCtrl.list);
 route.post("/", userMiddleware.authenticateToken, categoryCtrl.new);
-route.get("/", userMiddleware.authenticateToken, categoryCtrl.list);
 
 // Apenas admin
 route.put("/", userMiddleware.checkUserAdmin, categoryCtrl.updateCategory);

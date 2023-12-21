@@ -3,8 +3,8 @@ const route = express.Router();
 const listingCtrl = require("../../controllers/listingCtrl");
 const userMiddleware = require("../../middleware/user");
 
+route.get("/", listingCtrl.listListings);
 route.post("/", userMiddleware.authenticateToken, listingCtrl.new);
-route.get("/", userMiddleware.authenticateToken, listingCtrl.listListings);
 route.put("/", userMiddleware.authenticateToken, listingCtrl.updateListing);
 
 // Apenas admin

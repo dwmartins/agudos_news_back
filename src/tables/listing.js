@@ -9,7 +9,8 @@ class NewTableListing {
             await db.pool.query(`
                 CREATE TABLE IF NOT EXISTS listing_category (
                     id INT AUTO_INCREMENT PRIMARY KEY,
-                    cat_name VARCHAR(50),
+                    cat_name VARCHAR(50) NOT NULL,
+                    icon VARCHAR(50) NOT NULL
                     createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
                     updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
                 );

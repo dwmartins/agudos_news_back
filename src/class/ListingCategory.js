@@ -4,6 +4,7 @@ class ListingCategory {
     constructor(category) {
         this.id       = category.id;
         this.cat_name = category.cat_name;
+        this.icon     = category.icon;
         this.createAt = category.createAt;
         this.updateAt = category.updateAt;
     }
@@ -19,6 +20,14 @@ class ListingCategory {
     setCategoryName = (name) => {
         this.cat_name = name;
     }
+
+    getIcon = () => {
+        return this.icon;
+    }
+
+    setIcon = (icon) => {
+        this.icon = icon;
+    }
     
     getCreatedAt = () => {
         return this.createAt;
@@ -29,7 +38,7 @@ class ListingCategory {
     }
 
     save = async () => {
-        return await categoryDAO.saveDAO(this.getCategoryName());
+        return await categoryDAO.saveDAO(this.getCategoryName(), this.getIcon());
     }
 
     update = async () => {

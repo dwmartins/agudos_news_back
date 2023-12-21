@@ -52,7 +52,8 @@ class ListingCategoryCtrl {
     }
 
     list = async (req, res) => {
-        const categories = await categoryDAO.findAll();
+        const { limit } = req.query;
+        const categories = await categoryDAO.findAll(limit);
 
         if(categories.error) {
             return this.sendResponse(res, 500, {error: 'Houve um erro ao buscar as categorias.'});
