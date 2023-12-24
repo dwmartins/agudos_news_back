@@ -162,6 +162,8 @@ class UserCtrl {
                 const response = `Foi envido uma nova senha temporária em seu e-mail.`;
                 return this.sendResponse(res, 200, {success: response});
             }
+        } else if(!userData.length && !userData.error){
+            return this.sendResponse(res, 200, {alert: 'E-mail não encontrado'});
         }
 
         return this.sendNewPassword(res, 500, {error: `Houve um erro, tente novamente ou entre em contato com o suporte.`});
