@@ -21,8 +21,9 @@ class UserCtrl {
                 const token = jwt.sign(payload, user.getToken());
                 delete user.token;
                 delete user.password;
+                user.token = token;
 
-                const response = {success: true, token: token, user: user};
+                const response = {success: true, user: user};
 
                 const userAccess = {
                     user_id: user.getId(),
