@@ -4,6 +4,8 @@ const UserAccess = require("../class/UserAccess");
 const userDAO = require("../models/userDAO");
 const helper = require("../utilities/helper");
 const sendEmail = require("./sendEmail");
+const googleUp = require('./googleUploadCtrl');
+const imageType = require('image-type');
 
 class UserCtrl {
 
@@ -64,7 +66,11 @@ class UserCtrl {
             newUser.setToken(token);
             newUser.setUserType("common");
             newUser.setActive("Y");
-            const result = newUser.save();
+
+            const imgUser = await this.setImgUser(newUser.getPhoto_url(), newUser.getEmail() )
+            newUser.setPhoto_url('http://drive.google.com/uc?export=view&id=' + imgUser);
+
+            const result = await newUser.save();
 
             if(result && !result.error) {
                 await sendEmail.welcome(newUser.getEmail(), newUser.getName());
@@ -167,6 +173,14 @@ class UserCtrl {
         }
 
         return this.sendNewPassword(res, 500, {error: `Houve um erro, tente novamente ou entre em contato com o suporte.`});
+    }
+
+    setImgUser = async (file, nameFile) => {
+        const img64 = file.replace(/^data:image\/jpeg;base64,/, '');
+        const decodedImage = Buffer.from(img64, 'base64');
+
+        const userImg = await googleUp.uploadFile(nameFile +'_photo_perfil.jpg', 'jpg', decodedImage);
+        return userImg;
     }
 
     sendResponse = (res, statusCode, msg) => {
