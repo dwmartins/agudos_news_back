@@ -136,18 +136,18 @@ class UserCtrl {
     disabled = async (req, res) => {
         const { id, action } = req.query;
 
-        let userAction = action === "N" ? "desabilitado" : "habilitado";
-        const userId = await userDAO.findById(id);
+        try {
+            let userAction = action === "N" ? "desabilitado" : "habilitado";
+            const userId = await userDAO.findById(id);
 
-        const user = new User(userId[0]);
-        user.setActive(action);
-        const result = await user.update();
+            const user = new User(userId[0]);
+            user.setActive(action);
+            await user.update();
 
-        if(result && !result.error) {
             return this.sendResponse(res, 200, {success: `Usuário ${userAction} com sucesso.`});
+        } catch (error) {
+            return this.sendResponse(res, 500, {erro: `Houve um erro ao mudar o status do usuário.`});
         }
-        
-        return this.sendResponse(res, 500, {erro: `Houve um erro ao mudar o status do usuário.`});
     }
 
     sendNewPassword = async (req, res) => {
@@ -173,6 +173,18 @@ class UserCtrl {
         }
 
         return this.sendNewPassword(res, 500, {error: `Houve um erro, tente novamente ou entre em contato com o suporte.`});
+    }
+
+    getUser = async (req, res) => {
+        const { id } = req.params;
+
+        try {
+            const user = await userDAO.findById(id);
+            this.sendResponse(res, 200, user[0]);
+        } catch (error) {
+            return this.sendResponse(res, 500, {erro: `Houve um erro ao buscar o usuário.`});
+        }
+        
     }
 
     setImgUser = async (file, nameFile) => {

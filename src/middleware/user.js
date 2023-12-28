@@ -25,7 +25,7 @@ class UserMiddleware {
         }
 
         if(userData.error) {
-            return res.status(401).json({error: "Houve um erro, tente novamente."});   
+            return res.status(500).json({error: "Houve um erro, tente novamente."});   
         }
     }
 

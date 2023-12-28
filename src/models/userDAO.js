@@ -72,7 +72,7 @@ class UserDAO {
             return result[0];
         } catch (error) {
             logger.log(`error`, `Houve um erro ao buscar os usuários por ID: ${error}`);
-            return {error: error}
+            throw new Error('Houve um erro ao buscar o usuário por ID');
         }
     }
 
