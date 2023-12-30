@@ -25,8 +25,6 @@ class UserCtrl {
                 delete user.password;
                 user.token = token;
 
-                const response = {success: true, user: user};
-
                 const userAccess = {
                     user_id: user.getId(),
                     email: user.getEmail(),
@@ -36,7 +34,7 @@ class UserCtrl {
                 const access = new UserAccess(userAccess);
                 await access.save();
                 
-                return this.sendResponse(res, 200, response);
+                return this.sendResponse(res, 200, user);
             } else {
                 return this.sendResponse(res, 200, {alert: `Usuário ou senha inválidos.`});
             }
