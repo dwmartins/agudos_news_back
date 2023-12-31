@@ -65,8 +65,10 @@ class UserCtrl {
             newUser.setUserType("common");
             newUser.setActive("Y");
 
-            const imgUser = await this.setImgUser(newUser.getPhoto_url(), newUser.getEmail() )
-            newUser.setPhoto_url('http://drive.google.com/uc?export=view&id=' + imgUser);
+            if(newUser.getPhoto_url()) {
+                const imgUser = await this.setImgUser(newUser.getPhoto_url(), newUser.getEmail() )
+                newUser.setPhoto_url('http://drive.google.com/uc?export=view&id=' + imgUser);
+            }
 
             const result = await newUser.save();
 
