@@ -46,10 +46,11 @@ class ListingCategoryDAO {
     }
 
     findAll = async (limit) => {
+        const limitValue = parseInt(limit, 10);
 
         let sql = `SELECT * FROM listing_category`;
 
-        if(limit) {
+        if(limitValue) {
             sql += ` LIMIT ?`;
         }
 
