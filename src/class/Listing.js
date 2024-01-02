@@ -95,8 +95,6 @@ class Listing {
         this.email = email;
     }
 
-    // ... (seu código anterior)
-
     getEmail = () => {
         return this.email;
     }
