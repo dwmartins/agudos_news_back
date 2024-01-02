@@ -5,6 +5,7 @@ class Carousel {
         this.id             = carousel.id;
         this.user_id        = carousel.user_id;
         this.description    = carousel.description;
+        this.status         = carousel.status;
         this.image          = carousel.image;
         this.createdAt      = carousel.createdAt;
         this.updatedAt      = carousel.updatedAt;
@@ -28,6 +29,14 @@ class Carousel {
 
     setDescription = (description) => {
         this.description = description;
+    }
+
+    getStatus = () => {
+        return this.status;
+    }
+
+    setStatus = (status) => {
+        this.status = status;
     }
 
     getImage = () => {
@@ -70,3 +79,5 @@ class Carousel {
         return await carouselDAO.deleteDAO(this.getId);
     }
 }
+
+module.exports = Carousel;
