@@ -8,6 +8,7 @@ require("../config/dbConnection");
 const userRoutes = require("../src/routes/users/userRoute");
 const listingRoute = require("../src/routes/listing/listingRoute");
 const categoryRoute = require("../src/routes/listing/categoryRoute");
+const carouselRoute = require("../src/routes/carousel/carouselRouter");
 
 createServer = () => {
     const app = express();
@@ -19,6 +20,7 @@ createServer = () => {
     app.use('/usuario', userRoutes);
     app.use('/anuncios', listingRoute);
     app.use('/anuncios/categorias', categoryRoute);
+    app.use('/carousel', carouselRoute);
 
     app.get('/', (req, res) => {
         res.status(200).sendFile(path.resolve('index.html'));

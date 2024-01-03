@@ -1,5 +1,6 @@
 const Carousel = require('../class/Carousel');
 const carouselDAO = require("../models/carouselDAO");
+const googleUp = require("./googleUploadCtrl");
 
 class CarouselCtrl {
     new = async (req, res) => {
@@ -7,7 +8,12 @@ class CarouselCtrl {
             const carouselBody = req.body;
 
             const carousel = new Carousel(carouselBody);
+
             carousel.setStatus('Pendente');
+            
+            const carouselIgm = await this.setImg(carousel.getImage(), carousel.getUserId());
+
+            carousel.setImage('http://drive.google.com/uc?export=view&id=' + carouselIgm);
             await carousel.save();
 
             return this.sendResponse(res, 200, {success: 'Carousel criado com sucesso.'});
@@ -49,6 +55,14 @@ class CarouselCtrl {
         } catch (error) {
             return this.sendResponse(res, 500, {error: 'Falha ao buscar os carousels'});
         }
+    }
+
+    setImg = async (file, nameFile) => {
+        const img64 = file.replace(/^data:image\/jpeg;base64,/, '');
+        const decodedImage = Buffer.from(img64, 'base64');
+
+        const carouselImg = await googleUp.uploadFile(nameFile +'_carousel.jpg', 'jpg', decodedImage);
+        return carouselImg;
     }
 
     sendResponse = (res, statusCode, msg) => {
