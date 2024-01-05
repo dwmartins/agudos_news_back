@@ -18,7 +18,6 @@ class NewTableCarousel {
             `);
 
         } catch (error) {
-            console.log('kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk')
             logger.log(`error`, `Falha ao criar a tabela (carousel_price): ${error}`);
         }
     }
