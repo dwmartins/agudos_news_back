@@ -1,6 +1,5 @@
 const CarouselPrice = require('../class/CarouselPrice');
 const carouselPriceDAO = require("../models/carouselPriceDAO");
-const googleUp = require("./googleUploadCtrl");
 
 class CarouselPriceCtrl {
     new = async (req, res) => {
