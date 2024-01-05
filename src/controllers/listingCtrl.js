@@ -1,19 +1,17 @@
 const Listing = require("../class/Listing");
 const listingDAO = require("../models/listingDAO");
+const googleUp = require("./googleUploadCtrl");
 
 class ListingCtrl {
     new = async (req, res) => {
-        const listingBody = req.body;
-
-        const listing = new Listing(listingBody);
-        listing.setStatus("Pendente");
-        const result = await listing.save();
-
-        if(result.error) {
-            return this.sendResponse(res, 500, {error: 'Houve um erro ao criar o anuncio.'});
+        try {
+            const listingBody = req.body;
+            const listing = new Listing(listingBody);
+            listing.setStatus("pendente");
+            await listing.save();
+        } catch (error) {
+            return this.sendResponse(res, 500, {error: 'Falha ao criar o anuncio.'});
         }
-
-        return this.sendResponse(res, 200, {success: 'Anuncio criado com sucesso.'});
     }
 
     updateListing = async (req, res) => {

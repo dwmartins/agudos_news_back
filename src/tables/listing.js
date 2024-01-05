@@ -27,7 +27,7 @@ class NewTableListing {
                     id INT AUTO_INCREMENT PRIMARY KEY,
                     user_id INT NOT NULL,
                     name VARCHAR(255) NOT NULL,
-                    category INT NOT NULL,
+                    category LONGTEXT,
                     summary VARCHAR(255) NOT NULL,
                     description LONGTEXT NOT NULl, 
                     keywords LONGTEXT,
@@ -54,8 +54,7 @@ class NewTableListing {
                     coverImage LONGTEXT,
                     createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
                     updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-                    FOREIGN KEY (category) REFERENCES listing_category(id) ON DELETE CASCADE
+                    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
                 );
             `);
         } catch (error) {

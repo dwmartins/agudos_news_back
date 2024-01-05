@@ -9,7 +9,7 @@ class CarouselCtrl {
 
             const carousel = new Carousel(carouselBody);
 
-            carousel.setStatus('Pendente');
+            carousel.setStatus('pendente');
             
             const carouselIgm = await this.setImg(carousel.getImage(), carousel.getUserId());
 

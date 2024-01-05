@@ -17,8 +17,8 @@ class ListingDAO {
             await this.conn.query(sql, values);
             return true;
         } catch (error) {
-            logger.log(`error`,`Houve um erro ao inserir a listing no banco: ${error}`);
-            return {error: error}
+            logger.log(`error`,`Falha ao inserir a listing no banco: ${error}`);
+            throw error
         }
     }
 
