@@ -10,6 +10,7 @@ class NewTableCarousel {
                 CREATE TABLE IF NOT EXISTS carousel_price (
                     id INT AUTO_INCREMENT PRIMARY KEY,
                     description VARCHAR(50) NOT NULL,
+                    type VARCHAR(50) NOT NULL
                     price DECIMAL(10,2) NOT NULL,
                     active ENUM('Y', 'N') DEFAULT 'Y',
                     createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,

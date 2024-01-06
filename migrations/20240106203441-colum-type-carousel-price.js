@@ -15,7 +15,7 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db, callback) {
-  const sql = `ALTER TABLE carousel ADD COLUMN promotionalCode VARCHAR(50) NOT NULL AFTER payment`;
+  const sql = `ALTER TABLE carousel_price ADD COLUMN type VARCHAR(50) NOT NULL AFTER description`;
   db.runSql(sql, function (err) {
     if(err) return callback(err);
     callback();
@@ -23,7 +23,7 @@ exports.up = function(db, callback) {
 };
 
 exports.down = function(db) {
-  const sql = `ALTER TABLE carousel DROP COLUMN promotionalCode`;
+  const sql = `ALTER TABLE carousel_price DROP COLUMN type`;
 
   db.runSql(sql, function (err) {
     if(err) return callback(err);

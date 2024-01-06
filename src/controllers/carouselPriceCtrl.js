@@ -8,7 +8,7 @@ class CarouselPriceCtrl {
             const carouselPrice = new CarouselPrice(reqBody);
             await carouselPrice.save();
 
-            return this.sendResponse(res, 200, {success: `Preço para Card (${carouselPrice.getDescription()}) inserido com sucesso.`});
+            return this.sendResponse(res, 200, {success: `Card (${carouselPrice.getType()}) inserido com sucesso.`});
             
         } catch (error) {
             return this.sendResponse(res, 500, {error: `Falha ao criar o preço para carousel`});

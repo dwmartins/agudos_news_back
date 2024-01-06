@@ -1,9 +1,18 @@
 const carouselPriceDAO = require("../models/carouselPriceDAO");
 
+/*
+    ***** ATENÇÃO *****
+
+    this.type = "PAGEHOMETOP" etc...
+    this.active = "Y" ou "N"
+    Seguir sempre um padrão
+*/
+
 class CarouselPrice {
     constructor(price) {
         this.id             = price.id;
         this.description    = price.description;
+        this.type           = price.type;
         this.price          = price.price;
         this.active         = price.active;
         this.createdAt      = price.createdAt;
@@ -20,6 +29,14 @@ class CarouselPrice {
 
     setDescription = (description) => {
         this.description = description;
+    }
+
+    getType = () => {
+        return this.type;
+    }
+
+    setType = (type) => {
+        this.type = type;
     }
 
     getPrice = () => {
