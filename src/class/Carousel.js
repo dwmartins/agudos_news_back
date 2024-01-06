@@ -2,16 +2,18 @@ const carouselDAO = require("../models/carouselDAO")
 
 class Carousel {
     constructor(carousel) {
-        this.id             = carousel.id;
-        this.user_id        = carousel.user_id;
-        this.description    = carousel.description;
-        this.status         = carousel.status;
-        this.carousel_type  = carousel.carousel_type;
-        this.payment        = carousel.payment;
-        this.payment_type   = carousel.payment_type;
-        this.image          = carousel.image;
-        this.createdAt      = carousel.createdAt;
-        this.updatedAt      = carousel.updatedAt;
+        this.id                 = carousel.id;
+        this.user_id            = carousel.user_id;
+        this.description        = carousel.description;
+        this.status             = carousel.status;
+        this.carousel_type      = carousel.carousel_type;
+        this.payment            = carousel.payment;
+        this.promotionalCode    = carousel.promotionalCode
+        this.payment_type       = carousel.payment_type;
+        this.image              = carousel.image;
+        this.observation        = carousel.observation;
+        this.createdAt          = carousel.createdAt;
+        this.updatedAt          = carousel.updatedAt;
     }
 
     getId = () => {
@@ -58,6 +60,14 @@ class Carousel {
         this.payment = payment;
     }
 
+    getPromotionalCode = () => {
+        return this.promotionalCode;
+    }
+
+    setPromotionalCode = (promotionalCode) => {
+        this.promotionalCode = promotionalCode;
+    }
+
     getPaymentType = () => {
         return this.payment_type;
     }
@@ -74,8 +84,20 @@ class Carousel {
         this.image = image;
     }
 
-    getCreateAt = () => {
+    getObservation = () => {
+        return this.observation;
+    }
+
+    setObservation = (observation) => {
+        this.observation = observation;
+    }
+
+    getCreatedAt = () => {
         return this.createdAt;
+    }
+
+    getUpdatedAt = () => {
+        return this.updatedAt;
     }
 
     save = async () => {

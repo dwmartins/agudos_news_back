@@ -1,5 +1,6 @@
 const Carousel = require('../class/Carousel');
 const carouselDAO = require("../models/carouselDAO");
+const carouselPriceDAO = require("../models/carouselPriceDAO");
 const googleUp = require("./googleUploadCtrl");
 
 class CarouselCtrl {
@@ -15,15 +16,27 @@ class CarouselCtrl {
             
             const carousel = new Carousel(carouselBody);
 
+            const price = await carouselPriceDAO.findById(carousel.getCarouselType());
+            carousel.setPayment(price[0].price);
+
+
             carousel.setStatus('pendente');
             
             const carouselIgm = await this.setImg(carousel.getImage(), carousel.getUserId());
 
             carousel.setImage('http://drive.google.com/uc?export=view&id=' + carouselIgm);
             const result = await carousel.save();
-            console.log(result[0].insertId)
 
-            return this.sendResponse(res, 200, {success: 'Carousel criado com sucesso.'});
+            const response = {
+                type: price[0].description,
+                description: carousel.getDescription(),
+                payment: carousel.getPayment(),
+                payment_type: carousel.getPaymentType(),
+                status: carousel.getStatus(),
+                id: result[0].insertId
+            }
+
+            return this.sendResponse(res, 200, response);
         } catch (error) {
             return this.sendResponse(res, 500, {error: 'Falha ao criar o carousel.'});
         }
