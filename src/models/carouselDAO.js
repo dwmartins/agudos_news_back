@@ -14,8 +14,7 @@ class CarouselDAO {
         const values = Object.values(carousel);
 
         try {
-            await this.conn.query(sql, values);
-            return true;
+            return await this.conn.query(sql, values);
         } catch (error) {
             logger.log(`error`,`Houve um erro ao inserir o carousel no banco: ${error}`);
             throw error

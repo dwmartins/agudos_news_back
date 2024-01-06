@@ -7,6 +7,12 @@ class CarouselCtrl {
         try {
             const carouselBody = req.body;
 
+            const emptyKeys = Object.keys(carouselBody).filter(item => !carouselBody[item]);
+
+            if(emptyKeys.length) {
+                return this.sendResponse(res, 200, {alert: `Todos os campos devem ser preenchidos.`}); 
+            }
+            
             const carousel = new Carousel(carouselBody);
 
             carousel.setStatus('pendente');
@@ -14,7 +20,8 @@ class CarouselCtrl {
             const carouselIgm = await this.setImg(carousel.getImage(), carousel.getUserId());
 
             carousel.setImage('http://drive.google.com/uc?export=view&id=' + carouselIgm);
-            await carousel.save();
+            const result = await carousel.save();
+            console.log(result[0].insertId)
 
             return this.sendResponse(res, 200, {success: 'Carousel criado com sucesso.'});
         } catch (error) {
@@ -29,7 +36,7 @@ class CarouselCtrl {
             const carousel = new Carousel(carouselBody);
 
             const sameImg = await carouselDAO.findImgById(carousel.getImage());
-            
+
             if(!sameImg) {
                 const newImg = await this.setImg(carousel.getImage(), carousel.getUserId());
                 carousel.setImage('http://drive.google.com/uc?export=view&id=' + newImg);
