@@ -83,6 +83,17 @@ class CarouselDAO {
             throw error
         }
     }
+
+    findImgById = async (id) => {
+        try {
+            const sql = 'SELECT image FROM carousel WHERE image = ?';
+            const result = await this.conn.query(sql, [id]);
+            return result[0].length > 0;
+        } catch (error) {
+            logger.log(`error`, `Houve um erro buscar a imagem do carousel: ${error}`);
+            throw error
+        }
+    }
 }
 
 module.exports = new CarouselDAO;

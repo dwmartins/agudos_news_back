@@ -27,6 +27,14 @@ class CarouselCtrl {
             const carouselBody = req.body;
 
             const carousel = new Carousel(carouselBody);
+
+            const sameImg = await carouselDAO.findImgById(carousel.getImage());
+            
+            if(!sameImg) {
+                const newImg = await this.setImg(carousel.getImage(), carousel.getUserId());
+                carousel.setImage('http://drive.google.com/uc?export=view&id=' + newImg);
+            }
+
             await carousel.update();
 
             return this.sendResponse(res, 200, {success: 'Carousel atualizado com sucesso.'});
