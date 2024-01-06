@@ -1,6 +1,7 @@
 const logger = require("./logger");
 const tableUsers = require("../src/tables/User");
 const tableListing = require("../src/tables/listing");
+const tableBannerPRRice = require("../src/tables/bannerPrice");
 const tableCarousel = require("../src/tables/carousel");
 const helper = require("../src/utilities/helper");
 
@@ -14,6 +15,10 @@ class CreateTables {
         await tableListing.createAll();
     }
 
+    bannerPrice = async () => {
+        await tableBannerPRRice.createAll();
+    }
+
     carousel = async () => {
         await tableCarousel.createAll();
     }
@@ -22,6 +27,7 @@ class CreateTables {
         console.log(`${helper.getDateTime()} - Preparando a criação das Tabelas... `);
         await this.users();
         await this.listing();
+        await this.bannerPrice();
         await this.carousel();
         console.log(`${helper.getDateTime()} - Finalizando a criação das tabelas. `);
     }

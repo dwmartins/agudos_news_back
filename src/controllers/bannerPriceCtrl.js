@@ -1,25 +1,25 @@
-const CarouselPrice = require('../class/CarouselPrice');
-const carouselPriceDAO = require("../models/carouselPriceDAO");
+const BannerPrice = require('../class/BannerPrice');
+const bannerPriceDAO = require("../models/bannerPriceDAO");
 
-class CarouselPriceCtrl {
+class BannerPriceCtrl {
     new = async (req, res) => {
         try {
             const reqBody = req.body;
-            const carouselPrice = new CarouselPrice(reqBody);
-            await carouselPrice.save();
+            const bannerPrice = new BannerPrice(reqBody);
+            await bannerPrice.save();
 
-            return this.sendResponse(res, 200, {success: `Card (${carouselPrice.getType()}) inserido com sucesso.`});
+            return this.sendResponse(res, 200, {success: `Card (${bannerPrice.getType()}) inserido com sucesso.`});
             
         } catch (error) {
             return this.sendResponse(res, 500, {error: `Falha ao criar o preço para carousel`});
         }
     }
 
-    updateCarouselPrice = async (req, res) => {
+    updateBannerPrice = async (req, res) => {
         try {
             const reqBody = req.body;
-            const carouselPrice = new CarouselPrice(reqBody);
-            await carouselPrice.update();
+            const bannerPrice = new BannerPrice(reqBody);
+            await bannerPrice.update();
 
             return this.sendResponse(res, 200, {success: 'Card de preços atualizado com sucesso.'});
         } catch (error) {
@@ -27,10 +27,10 @@ class CarouselPriceCtrl {
         }
     }
 
-    deleteCarouselPrice = async (req, res) => {
+    deleteBannerPrice = async (req, res) => {
         try {
             const { id } = req.params;
-            await carouselPriceDAO.deleteDAO(id);
+            await bannerPriceDAO.deleteDAO(id);
 
             return this.sendResponse(res, 200, {success: 'Card de preços deletado com sucesso.'});
         } catch (error) {
@@ -38,23 +38,23 @@ class CarouselPriceCtrl {
         }
     }
 
-    listCarouselPrice = async (req, res) => {
+    listBannerPrice = async (req, res) => {
         try {
             const { status } = req.query;
-            const carouselPrice = await carouselPriceDAO.findAll(status);
+            const bannerPrice = await bannerPriceDAO.findAll(status);
 
-            return this.sendResponse(res, 200, carouselPrice);
+            return this.sendResponse(res, 200, bannerPrice);
         } catch (error) {
             return this.sendResponse(res, 500, {error: 'Falha ao buscar os Cards de preços dos carousels'});
         }
     }
 
-    listCarouselPriceById = async (req, res) => {
+    listBannerPriceById = async (req, res) => {
         try {
             const { id } = req.params;
-            const carouselPrice = await carouselPriceDAO.findById(id);
+            const bannerPrice = await bannerPriceDAO.findById(id);
 
-            return this.sendResponse(res, 200, carouselPrice[0]);
+            return this.sendResponse(res, 200, bannerPrice[0]);
         } catch (error) {
             return this.sendResponse(res, 500, {error: 'Falha o buscar o Card de preços do carousel'});
         }
@@ -65,4 +65,4 @@ class CarouselPriceCtrl {
     }
 }
 
-module.exports = new CarouselPriceCtrl;
+module.exports = new BannerPriceCtrl;

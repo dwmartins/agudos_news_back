@@ -9,7 +9,7 @@ const userRoutes = require("../src/routes/users/userRoute");
 const listingRoute = require("../src/routes/listing/listingRoute");
 const categoryRoute = require("../src/routes/listing/categoryRoute");
 const carouselRoute = require("../src/routes/carousel/carouselRouter");
-const carouselPriceRoute = require("../src/routes/carousel/carouselPriceRoute");
+const bannerPriceRoute = require("../src/routes/banner/bannerPriceRouter");
 
 createServer = () => {
     const app = express();
@@ -22,7 +22,7 @@ createServer = () => {
     app.use('/anuncios', listingRoute);
     app.use('/anuncios/categorias', categoryRoute);
     app.use('/carousel', carouselRoute);
-    app.use('/carousel/precos', carouselPriceRoute);
+    app.use('/banner', bannerPriceRoute);
 
     app.get('/', (req, res) => {
         res.status(200).sendFile(path.resolve('index.html'));

@@ -1,4 +1,4 @@
-const carouselPriceDAO = require("../models/carouselPriceDAO");
+const carouselPriceDAO = require("../models/bannerPriceDAO");
 
 /*
     ***** ATENÇÃO *****
@@ -8,7 +8,7 @@ const carouselPriceDAO = require("../models/carouselPriceDAO");
     Seguir sempre um padrão
 */
 
-class CarouselPrice {
+class BannerPrice {
     constructor(price) {
         this.id             = price.id;
         this.description    = price.description;
@@ -92,4 +92,4 @@ class CarouselPrice {
     }
 }
 
-module.exports = CarouselPrice;
+module.exports = BannerPrice;

@@ -1,6 +1,6 @@
 const Carousel = require('../class/Carousel');
 const carouselDAO = require("../models/carouselDAO");
-const carouselPriceDAO = require("../models/carouselPriceDAO");
+const bannerPriceDAO = require("../models/bannerPriceDAO");
 const googleUp = require("./googleUploadCtrl");
 
 class CarouselCtrl {
@@ -16,7 +16,7 @@ class CarouselCtrl {
             
             const carousel = new Carousel(carouselBody);
 
-            const price = await carouselPriceDAO.findById(carousel.getCarouselType());
+            const price = await bannerPriceDAO.findById(carousel.getCarouselType());
             carousel.setPayment(price[0].price);
 
 
