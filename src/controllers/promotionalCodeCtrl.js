@@ -47,7 +47,7 @@ class PromotionalCodeCtrl {
         }
     }
 
-    listBannerPriceById = async (req, res) => {
+    listCodes = async (req, res) => {
         try {
             const { id } = req.params;
             const promotionalCode = await promotionalCodeDAO.findById(id);
