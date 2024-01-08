@@ -1,7 +1,7 @@
 const promotionalCodeDAO = require("../models/PromotionalCodeDAO");
 
 class PromotionalCode {
-    constructor(code) {
+    constructor(code = null) {
         this.id             = code.id;
         this.code           = code.code;
         this.description    = code.description;
@@ -104,10 +104,6 @@ class PromotionalCode {
         delete plainObject.updatedAt;
 
         return await promotionalCodeDAO.updateDAO(plainObject);
-    }
-
-    delete = async () => {
-        return await promotionalCodeDAO.deleteDAO(this.getId);
     }
 }
 
