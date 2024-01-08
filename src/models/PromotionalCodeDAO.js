@@ -83,6 +83,19 @@ class PromotionalCodeDAO {
             throw error
         }
     }
+
+    findByCode = async (code) => {
+        try {
+            const sql = `SELECT * FROM promotionalCode WHERE code = ? AND active = ?`;
+            const values = [code, "Y"];
+
+            const result = await this.conn.query(sql, values);
+            return result[0];
+        } catch (error) {
+            logger.log(`error`, `Houve um erro buscar o código promocional pelo código: ${error}`);
+            throw error
+        }
+    }
 }
 
 module.exports = new PromotionalCodeDAO;

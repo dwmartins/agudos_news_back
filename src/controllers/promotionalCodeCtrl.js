@@ -47,6 +47,42 @@ class PromotionalCodeCtrl {
         }
     }
 
+    useCode = async (req, res) => {
+        try {
+            const { code } = req.body;
+            const existCode = await promotionalCodeDAO.findByCode(code);
+
+            if(existCode.length) {
+                const valid = await this.checkActive(existCode[0]);
+
+                if(valid) {
+                    return this.sendResponse(res, 200, {success: 'Código promocional validado.'});
+                } 
+            }
+
+            return this.sendResponse(res, 200, {alert: 'Este código não é valido.'});
+        } catch (error) {
+            return this.sendResponse(res, 500, {alert: 'Falha ao aplicar o código promocional.'});
+        }
+    }
+
+    checkActive = async (promotionalCode) => {
+        const code = new PromotionalCode(promotionalCode);
+
+        const endDate = new Date(code.getEndDate());
+
+        const currentDate = new Date();
+
+        if(currentDate <= endDate) {
+            return true;
+        }
+        
+        code.setActive("N");
+        await code.update();
+
+        return false;
+    }
+
     sendResponse = (res, statusCode, msg) => {
         res.status(statusCode).json(msg);
     }
