@@ -1,3 +1,5 @@
+const promotionalCodeDAO = require("../models/PromotionalCodeDAO");
+
 class PromotionalCode {
     constructor(code) {
         this.id             = code.id;
@@ -78,6 +80,34 @@ class PromotionalCode {
 
     getUpdatedAt = () => {
         return this.updatedAt;
+    }
+
+    save = async () => {
+
+        let plainObject = Object.fromEntries(
+            Object.entries(this).filter(([key, value]) => typeof value !== 'function')
+        );
+
+        delete plainObject.createdAt;
+        delete plainObject.updatedAt;
+        delete plainObject.id;
+
+        return await promotionalCodeDAO.saveDAO(plainObject);
+    }
+
+    update = async () => {
+        let plainObject = Object.fromEntries(
+            Object.entries(this).filter(([key, value]) => typeof value !== 'function')
+        );
+
+        delete plainObject.createdAt;
+        delete plainObject.updatedAt;
+
+        return await promotionalCodeDAO.updateDAO(plainObject);
+    }
+
+    delete = async () => {
+        return await promotionalCodeDAO.deleteDAO(this.getId);
     }
 }
 
