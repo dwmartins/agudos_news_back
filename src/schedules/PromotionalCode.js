@@ -8,7 +8,7 @@ const promotionalCodeCtrl = require("../controllers/promotionalCodeCtrl");
 
 class SchedulePromotionalCode {
 
-    // Checa que o código está vencido e coloca como "N" => Não ativado todos os dias as 00:00:00
+    // Checa se o código está vencido e coloca como "N" => Não ativado, roda todos os dias as 00:00:00
     checkValid = async () => {
         const code = await promotionalCodeDAO.findAll("Y");
 
