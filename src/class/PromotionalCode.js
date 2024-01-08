@@ -6,6 +6,7 @@ class PromotionalCode {
         this.discount       = code.discount;
         this.activeDate     = code.activeDate;
         this.endDate        = code.endDate;
+        this.active         = code.active
         this.userCreate     = code.userCreate;
         this.createdAt      = code.createdAt;
         this.updatedAt      = code.updatedAt;
@@ -53,6 +54,14 @@ class PromotionalCode {
 
     setEndDate = (endDate) => {
         this.endDate = endDate;
+    }
+
+    getActive = () => {
+        return this.active
+    }
+
+    setActive = (active) => {
+        this.active = active;
     }
 
     getUserCreate = () => {
