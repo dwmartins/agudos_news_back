@@ -41,20 +41,9 @@ class PromotionalCodeCtrl {
             const { status } = req.query;
             const promotionalCodes = await promotionalCodeDAO.findAll(status);
 
-            return this.sendResponse(res, 200, promotionalCodes[0]);
+            return this.sendResponse(res, 200, promotionalCodes);
         } catch (error) {
             return this.sendResponse(res, 500, {error: 'Falha ao buscar os códigos promocionais'});
-        }
-    }
-
-    listCodes = async (req, res) => {
-        try {
-            const { id } = req.params;
-            const promotionalCode = await promotionalCodeDAO.findById(id);
-
-            return this.sendResponse(res, 200, promotionalCode[0]);
-        } catch (error) {
-            return this.sendResponse(res, 500, {error: 'Falha o buscar o código promocional'});
         }
     }
 
