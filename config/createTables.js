@@ -4,6 +4,7 @@ const tableListing = require("../src/tables/listing");
 const tableBannerPRRice = require("../src/tables/bannerPrice");
 const tableCarousel = require("../src/tables/carousel");
 const tablePromotionalCode = require("../src/tables/promotionalCode");
+const tableTransitions = require("../src/tables/transitions");
 const helper = require("../src/utilities/helper");
 
 class CreateTables {
@@ -28,6 +29,10 @@ class CreateTables {
         await tablePromotionalCode.createAll()
     }
 
+    transitions = async () => {
+        await tableTransitions.createAll();
+    }
+
     createAll = async () => {
         console.log(`${helper.getDateTime()} - Preparando a criação das Tabelas... `);
         await this.users();
@@ -35,6 +40,7 @@ class CreateTables {
         await this.bannerPrice();
         await this.carousel();
         await this.promotionalCode();
+        await this.transitions();
         console.log(`${helper.getDateTime()} - Finalizando a criação das tabelas. `);
     }
 }

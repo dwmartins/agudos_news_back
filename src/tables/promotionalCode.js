@@ -26,7 +26,7 @@ class NewTablePromotionalCode {
     }
 
     createAll = async () => {
-        console.log(`${helper.getDateTime()} - Criando tabela de (carousel)...`)
+        console.log(`${helper.getDateTime()} - Criando tabela de (promotionalCode)...`)
         await this.promotionalCode();
     }
 }
