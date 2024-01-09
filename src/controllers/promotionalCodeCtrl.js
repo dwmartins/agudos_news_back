@@ -67,20 +67,24 @@ class PromotionalCodeCtrl {
     }
 
     checkActive = async (promotionalCode) => {
-        const code = new PromotionalCode(promotionalCode);
+        try {
+            const code = new PromotionalCode(promotionalCode);
 
-        const endDate = new Date(code.getEndDate());
+            const endDate = new Date(code.getEndDate());
 
-        const currentDate = new Date();
+            const currentDate = new Date();
 
-        if(currentDate <= endDate) {
-            return true;
+            if(currentDate <= endDate) {
+                return true;
+            }
+            
+            code.setActive("N");
+            await code.update();
+
+            return false;
+        } catch (error) {
+            throw error;
         }
-        
-        code.setActive("N");
-        await code.update();
-
-        return false;
     }
 
     sendResponse = (res, statusCode, msg) => {
