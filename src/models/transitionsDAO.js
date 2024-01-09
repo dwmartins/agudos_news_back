@@ -65,7 +65,20 @@ class TransactionsDAO {
             const result = await this.conn.query(sql, value);
             return result[0];
         } catch (error) {
-            logger.log(`error`, `Houve um erro buscar os códigos promocionais: ${error}`);
+            logger.log(`error`, `Houve um erro buscar as transações: ${error}`);
+            throw error
+        }
+    }
+
+    findAllByReferenceDate = async (date) => {
+        try {
+            const referenceDate = new Date(date).toISOString().split('T')[0];
+
+            let sql = 'SELECT * FROM transactions WHERE referenceDate = ?';
+            const result = await this.conn.query(sql, [referenceDate]);
+            return result[0];
+        } catch (error) {
+            logger.log(`error`, `Houve um erro buscar as transações: ${error}`);
             throw error
         }
     }

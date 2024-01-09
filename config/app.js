@@ -5,6 +5,7 @@ const logger = require("../config/logger");
 const path = require("path");
 require("../config/dbConnection");
 require("../src/schedules/PromotionalCode");
+require("../src/schedules/Transitions");
 
 const userRoutes = require("../src/routes/users/userRoute");
 const listingRoute = require("../src/routes/listing/listingRoute");

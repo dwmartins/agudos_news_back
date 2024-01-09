@@ -93,6 +93,18 @@ class CarouselDAO {
             throw error
         }
     }
+
+    findPreviuData = async () => {
+        try {
+            const sql = 'SELECT * FROM carousel WHERE createdAt >= CURDATE() - INTERVAL 1 DAY AND createdAt < CURDATE()';
+            const result = await this.conn.query(sql);
+            
+            return result[0];
+        } catch (error) {
+            logger.log(`error`, `Houve um erro buscar os dados do carousel referente a data anterior: ${error}`);
+            throw error
+        }
+    }
 }
 
 module.exports = new CarouselDAO;

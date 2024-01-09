@@ -1,12 +1,13 @@
+const transictionDAO = require("../models/transitionsDAO");
+
 class Transaction {
-    constructor(transactions) {
-        this.id             = transactions.id;
-        this.referenceDate  = transactions.referenceDate;
-        this.type           = transactions.type;
-        this.value          = transactions.value;
-        this.createdAt      = transactions.createdAt;
-        this.updatedAt      = transactions.updatedAt;
-    }
+
+    id    
+    referenceDate
+    type 
+    value 
+    createdAt
+    updatedAt
 
     getId = () => {
         return this.id;
@@ -28,6 +29,14 @@ class Transaction {
         this.type = type;
     }
 
+    getValue = () => {
+        return this.value;
+    }
+
+    setValue = (value) => {
+        this.value = value;
+    }
+
     getCreatedAt = () => {
         return this.createdAt;
     }
@@ -46,7 +55,7 @@ class Transaction {
         delete plainObject.updatedAt;
         delete plainObject.id;
 
-        return await promotionalCodeDAO.saveDAO(plainObject);
+        return await transictionDAO.saveDAO(plainObject);
     }
 
     update = async () => {
@@ -57,7 +66,7 @@ class Transaction {
         delete plainObject.createdAt;
         delete plainObject.updatedAt;
 
-        return await promotionalCodeDAO.updateDAO(plainObject);
+        return await transictionDAO.updateDAO(plainObject);
     }
 }
 

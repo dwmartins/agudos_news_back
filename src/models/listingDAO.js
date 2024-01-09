@@ -83,6 +83,18 @@ class ListingDAO {
             return {error: error}
         }
     }
+
+    findPreviuData = async () => {
+        try {
+            const sql = 'SELECT * FROM listing WHERE createdAt >= CURDATE() - INTERVAL 1 DAY AND createdAt < CURDATE()';
+            const result = await this.conn.query(sql);
+            
+            return result[0];
+        } catch (error) {
+            logger.log(`error`, `Houve um erro buscar os dados da listing referente a data anterior: ${error}`);
+            throw error
+        }
+    }
 }
 
 module.exports = new ListingDAO;
