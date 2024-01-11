@@ -1,3 +1,5 @@
+const jobDao = require("../models/jobDAO");
+
 class Job {
     constructor(job) {
         this.id             = job.id;
@@ -50,4 +52,30 @@ class Job {
     getCreatedAt = () => this.createdAt;
 
     getUpdatedAt = () => this.updatedAt;
+
+    save = async () => {
+
+        let plainObject = Object.fromEntries(
+            Object.entries(this).filter(([key, value]) => typeof value !== 'function')
+        );
+
+        delete plainObject.createdAt;
+        delete plainObject.updatedAt;
+        delete plainObject.id;
+
+        return await jobDao.saveDAO(plainObject);
+    }
+
+    update = async () => {
+        let plainObject = Object.fromEntries(
+            Object.entries(this).filter(([key, value]) => typeof value !== 'function')
+        );
+
+        delete plainObject.createdAt;
+        delete plainObject.updatedAt;
+
+        return await jobDao.updateDAO(plainObject);
+    }
 }
+
+module.exports = Job;
