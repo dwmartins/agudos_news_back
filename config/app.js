@@ -14,6 +14,7 @@ const carouselRoute = require("../src/routes/carousel/carouselRouter");
 const bannerPriceRoute = require("../src/routes/banner/bannerPriceRouter");
 const promotionalCodeRoute = require("../src/routes/promotionalCode/promotionalCodeRoute");
 const transitionRoute = require("../src/routes/transition/transitionRoute");
+const jobRoute = require("../src/routes/jobs/jobRoute");
 
 createServer = () => {
     const app = express();
@@ -28,7 +29,8 @@ createServer = () => {
     app.use('/carousel', carouselRoute);
     app.use('/banner', bannerPriceRoute);
     app.use('/codigo-promocional', promotionalCodeRoute);
-    app.use('/transacoes', transitionRoute)
+    app.use('/transacoes', transitionRoute);
+    app.use('/empregos', jobRoute);
 
     app.get('/', (req, res) => {
         res.status(200).sendFile(path.resolve('index.html'));
