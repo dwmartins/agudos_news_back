@@ -35,6 +35,7 @@ class jobCtrl {
             const reqBody = req.body;
 
             const infoJob = {
+                id: reqBody.id,
                 user: reqBody.user,
                 title: reqBody.title,
                 description: reqBody.description,
@@ -49,7 +50,7 @@ class jobCtrl {
             }
 
             const job = new Job(infoJob);
-            await job.save();
+            await job.update();
 
             return this.sendResponse(res, 201, {success: 'Vaga de empresa atualizada com sucesso.'});
         } catch (error) {
