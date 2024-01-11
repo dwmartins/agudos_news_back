@@ -3,6 +3,7 @@ const jobDao = require("../models/jobDAO");
 class Job {
     constructor(job) {
         this.id             = job.id;
+        this.user           = job.user
         this.title          = job.title;
         this.description    = job.description;
         this.workMode       = job.workMode;

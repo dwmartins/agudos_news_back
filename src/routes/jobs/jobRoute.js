@@ -4,8 +4,8 @@ const jobCtrl = require("../../controllers/jobCtrl");
 const userMiddleware = require("../../middleware/user");
 
 route.get("/", jobCtrl.listJobs);
-route.post("/", userMiddleware.authenticateToken, jobCtrl.new);
-route.put("/", userMiddleware.authenticateToken, jobCtrl.updateJob);
-route.delete("/:id", userMiddleware.checkUserAdmin ,userMiddleware.authenticateToken, jobCtrl.deleteJob);
+route.post("/", jobCtrl.new);
+route.put("/", jobCtrl.updateJob);
+route.delete("/:id", jobCtrl.deleteJob);
 
 module.exports = route;

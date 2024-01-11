@@ -7,6 +7,7 @@ class jobCtrl {
             const reqBody = req.body;
 
             const infoJob = {
+                user: reqBody.user,
                 title: reqBody.title,
                 description: reqBody.description,
                 workMode: reqBody.workMode,
@@ -34,6 +35,7 @@ class jobCtrl {
             const reqBody = req.body;
 
             const infoJob = {
+                user: reqBody.user,
                 title: reqBody.title,
                 description: reqBody.description,
                 workMode: reqBody.workMode,
