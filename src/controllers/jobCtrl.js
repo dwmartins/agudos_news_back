@@ -29,7 +29,7 @@ class jobCtrl {
             for (let i = 0; i < reqBody.benefits.length; i++) {
                 const infoJobBenefits = {
                     jobId: jobReturn.insertId,
-                    benefits: jobReturn.benefits[i]
+                    benefit: reqBody.benefits[i].benefit
                 }
                 
                 const jobBenefits = new JobBenefits(infoJobBenefits);
@@ -39,7 +39,7 @@ class jobCtrl {
             return this.sendResponse(res, 201, {success: 'A vaga de emprego foi criada com sucesso.'});
 
         } catch (error) {
-            return this.sendResponse(res, 500, {erro: error, message: 'Falha ao criar a vaga de emprego.'})
+            return this.sendResponse(res, 500, {error: error, message: 'Falha ao criar a vaga de emprego.'})
         }
     }
 
