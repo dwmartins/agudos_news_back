@@ -56,9 +56,23 @@ class JobBenefitsDAO {
             const sql = `SELECT id FROM jobs_benefits WHERE id = ?`;
             const value = [id];
 
-            const result = this.conn.query(sql, value);
+            const result = await this.conn.query(sql, value);
 
             return result[0];
+        } catch (error) {
+            logger.error(`error`, `Falha ao buscar os benefícios da vaga de emprego por id: ${error}`);
+            throw error
+        }
+    }
+
+    findExistsById = async (id) => {
+        try {
+            const sql = `SELECT id FROM jobs_benefits WHERE id = ?`;
+            const value = [id];
+
+            const result = await this.conn.query(sql, value);
+
+            return result[0].length > 0;
         } catch (error) {
             logger.error(`error`, `Falha ao buscar os benefícios da vaga de emprego por id: ${error}`);
             throw error
@@ -70,7 +84,7 @@ class JobBenefitsDAO {
             const sql = `SELECT id FROM jobs_benefits WHERE jobId = ?`;
             const value = [id];
 
-            const result = this.conn.query(sql, value);
+            const result = await this.conn.query(sql, value);
 
             return result[0];
         } catch (error) {

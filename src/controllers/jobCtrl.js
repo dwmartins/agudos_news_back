@@ -65,6 +65,23 @@ class jobCtrl {
             const job = new Job(infoJob);
             await job.update();
 
+            for (let i = 0; i < reqBody.benefits.length; i++) {
+
+                const infoJobBenefits = {
+                    id: reqBody.benefits[i].id,
+                    jobId: reqBody.benefits[i].jobId,
+                    benefit: reqBody.benefits[i].benefit
+                }
+
+                const jobBenefits = new JobBenefits(infoJobBenefits);
+
+                if(await jobBenefitsDAO.findExistsById(reqBody.benefits[i].id)) {
+                    await jobBenefits.update();
+                } else {
+                    await jobBenefits.save();
+                }
+            }
+
             return this.sendResponse(res, 201, {success: 'Vaga de empresa atualizada com sucesso.'});
         } catch (error) {
             return this.sendResponse(res, 500, {error: error, message: 'Falha ao atualizar a vaga de emprego.'});
