@@ -97,6 +97,11 @@ class jobCtrl {
             const { status } = req.query;
             const jobs = await jobDAO.findAll(status);
 
+            for (let i = 0; i < jobs.length; i++) {
+                const jobBenefits = await jobBenefitsDAO.findByJob(jobs[i].id);
+                jobs[i].benefits = jobBenefits;
+            }
+
             return this.sendResponse(res, 200, jobs);
         } catch (error) {
             return this.sendResponse(res, 500, {error: error, message: 'Falha ao buscas as vagas de empregos.'});

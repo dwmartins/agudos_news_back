@@ -81,7 +81,7 @@ class JobBenefitsDAO {
 
     findByJob = async (id) => {
         try {
-            const sql = `SELECT id FROM jobs_benefits WHERE jobId = ?`;
+            const sql = `SELECT * FROM jobs_benefits WHERE jobId = ?`;
             const value = [id];
 
             const result = await this.conn.query(sql, value);
