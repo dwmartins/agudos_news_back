@@ -26,14 +26,16 @@ class jobCtrl {
             const job = new Job(infoJob);
             const jobReturn = await job.save();
 
-            for (let i = 0; i < reqBody.benefits.length; i++) {
-                const infoJobBenefits = {
-                    jobId: jobReturn.insertId,
-                    benefit: reqBody.benefits[i].benefit
+            if(reqBody.benefits) {
+                for (let i = 0; i < reqBody.benefits.length; i++) {
+                    const infoJobBenefits = {
+                        jobId: jobReturn.insertId,
+                        benefit: reqBody.benefits[i].benefit
+                    }
+                    
+                    const jobBenefits = new JobBenefits(infoJobBenefits);
+                    await jobBenefits.save();
                 }
-                
-                const jobBenefits = new JobBenefits(infoJobBenefits);
-                await jobBenefits.save();
             }
 
             return this.sendResponse(res, 201, {success: 'A vaga de emprego foi criada com sucesso.'});
@@ -65,20 +67,22 @@ class jobCtrl {
             const job = new Job(infoJob);
             await job.update();
 
-            for (let i = 0; i < reqBody.benefits.length; i++) {
+            if(reqBody.benefits) {
+                for (let i = 0; i < reqBody.benefits.length; i++) {
 
-                const infoJobBenefits = {
-                    id: reqBody.benefits[i].id,
-                    jobId: reqBody.benefits[i].jobId,
-                    benefit: reqBody.benefits[i].benefit
-                }
-
-                const jobBenefits = new JobBenefits(infoJobBenefits);
-
-                if(await jobBenefitsDAO.findExistsById(reqBody.benefits[i].id)) {
-                    await jobBenefits.update();
-                } else {
-                    await jobBenefits.save();
+                    const infoJobBenefits = {
+                        id: reqBody.benefits[i].id,
+                        jobId: reqBody.benefits[i].jobId,
+                        benefit: reqBody.benefits[i].benefit
+                    }
+    
+                    const jobBenefits = new JobBenefits(infoJobBenefits);
+    
+                    if(await jobBenefitsDAO.findExistsById(reqBody.benefits[i].id)) {
+                        await jobBenefits.update();
+                    } else {
+                        await jobBenefits.save();
+                    }
                 }
             }
 
