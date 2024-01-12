@@ -14,7 +14,8 @@ class JobDAO {
         const values = Object.values(jobs);
 
         try {
-            return await this.conn.query(sql, values);
+            const result = await this.conn.query(sql, values);
+            return result[0];
         } catch (error) {
             logger.log(`error`,`Erro ao salvar a vaga de emprego: ${error}`);
             throw error

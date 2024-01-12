@@ -1,5 +1,8 @@
 const Job = require("../class/Job");
 const jobDAO = require("../models/jobDAO");
+const JobBenefits = require("../class/jobBenefits");
+const JobBenefitsDAO = require("../models/jobBenefitsDAO");
+const jobBenefitsDAO = require("../models/jobBenefitsDAO");
 
 class jobCtrl {
     new = async (req, res) => {
@@ -21,7 +24,17 @@ class jobCtrl {
             }
 
             const job = new Job(infoJob);
-            await job.save();
+            const jobReturn = await job.save();
+
+            for (let i = 0; i < reqBody.benefits.length; i++) {
+                const infoJobBenefits = {
+                    jobId: jobReturn.insertId,
+                    benefits: jobReturn.benefits[i]
+                }
+                
+                const jobBenefits = new JobBenefits(infoJobBenefits);
+                await jobBenefits.save();
+            }
 
             return this.sendResponse(res, 201, {success: 'A vaga de emprego foi criada com sucesso.'});
 

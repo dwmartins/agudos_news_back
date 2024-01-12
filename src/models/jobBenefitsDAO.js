@@ -33,7 +33,7 @@ class JobBenefitsDAO {
             await this.conn.query(sql, values);
             return true;
         } catch (error) {
-            logger.log(`error`,`Falha ao atualizar o benefícios da vaga de emprego: ${error}`);
+            logger.error(`error`,`Falha ao atualizar o benefícios da vaga de emprego: ${error}`);
             throw error
         }
     }
@@ -46,7 +46,7 @@ class JobBenefitsDAO {
             await this.conn.query(sql, value);
             return true;
         } catch (error) {
-            logger.log(`error`, `Falha ao deletar o benefícios da vaga de emprego: ${error}`);
+            logger.error(`error`, `Falha ao deletar o benefícios da vaga de emprego: ${error}`);
             throw error
         }
     }
@@ -60,7 +60,7 @@ class JobBenefitsDAO {
 
             return result[0];
         } catch (error) {
-            logger.log(`error`, `Falha ao buscar os benefícios da vaga de emprego por id: ${error}`);
+            logger.error(`error`, `Falha ao buscar os benefícios da vaga de emprego por id: ${error}`);
             throw error
         }
     }
@@ -74,8 +74,10 @@ class JobBenefitsDAO {
 
             return result[0];
         } catch (error) {
-            logger.log(`error`, `Falha ao buscar os benefícios da vaga de emprego por id: ${error}`);
+            logger.error(`error`, `Falha ao buscar os benefícios da vaga de emprego por id: ${error}`);
             throw error
         }
     }
 }
+
+module.exports = new JobBenefitsDAO;
