@@ -67,7 +67,7 @@ class UserCtrl {
 
             if(newUser.getPhoto_url()) {
                 const imgUser = await this.setImgUser(newUser.getPhoto_url(), newUser.getEmail() )
-                newUser.setPhoto_url('http://drive.google.com/uc?export=view&id=' + imgUser);
+                newUser.setPhoto_url('https://lh3.google.com/u/0/d/' + imgUser);
             }
 
             const result = await newUser.save();

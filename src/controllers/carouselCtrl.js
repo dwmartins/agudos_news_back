@@ -24,7 +24,7 @@ class CarouselCtrl {
             
             const carouselIgm = await this.setImg(carousel.getImage(), carousel.getUserId());
 
-            carousel.setImage('http://drive.google.com/uc?export=view&id=' + carouselIgm);
+            carousel.setImage('https://lh3.google.com/u/0/d/' + carouselIgm);
             const result = await carousel.save();
 
             const response = {
@@ -52,7 +52,7 @@ class CarouselCtrl {
 
             if(!sameImg) {
                 const newImg = await this.setImg(carousel.getImage(), carousel.getUserId());
-                carousel.setImage('http://drive.google.com/uc?export=view&id=' + newImg);
+                carousel.setImage('https://lh3.google.com/u/0/d/' + newImg);
             }
 
             await carousel.update();
