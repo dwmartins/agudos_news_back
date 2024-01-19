@@ -15,6 +15,7 @@ const bannerPriceRoute = require("../src/routes/banner/bannerPriceRouter");
 const promotionalCodeRoute = require("../src/routes/promotionalCode/promotionalCodeRoute");
 const transitionRoute = require("../src/routes/transition/transitionRoute");
 const jobRoute = require("../src/routes/jobs/jobRoute");
+const awsimg = require("../src/routes/awsimgteste.js")
 
 createServer = () => {
     const app = express();
@@ -31,6 +32,7 @@ createServer = () => {
     app.use('/codigo-promocional', promotionalCodeRoute);
     app.use('/transacoes', transitionRoute);
     app.use('/empregos', jobRoute);
+    app.use('/testeimg', awsimg)
 
     app.get('/', (req, res) => {
         res.status(200).sendFile(path.resolve('index.html'));
