@@ -2,8 +2,12 @@ const express = require("express");
 const route = express.Router();
 const userCtrl = require("../../controllers/userCtrl");
 const UserMiddleware = require("../../middleware/user");
+const multer = require("multer");
 
-route.post('/novo', userCtrl.new);
+const storage = multer.memoryStorage();
+const upload = multer({storage: storage});
+
+route.post('/novo', upload.single('photo'), userCtrl.new);
 route.post("/login", userCtrl.login);
 route.post("/nova-senha", userCtrl.sendNewPassword);
 

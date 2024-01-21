@@ -1,7 +1,11 @@
 const express = require("express");
 const route = express.Router();
-const awsctrl = require("../controllers/awsUploadCtrl");
+const awsTeste = require("../controllers/awsUploadCtrl");
+const multer = require("multer");
 
-route.post('/', awsctrl.uploadImg);
+const storage = multer.memoryStorage();
+const upload = multer({storage: storage});
+
+route.post('/', upload.single('photo'), awsTeste.uploadPhotoUser);
 
 module.exports = route;

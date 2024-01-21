@@ -1,4 +1,6 @@
+require('dotenv').config();
 const jwt = require("jsonwebtoken");
+const mime = require("mime-types");
 const User = require("../class/User");
 const UserAccess = require("../class/UserAccess");
 const userDAO = require("../models/userDAO");
@@ -6,8 +8,10 @@ const helper = require("../utilities/helper");
 const sendEmail = require("./sendEmail");
 const googleUp = require('./googleUploadCtrl');
 const imageType = require('image-type');
+const awsUploadCtrl = require("./awsUploadCtrl");
 
 class UserCtrl {
+    infoIgm;
 
     login = async (req, res) => {
         const { email, password } = req.body;
@@ -45,42 +49,53 @@ class UserCtrl {
 
         return this.sendResponse(res, 500, {erro: `Houve um erro ao realizar o login.`});
     }
-    
+
     new = async (req, res) => {
-        const userBody = req.body;
-        const newUser = new User(userBody);
+        try {
+            const reqBody = req.body;
+            const img = req.file;
+            const user = new User(reqBody);
 
-        const emailExists = await userDAO.findByEmail(newUser.getEmail());
+            const existsEmail = await userDAO.findByEmail(user.getEmail());
 
-        if(emailExists.error) {
-            return this.sendResponse(res, 500, {erro: `Houve um erro ao criar o usuário.`});
-        }
+            if(existsEmail.length) {
+                return this.sendResponse(res, 200, {alert: 'Este e-mail já está em uso.'});
+            }
 
-        if(!emailExists.length) {
-            const encodedPassword = await helper.encodePassword(newUser.getPassword());
+            if(img) {
+                this.infoIgm = this.ValidImg(img);
+
+                if(this.infoIgm.invalid) {
+                    return this.sendResponse(res, 400, {alert: this.infoIgm.invalid});
+                }
+            }
+
+            const encodedPassword = await helper.encodePassword(user.getPassword());
             const token = helper.newCrypto();
 
-            newUser.setPassword(encodedPassword);
-            newUser.setToken(token);
-            newUser.setUserType("common");
-            newUser.setActive("Y");
+            user.setPassword(encodedPassword);
+            user.setToken(token);
+            user.setUserType("common");
+            user.setActive("Y");
+            user.setPhoto_url('');
+            const response = await user.save();
 
-            if(newUser.getPhoto_url()) {
-                const imgUser = await this.setImgUser(newUser.getPhoto_url(), newUser.getEmail() )
-                newUser.setPhoto_url('https://lh3.google.com/u/0/d/' + imgUser);
+            if(img) {
+                const fileName = `${response[0].insertId}_${user.getName()}`;
+                const imgUrl = `${process.env.URLDOCS}/${process.env.FOLDERIMGUSERS}/${fileName}.${this.infoIgm.extension}`;
+
+                await Promise.all([
+                    awsUploadCtrl.uploadPhotoUser(img, fileName),
+                    userDAO.updateImg(imgUrl, response[0].insertId)
+                ]);
             }
 
-            const result = await newUser.save();
+            await sendEmail.welcome(user.getEmail(), user.getName());
 
-            if(result && !result.error) {
-                await sendEmail.welcome(newUser.getEmail(), newUser.getName());
-                return this.sendResponse(res, 201, {success: 'Usuário criado com sucesso.'})
-            }
-
+            return this.sendResponse(res, 201, {success: 'Usuário criado com sucesso.'});
+        } catch (error) {
             return this.sendResponse(res, 500, {error: 'Houve um erro ao criar o usuário'});
         }
-
-        return this.sendResponse(res, 200, {alert: 'Este e-mail já está em uso.'});
     }
 
     updateUser = async (req, res) => {
@@ -193,6 +208,24 @@ class UserCtrl {
 
         const userImg = await googleUp.uploadFile(nameFile +'_photo_perfil.jpg', 'jpg', decodedImage);
         return userImg;
+    }
+
+    ValidImg = (file) => {
+        const contentType = mime.lookup(file.originalname);
+        const extension = mime.extension(contentType);
+
+        const validExtensions = ['png', 'jpg', 'jpeg'];
+        const maxSizeInBytes = 5 * 1024 * 1024;
+
+        if(!validExtensions.includes(extension)) {
+            return {invalid: 'O formato da imagem deve ser (png, jpg, jpeg)'}
+        } 
+
+        if(file.size > maxSizeInBytes) {
+            return {invalid: 'A Imagem deve ter no máximo 5MB'}
+        }
+
+        return {contentType: contentType, extension: extension};
     }
 
     sendResponse = (res, statusCode, msg) => {

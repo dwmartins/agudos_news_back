@@ -14,11 +14,10 @@ class UserDAO {
         const values = Object.values(user);
 
         try {
-            await this.conn.query(sql, values);
-            return true;
+            return await this.conn.query(sql, values);
         } catch (error) {
-            logger.log(`error`,`Houve um erro ao inserir o usuário no banco: ${error}`);
-            return {error: error}
+            logger.log(`error`,`Falha ao inserir o usuário no banco: ${error}`);
+            throw new Error(error);
         }
     }
 
@@ -36,6 +35,18 @@ class UserDAO {
         } catch (error) {
             logger.log(`error`,`Houve um erro ao atualizar o usuário: ${error}`);
             return {error: error}
+        }
+    }
+
+    updateImg = async (imgName, userId) => {
+        const sql = `UPDATE users SET photo_url = ? WHERE id = ?`;
+        const values = [imgName, userId];
+
+        try {
+           return await this.conn.query(sql, values);
+        } catch (error) {
+            logger.log(`error`,`Falha ao atualizar a foto do usuário: ${error}`);
+            throw new Error(error);
         }
     }
 
