@@ -140,9 +140,11 @@ class UserCtrl {
                     awsUploadCtrl.uploadPhotoUser(img, fileName),
                     userDAO.updateImg(imgUrl, user.getId())
                 ]);
+
+                return this.sendResponse(res, 201, {success: 'Foto atualizada com sucesso.'});
             }
         } catch (error) {
-            
+            return this.sendResponse(res, 500, {erro: `Falha ao atualizar a foto.`});
         }
     }
 
