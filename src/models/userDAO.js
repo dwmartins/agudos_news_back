@@ -59,7 +59,7 @@ class UserDAO {
             return true;
         } catch (error) {
             logger.log(`error`, `Houve um erro ao delete o usuário: ${error}`);
-            return {error: error}
+            throw new Error(error);
         }
     }
 
@@ -70,7 +70,7 @@ class UserDAO {
             return result[0];
         } catch (error) {
             logger.log(`error`, `Houve um erro ao buscar os usuários: ${error}`);
-            return {error: error}   
+            throw new Error(error);  
         }
     }
 
@@ -84,6 +84,17 @@ class UserDAO {
         } catch (error) {
             logger.log(`error`, `Houve um erro ao buscar os usuários por ID: ${error}`);
             throw new Error('Houve um erro ao buscar o usuário por ID');
+        }
+    }
+
+    disabled = async (action, id) => {
+        try {
+            const sql = `UPDATE users SET active = ? WHERE id = ?`;
+            const values = [action, id];
+            return await this.conn.query(sql, values);
+        } catch (error) {
+            logger.log(`error`,`Falha ao desabilitar o usuário: ${error}`);
+            throw new Error(error);
         }
     }
 

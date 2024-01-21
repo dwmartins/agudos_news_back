@@ -149,41 +149,37 @@ class UserCtrl {
     }
 
     deleteUser = async (req, res) => {
-        const { id } = req.params;
+        try {
+            const { id } = req.params;
 
-        const result = await userDAO.deleteDAO(id);
+            await userDAO.deleteDAO(id);
 
-        if(result && !result.error) {
             return this.sendResponse(res, 200, {success: `Usuário deletado com sucesso.`});
-        }
-
-        return this.sendResponse(res, 500, {erro: `Houve um erro ao deletar o usuário.`});
+            
+        } catch (error) {
+            return this.sendResponse(res, 500, {erro: `Falha ao deletar o usuário.`});
+        }   
     }
 
     list = async (req, res) => {
-        const users = await userDAO.findAll();
-
-        if(users.error) {
+        try {
+            const users = await userDAO.findAll();
+            this.sendResponse(res, 200, users);
+            
+        } catch (error) {
             return this.sendResponse(res, 500, {erro: `Houve um erro ao buscar os usuários.`}); 
         }
-        
-        this.sendResponse(res, 200, users);
     }
 
-    disabled = async (req, res) => {
-        const { id, action } = req.query;
-
+    disabledUser = async (req, res) => {
         try {
+            const { id, action } = req.query;
             let userAction = action === "N" ? "desabilitado" : "habilitado";
-            const userId = await userDAO.findById(id);
-
-            const user = new User(userId[0]);
-            user.setActive(action);
-            await user.update();
+            await userDAO.disabled(action, id);
 
             return this.sendResponse(res, 200, {success: `Usuário ${userAction} com sucesso.`});
         } catch (error) {
-            return this.sendResponse(res, 500, {erro: `Houve um erro ao mudar o status do usuário.`});
+            return this.sendResponse(res, 500, {erro: `Falha ao mudar o status do usuário.`});
         }
     }
 

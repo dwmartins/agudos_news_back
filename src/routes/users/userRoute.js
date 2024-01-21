@@ -18,7 +18,7 @@ route.delete("/deleta/:id", UserMiddleware.authenticateToken, userCtrl.deleteUse
 route.get("/:id", UserMiddleware.authenticateToken, userCtrl.getUser);
 
 // Rotas de admin
-route.put("/admin/desabilita", UserMiddleware.authenticateToken, UserMiddleware.checkUserAdmin, userCtrl.disabled);
+route.put("/admin/desabilita", UserMiddleware.authenticateToken, UserMiddleware.checkUserAdmin, userCtrl.disabledUser);
 route.get("/admin/users", UserMiddleware.authenticateToken, UserMiddleware.checkUserAdmin, userCtrl.list);
 
 module.exports = route;
