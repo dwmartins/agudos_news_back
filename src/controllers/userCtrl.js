@@ -6,8 +6,6 @@ const UserAccess = require("../class/UserAccess");
 const userDAO = require("../models/userDAO");
 const helper = require("../utilities/helper");
 const sendEmail = require("./sendEmail");
-const googleUp = require('./googleUploadCtrl');
-const imageType = require('image-type');
 const awsUploadCtrl = require("./awsUploadCtrl");
 
 class UserCtrl {
@@ -220,14 +218,6 @@ class UserCtrl {
             return this.sendResponse(res, 500, {erro: `Houve um erro ao buscar o usuário.`});
         }
         
-    }
-
-    setImgUser = async (file, nameFile) => {
-        const img64 = file.replace(/^data:image\/jpeg;base64,/, '');
-        const decodedImage = Buffer.from(img64, 'base64');
-
-        const userImg = await googleUp.uploadFile(nameFile +'_photo_perfil.jpg', 'jpg', decodedImage);
-        return userImg;
     }
 
     ValidImg = (file) => {
