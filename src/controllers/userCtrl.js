@@ -14,6 +14,41 @@ class UserCtrl {
     infoIgm;
 
     login = async (req, res) => {
+        try {
+            const { email, password } = req.body;
+            const userData = await userDAO.findByEmail(email);
+
+            if(userData.length) {
+                const user = new User(userData[0]);
+                const password_hash = await helper.comparePasswordHash(password, user.password); 
+
+                if(password_hash) {
+                    const payload  = { email: user.getEmail() };
+                    const token = jwt.sign(payload, user.getToken());
+                    delete user.token;
+                    delete user.password;
+                    user.token = token;
+
+                    const userAccess = {
+                        user_id: user.getId(),
+                        email: user.getEmail(),
+                        ip: req.ip.replace('::ffff:', '')
+                    }
+
+                    const access = new UserAccess(userAccess);
+                    await access.save();
+
+                    return this.sendResponse(res, 200, user);
+                }
+            }
+
+            return this.sendResponse(res, 200, {alert: `Usuário ou senha inválidos.`});
+        } catch (error) {
+            return this.sendResponse(res, 500, {erro: `Houve um erro ao realizar o login.`});
+        }
+    }
+
+    logins = async (req, res) => {
         const { email, password } = req.body;
 
         const userData = await userDAO.findByEmail(email);
