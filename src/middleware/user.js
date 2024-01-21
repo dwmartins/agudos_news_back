@@ -11,20 +11,19 @@ class UserMiddleware {
         if(!token) {
             return res.status(401).json({invalidToken: "Token não fornecido."});
         }
-    
-        const userData = await userDAO.findById(user_id);
 
-        if(userData.length && !userData.error) {
-            try {
-                jwt.verify(token, userData[0].token);
-                next();
-            } catch (error) {
-                logger.log(`error`, `Erro ao validar o token: ${error}`);
-                return res.status(401).json({invalidToken: "Token invalido."});
+        try {
+            const userData = await userDAO.findById(user_id);
+
+            if(userData.length) {
+                try {
+                    jwt.verify(token, userData[0].token);
+                    next();
+                } catch (error) {
+                    return res.status(401).json({invalidToken: "Token invalido."});
+                }
             }
-        }
-
-        if(userData.error) {
+        } catch (error) {
             return res.status(500).json({error: "Houve um erro, tente novamente."});   
         }
     }
@@ -32,20 +31,21 @@ class UserMiddleware {
     checkUserAdmin = async (req, res, next) => {
         const { user_id } = req.headers;
 
-        const userData = await userDAO.findById(user_id);
+        try {
+            const userData = await userDAO.findById(user_id);
 
-        if(userData.length && !userData.error) {
-            const user = new User(userData[0]);
+            if(userData.length) {
+                const user = new User(userData[0]);
 
-            if(user.getUserType() == 'admin') {
-                next();
-            } else {
-                const response = {notPermission: `Você não tem permissão para executar essa ação.`};
-                res.status(200).json(response);
+                if(user.getUserType() == 'admin') {
+                    next();
+                } else {
+                    const response = {notPermission: `Você não tem permissão para executar essa ação.`};
+                    res.status(200).json(response);
+                }
             }
-
-        } else if(!userData.length && !userData.error) {
-            return res.status(200).json({alert: 'Usuário não encontrado.'});
+        } catch (error) {
+            return res.status(500).json({error: "Houve um erro, tente novamente."});  
         }
     }
 }
