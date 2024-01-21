@@ -184,28 +184,30 @@ class UserCtrl {
     }
 
     sendNewPassword = async (req, res) => {
-        const { email } = req.body;
-        const userData = await userDAO.findByEmail(email);
+        try {
+            const { email } = req.body;
+            const userData = await userDAO.findByEmail(email);
 
-        if(userData.length && !userData.error) {
-            const password = helper.generateAlphanumericCode(6);
-            const encodedPassword = await helper.encodePassword(password);
+            if(userData.length) {
+                const password = helper.generateAlphanumericCode(6);
+                const encodedPassword = await helper.encodePassword(password);
+    
+                const user = new User(userData[0]);
+                user.setPassword(encodedPassword);
+                await user.update();
+    
+                await sendEmail.newPassword(user.getEmail(), password, user.getName());
 
-            const user = new User(userData[0]);
-            user.setPassword(encodedPassword);
-            const result = await user.update();
-
-            await sendEmail.newPassword(user.getEmail(), password, user.getName());
-
-            if(result && !result.error) {
                 const response = `Foi envido uma nova senha temporária em seu e-mail.`;
                 return this.sendResponse(res, 200, {success: response});
-            }
-        } else if(!userData.length && !userData.error){
-            return this.sendResponse(res, 200, {alert: 'E-mail não encontrado'});
-        }
 
-        return this.sendNewPassword(res, 500, {error: `Houve um erro, tente novamente ou entre em contato com o suporte.`});
+            } else if(!userData.length && !userData.error){
+                return this.sendResponse(res, 200, {alert: 'E-mail não encontrado'});
+            }
+
+        } catch (error) {
+            return this.sendNewPassword(res, 500, {error: `Falha, tente novamente ou entre em contato com o suporte.`});
+        }
     }
 
     getUser = async (req, res) => {
