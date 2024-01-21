@@ -48,43 +48,6 @@ class UserCtrl {
         }
     }
 
-    logins = async (req, res) => {
-        const { email, password } = req.body;
-
-        const userData = await userDAO.findByEmail(email);
-
-        if(userData.length && !userData.error) {
-            const user = new User(userData[0]);
-            const password_hash = await helper.comparePasswordHash(password, user.password); 
-
-            if(password_hash && !password_hash.error) {
-                const payload  = { email: user.getEmail() };
-                const token = jwt.sign(payload, user.getToken());
-                delete user.token;
-                delete user.password;
-                user.token = token;
-
-                const userAccess = {
-                    user_id: user.getId(),
-                    email: user.getEmail(),
-                    ip: req.ip.replace('::ffff:', '')
-                }
-
-                const access = new UserAccess(userAccess);
-                await access.save();
-                
-                return this.sendResponse(res, 200, user);
-            } else {
-                return this.sendResponse(res, 200, {alert: `Usuário ou senha inválidos.`});
-            }
-
-        } else if(!userData.length && !userData.error) {
-            return this.sendResponse(res, 200, {alert: `Usuário ou senha inválidos.`});
-        }
-
-        return this.sendResponse(res, 500, {erro: `Houve um erro ao realizar o login.`});
-    }
-
     new = async (req, res) => {
         try {
             const reqBody = req.body;
@@ -134,31 +97,53 @@ class UserCtrl {
     }
 
     updateUser = async (req, res) => {
-        const userBody = req.body;
-        const user = new User(userBody);
+        try {
+            const reqBody = req.body;
+            const img = req.file;
+            const user = new User(reqBody);
 
-        const emailExists = await userDAO.findByEmail(user.getEmail());
+            const emailExists = await userDAO.findByEmail(user.getEmail());
 
-        if(emailExists.error) {
+            if(emailExists.length) {
+                if(emailExists[0].email != user.getEmail()) {
+                    return this.sendResponse(res, 200, {alert: 'Este e-mail já está em uso.'});
+                }
+            }
+
+            const encodedPassword = await helper.encodePassword(user.getPassword());
+            user.setPassword(encodedPassword);
+            await user.update();
+
+            return this.sendResponse(res, 201, {success: 'Usuário atualizado com sucesso.'});
+        } catch (error) {
             return this.sendResponse(res, 500, {erro: `Houve um erro ao atualizar o usuário.`});
         }
+    }
 
-        if(emailExists.length) {
-            if(emailExists[0].email != user.getEmail()) {
-                return this.sendResponse(res, 200, {alert: 'Este e-mail já está em uso.'});
+    updateUserImg = async (req, res) => {
+        try {
+            const reqBody = req.body;
+            const img = req.file;
+            const user = new User(reqBody);
+
+            if(img) {
+                this.infoIgm = this.ValidImg(img);
+
+                if(this.infoIgm.invalid) {
+                    return this.sendResponse(res, 400, {alert: this.infoIgm.invalid});
+                }
+
+                const fileName = `${user.getId()}_${user.getName()}`;
+                const imgUrl = `${process.env.URLDOCS}/${process.env.FOLDERIMGUSERS}/${fileName}.${this.infoIgm.extension}`;
+
+                await Promise.all([
+                    awsUploadCtrl.uploadPhotoUser(img, fileName),
+                    userDAO.updateImg(imgUrl, user.getId())
+                ]);
             }
+        } catch (error) {
+            
         }
-
-        const encodedPassword = await helper.encodePassword(user.getPassword());
-        user.setPassword(encodedPassword);
-
-        const result = await user.update();
-
-        if(result && !result.error) {
-            return this.sendResponse(res, 201, {success: 'Usuário atualizado com sucesso.'})
-        }
-
-        return this.sendResponse(res, 500, {erro: `Houve um erro ao atualizar o usuário.`});
     }
 
     deleteUser = async (req, res) => {
