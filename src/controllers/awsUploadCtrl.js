@@ -55,7 +55,7 @@ class AwsUploadCtrl {
             const response = await this.uploadFile(file.buffer, key, contentType, folder);
             console.log(response);
         } catch (error) {
-            console.log(error)
+            throw new Error(error);
         }
     }
 
