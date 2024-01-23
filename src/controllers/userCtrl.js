@@ -73,7 +73,7 @@ class UserCtrl {
             user.setToken(token);
             user.setUserType("common");
             user.setActive("Y");
-            user.setPhoto_url('');
+            user.setPhoto_url(`${process.env.URLDOCS}/${process.env.FOLDERIMGUSERS}/no-image-user.jpeg`);
             const response = await user.save();
 
             if(img) {
