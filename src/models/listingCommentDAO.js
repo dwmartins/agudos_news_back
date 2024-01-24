@@ -95,3 +95,5 @@ class ListingCommentDAO {
         }
     }
 }
+
+module.exports = new ListingCommentDAO;

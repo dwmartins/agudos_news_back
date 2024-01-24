@@ -48,3 +48,5 @@ class ListingComment {
         return await listingCommentDAO.updateDAO(plainObject);
     }
 }
+
+module.exports = ListingComment;
