@@ -62,12 +62,34 @@ class NewTableListing {
         }
     }
 
+    listingComment = async () => {
+        try {
+            await db.pool.query(`
+                CREATE TABLE IF NOT EXISTS listing_comment (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    user INT NOT NULL,
+                    listing INT NOT NULL,
+                    assessment INT NOT NULL,
+                    comment VARCHAR(255) NOT NULL,
+                    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                    FOREIGN KEY (user) REFERENCES users(id) ON DELETE CASCADE,
+                    FOREIGN KEY (listing) REFERENCES listing(id) ON DELETE CASCADE
+                );
+            `);
+        } catch (error) {
+            logger.log(`error`, `Erro ao criar a tabela (listing_comment): ${error}`);
+        }
+    }
+
     // Criar as tabelas em ordem para não houver erro de chaves estrangeras por não existir as tabelas;
     createAll = async () => {
-        console.log(`${helper.getDateTime()} - Criando tabela de (listing_category)...`)
+        console.log(`${helper.getDateTime()} - Criando tabela de (listing_category)...`);
         await this.category();
-        console.log(`${helper.getDateTime()} - Criando tabela de (listing)...`)
+        console.log(`${helper.getDateTime()} - Criando tabela de (listing)...`);
         await this.listing();
+        console.log(`${helper.getDateTime()} - Criando tabela de (listing_comment)...`);
+        await this.listingComment();
     }
 }
 

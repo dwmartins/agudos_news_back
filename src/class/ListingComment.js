@@ -4,6 +4,7 @@ class ListingComment {
     constructor(comment) {
         this.id         = comment.id;
         this.user       = comment.user;
+        this.listing    = comment.listing;
         this.assessment = comment.assessment;
         this.comment    = comment.comment;
         this.createdAt  = comment.createdAt;
