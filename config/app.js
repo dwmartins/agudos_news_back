@@ -9,6 +9,7 @@ require("../src/schedules/Transitions");
 
 const userRoutes = require("../src/routes/users/userRoute");
 const listingRoute = require("../src/routes/listing/listingRoute");
+const listingCommentRoute = require("../src/routes/listing/listingCommentRoute.js");
 const categoryRoute = require("../src/routes/listing/categoryRoute");
 const carouselRoute = require("../src/routes/carousel/carouselRouter");
 const bannerPriceRoute = require("../src/routes/banner/bannerPriceRouter");
@@ -27,6 +28,7 @@ createServer = () => {
     app.use('/usuario', userRoutes);
     app.use('/anuncios', listingRoute);
     app.use('/anuncios/categorias', categoryRoute);
+    app.use('/anuncios/comentarios', listingCommentRoute);
     app.use('/carousel', carouselRoute);
     app.use('/banner', bannerPriceRoute);
     app.use('/codigo-promocional', promotionalCodeRoute);
