@@ -1,3 +1,5 @@
+const listingCommentDAO = require("../models/listingCommentDAO");
+
 class ListingComment {
     constructor(comment) {
         this.id         = comment.id;
@@ -22,4 +24,27 @@ class ListingComment {
     getCreatedAt = () => this.createdAt;
 
     getUpdatedAt = () => this.updatedAt;
+
+    save = async () => {
+        let plainObject = Object.fromEntries(
+            Object.entries(this).filter(([key, value]) => typeof value !== 'function')
+        );
+
+        delete plainObject.createdAt;
+        delete plainObject.updatedAt;
+        delete plainObject.id;
+
+        return await listingCommentDAO.saveDAO(plainObject);
+    }
+
+    update = async () => {
+        let plainObject = Object.fromEntries(
+            Object.entries(this).filter(([key, value]) => typeof value !== 'function')
+        );
+
+        delete plainObject.createdAt;
+        delete plainObject.updatedAt;
+
+        return await listingCommentDAO.updateDAO(plainObject);
+    }
 }
