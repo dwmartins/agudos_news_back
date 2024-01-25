@@ -1,4 +1,4 @@
-const ListingPaymentoDAO = require("../models/listingPaymentDAO");
+const ListingPaymentDAO = require("../models/listingPaymentDAO");
 
 class ListingPayment {
     constructor(payment) {
@@ -42,7 +42,7 @@ class ListingPayment {
         delete plainObject.updatedAt;
         delete plainObject.id;
 
-        return await ListingPaymentoDAO.saveDAO(plainObject);
+        return await ListingPaymentDAO.saveDAO(plainObject);
     }
 
     update = async () => {
@@ -53,7 +53,7 @@ class ListingPayment {
         delete plainObject.createdAt;
         delete plainObject.updatedAt;
 
-        return await ListingPaymentoDAO.updateDAO(plainObject);
+        return await ListingPaymentDAO.updateDAO(plainObject);
     }
 }
 
