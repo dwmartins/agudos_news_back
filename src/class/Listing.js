@@ -23,12 +23,12 @@ class Listing {
         this.observation        = listing.observation;
         this.facebook           = listing.facebook;
         this.instagram          = listing.instagram;
-        this.twitter            = listing.twitter;
+        // this.twitter            = listing.twitter;
         this.linkedIn           = listing.linkedIn;
         this.openingHours       = listing.openingHours;
         this.promotionalCode    = listing.promotionalCode;
-        this.payment            = listing.payment;
-        this.image              = listing.image;
+        this.paymentid          = listing.paymentId;
+        // this.image              = listing.image;
         this.logoImage          = listing.logoImage;
         this.coverImage         = listing.coverImage;
         this.createdAt          = listing.createdAt;
@@ -195,14 +195,6 @@ class Listing {
         this.instagram = instagram;
     }
 
-    getTwitter = () => {
-        return this.twitter;
-    }
-
-    setTwitter = (twitter) => {
-        this.twitter = twitter;
-    }
-
     getLinkedIn = () => {
         return this.linkedIn;
     }
@@ -236,19 +228,7 @@ class Listing {
     }
 
     /**
-     * 1024px x 768px (JPG, GIF or PNG) max 5MB
-     * @returns String/ image URL
-     */
-    getImage = () => {
-        return this.image;
-    }
-
-    setImage = (image) => {
-        this.image = image;
-    }
-
-    /**
-     * // 250 x 250 px (JPG, GIF or PNG) max 5MB
+     * // 250 x 250 px (JPG, JPEG or PNG) max 5MB
      * @returns String/ image URL
      */
     getLogoImage = () => {
@@ -260,7 +240,7 @@ class Listing {
     }
 
     /**
-     * // 1920 x 480 px (JPG, GIF or PNG) max 5MB
+     * // 1920 x 480 px (JPG, JPEG or PNG) max 5MB
      * @returns  String/ image URL
      */
     getCoverImage = () => {

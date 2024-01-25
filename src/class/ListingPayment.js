@@ -2,13 +2,14 @@ const ListingPaymentoDAO = require("../models/listingPaymentDAO");
 
 class ListingPayment {
     constructor(payment) {
-        this.id         = payment.id;
-        this.userId     = payment.userId;
-        this.listingId  = payment.listingId;
-        this.method     = payment.method;
-        this.status     = payment.status;
-        this.createdAt  = payment.createdAt;
-        this.updatedAt  = payment.updatedAt;
+        this.id             = payment.id;
+        this.userId         = payment.userId;
+        this.listingId      = payment.listingId;
+        this.method         = payment.method;
+        this.status         = payment.status;
+        this.paymentDate    = payment.paymentDate;
+        this.createdAt      = payment.createdAt;
+        this.updatedAt      = payment.updatedAt;
     }
 
     getId = () => this.id;
@@ -24,6 +25,9 @@ class ListingPayment {
 
     getStatus = () => this.status;
     setStatus = (status) => this.status = status;
+
+    getPaymentDate = () => this.paymentDate;
+    setPaymentDate = (status) => this.paymentDate = status;
 
     getCreatedAt = () => this.createdAt;
 
