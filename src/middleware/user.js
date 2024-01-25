@@ -22,6 +22,8 @@ class UserMiddleware {
                 } catch (error) {
                     return res.status(401).json({invalidToken: "Token invalido."});
                 }
+            } else {
+                return res.status(401).json({invalidToken: "Token invalido."});
             }
         } catch (error) {
             return res.status(500).json({error: "Houve um erro, tente novamente."});   

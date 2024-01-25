@@ -52,8 +52,24 @@ class AwsUploadCtrl {
 
             const key = `${fileName}.${extension}`;
     
-            const response = await this.uploadFile(file.buffer, key, contentType, folder);
-            console.log(response);
+            await this.uploadFile(file.buffer, key, contentType, folder);
+            return true;
+        } catch (error) {
+            throw new Error(error);
+        }
+    }
+
+    uploadPhotoListing = async (file, fileName) => {
+        try {
+            const folder = process.env.FOLDERIMGLISTING;
+
+            const contentType = mime.lookup(file.originalname);
+            const extension = mime.extension(contentType);
+
+            const key = `${fileName}.${extension}`;
+    
+            await this.uploadFile(file.buffer, key, contentType, folder);
+            return true;
         } catch (error) {
             throw new Error(error);
         }
