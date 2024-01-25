@@ -1,3 +1,5 @@
+const ListingPaymentoDAO = require("../models/listingPaymentDAO");
+
 class ListingPayment {
     constructor(payment) {
         this.id         = payment.id;
@@ -26,4 +28,27 @@ class ListingPayment {
     getCreatedAt = () => this.createdAt;
 
     getUpdatedAt = () => this.updatedAt;
+
+    save = async () => {
+        let plainObject = Object.fromEntries(
+            Object.entries(this).filter(([key, value]) => typeof value !== 'function')
+        );
+
+        delete plainObject.createdAt;
+        delete plainObject.updatedAt;
+        delete plainObject.id;
+
+        return await ListingPaymentoDAO.saveDAO(plainObject);
+    }
+
+    update = async () => {
+        let plainObject = Object.fromEntries(
+            Object.entries(this).filter(([key, value]) => typeof value !== 'function')
+        );
+
+        delete plainObject.createdAt;
+        delete plainObject.updatedAt;
+
+        return await ListingPaymentoDAO.updateDAO(plainObject);
+    }
 }

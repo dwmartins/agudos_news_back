@@ -52,3 +52,5 @@ class ListingPaymentDAO {
         }
     }
 }
+
+module.exports = new ListingPaymentDAO;
