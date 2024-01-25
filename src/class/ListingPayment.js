@@ -52,3 +52,5 @@ class ListingPayment {
         return await ListingPaymentoDAO.updateDAO(plainObject);
     }
 }
+
+module.exports = ListingPayment;
