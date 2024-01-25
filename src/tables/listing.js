@@ -62,6 +62,26 @@ class NewTableListing {
         }
     }
 
+    listingPayment = async () => {
+        try {
+            await db.pool.query(`
+                CREATE TABLE IF NOT EXISTS listing_payment (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    userId INT NOT NULL,
+                    listingId INT NOT NULL,
+                    method VARCHAR(100),
+                    status VARCHAR(50),
+                    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                    FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE,
+                    FOREIGN KEY (listingId) REFERENCES listing(id) ON DELETE CASCADE
+                );
+            `);
+        } catch (error) {
+            
+        }
+    }
+
     listingComment = async () => {
         try {
             await db.pool.query(`
@@ -86,8 +106,13 @@ class NewTableListing {
     createAll = async () => {
         console.log(`${helper.getDateTime()} - Criando tabela de (listing_category)...`);
         await this.category();
+
         console.log(`${helper.getDateTime()} - Criando tabela de (listing)...`);
         await this.listing();
+
+        console.log(`${helper.getDateTime()} - Criando tabela de (listing_payment)...`);
+        await this.listingPayment();
+
         console.log(`${helper.getDateTime()} - Criando tabela de (listing_comment)...`);
         await this.listingComment();
     }
