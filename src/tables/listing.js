@@ -101,6 +101,23 @@ class NewTableListing {
         }
     }
 
+    listingGalleryImg = async () => {
+        try {
+            await db.pool.query(`
+                CREATE TABLE IF NOT EXISTS listing_galleryImg (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    listingId INT NOT NULL,
+                    imgUrl LONGTEXT NOT NULL,
+                    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                    FOREIGN KEY (listingId) REFERENCES listing(id) ON DELETE CASCADE
+                );
+            `);
+        } catch (error) {
+            logger.log(`error`, `Erro ao criar a tabela (listing_galleryImg): ${error}`);
+        }
+    }
+
     // Criar as tabelas em ordem para não houver erro de chaves estrangeras por não existir as tabelas;
     createAll = async () => {
         console.log(`${helper.getDateTime()} - Criando tabela de (listing_category)...`);
@@ -114,6 +131,9 @@ class NewTableListing {
 
         console.log(`${helper.getDateTime()} - Criando tabela de (listing_comment)...`);
         await this.listingComment();
+
+        console.log(`${helper.getDateTime()} - Criando tabela de (listing_galleryImg)...`);
+        await this.listingGalleryImg();
     }
 }
 

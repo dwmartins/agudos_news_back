@@ -18,7 +18,7 @@ class ListingDAO {
             return true;
         } catch (error) {
             logger.log(`error`,`Falha ao inserir a listing no banco: ${error}`);
-            throw error
+            throw new Error(error);
         }
     }
 
@@ -35,7 +35,7 @@ class ListingDAO {
             return true;
         } catch (error) {
             logger.log(`error`,`Houve um erro ao atualizar a listing: ${error}`);
-            return {error: error}
+            throw new Error(error);
         }
     }
 
@@ -48,7 +48,7 @@ class ListingDAO {
             return true;
         } catch (error) {
             logger.log(`error`, `Houve um erro ao delete a listing: ${error}`);
-            return {error: error}
+            throw new Error(error);
         }
     }
 
@@ -62,7 +62,7 @@ class ListingDAO {
             return result[0];
         } catch (error) {
             logger.log(`error`, `Houve um erro buscar o anuncio por id: ${error}`);
-            return {error: error}
+            throw new Error(error);
         }
     }
 
@@ -80,7 +80,7 @@ class ListingDAO {
             return result[0];
         } catch (error) {
             logger.log(`error`, `Houve um erro buscar os anuncios: ${error}`);
-            return {error: error}
+            throw new Error(error);
         }
     }
 
@@ -92,7 +92,7 @@ class ListingDAO {
             return result[0];
         } catch (error) {
             logger.log(`error`, `Houve um erro buscar os dados da listing referente a data anterior: ${error}`);
-            throw error
+            throw new Error(error);
         }
     }
 }
