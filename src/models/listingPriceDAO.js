@@ -57,7 +57,7 @@ class ListingPriceDAO {
             const sql = `SELECT id FROM listing_price WHERE id = ?`;
             const value = [id];
 
-            const result = this.conn.query(sql, value);
+            const result = await this.conn.query(sql, value);
 
             return result[0];
         } catch (error) {
@@ -68,10 +68,15 @@ class ListingPriceDAO {
 
     findAll = async (status) => {
         try {
-            const sql = `SELECT id FROM listing_price WHERE active = ?`;
+            let sql = `SELECT * FROM listing_price`;
+
+            if(status) {
+                sql += ` WHERE active = ?`
+            }
+
             const value = [status];
 
-            const results = this.conn.query(sql, value);
+            const results = await this.conn.query(sql, value);
             return results[0];
         } catch (error) {
             logger.log(`error`, `Falha ao buscar os preço do da listings: ${error}`);
