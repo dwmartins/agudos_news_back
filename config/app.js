@@ -10,13 +10,14 @@ require("../src/schedules/Transitions");
 const userRoutes = require("../src/routes/users/userRoute");
 const listingRoute = require("../src/routes/listing/listingRoute");
 const listingCommentRoute = require("../src/routes/listing/listingCommentRoute.js");
+const listingPriceRoute = require("../src/routes/listing/listingPriceRoute.js");
 const categoryRoute = require("../src/routes/listing/categoryRoute");
 const carouselRoute = require("../src/routes/carousel/carouselRouter");
 const bannerPriceRoute = require("../src/routes/banner/bannerPriceRouter");
 const promotionalCodeRoute = require("../src/routes/promotionalCode/promotionalCodeRoute");
 const transitionRoute = require("../src/routes/transition/transitionRoute");
 const jobRoute = require("../src/routes/jobs/jobRoute");
-const awsimg = require("../src/routes/awsimgteste.js")
+const awsimg = require("../src/routes/awsimgteste.js");
 
 createServer = () => {
     const app = express();
@@ -29,6 +30,7 @@ createServer = () => {
     app.use('/anuncios', listingRoute);
     app.use('/anuncios/categorias', categoryRoute);
     app.use('/anuncios/comentarios', listingCommentRoute);
+    app.use('/anuncios/precos', listingPriceRoute);
     app.use('/carousel', carouselRoute);
     app.use('/banner', bannerPriceRoute);
     app.use('/codigo-promocional', promotionalCodeRoute);
