@@ -125,7 +125,8 @@ class NewTableListing {
                     id INT AUTO_INCREMENT PRIMARY KEY,
                     description VARCHAR(255),
                     level VARCHAR(100) NOT NULL,
-                    active ENUM('Y', 'N') DEFAULT 'Y',
+                    active ENUM('Y', 'N') DEFAULT 'Y' NOT NULL,
+                    price DECIMAL(10,2),
                     createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
                     updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
                 );    

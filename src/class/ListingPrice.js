@@ -6,6 +6,7 @@ class ListingPrice {
         this.description    = price.description;
         this.level          = price.level;
         this.active         = price.active;
+        this.price          = price.price
         this.createdAt      = price.createdAt;
         this.updatedAt      = price.updatedAt;
     }
@@ -20,6 +21,9 @@ class ListingPrice {
 
     getActive = () => this.active;
     setActive = (active) => this.active = active;
+
+    getPrice = () => this.price;
+    setPrice = (price) => this.price = price;
 
     getCreateAt = () => this.createdAt;
 
