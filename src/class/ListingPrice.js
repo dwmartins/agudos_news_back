@@ -1,3 +1,5 @@
+const listingPriceDAO = require("../models/listingPriceDAO");
+
 class ListingPrice {
     constructor(price) {
         this.id             = price.id;
@@ -22,4 +24,30 @@ class ListingPrice {
     getCreateAt = () => this.createdAt;
 
     getUpdatedAt = () =>  this.updatedAt;
+
+    save = async () => {
+
+        let plainObject = Object.fromEntries(
+            Object.entries(this).filter(([key, value]) => typeof value !== 'function')
+        );
+
+        delete plainObject.createdAt;
+        delete plainObject.updatedAt;
+        delete plainObject.id;
+
+        return await listingPriceDAO.saveDAO(plainObject);
+    }
+
+    update = async () => {
+        let plainObject = Object.fromEntries(
+            Object.entries(this).filter(([key, value]) => typeof value !== 'function')
+        );
+
+        delete plainObject.createdAt;
+        delete plainObject.updatedAt;
+
+        return await listingPriceDAO.updateDAO(plainObject);
+    }
 }
+
+module.exports = ListingPrice;
