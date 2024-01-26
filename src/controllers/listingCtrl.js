@@ -7,7 +7,11 @@ class ListingCtrl {
     new = async (req, res) => {
         try {
             const listingBody = req.body;
-            const imgs = req.files;
+            const imgsValid = this.validImgs(req.files);
+
+            if(!imgsValid) {
+                return this.sendResponse(res, 400, {imgInvalid: 'Alguma das imagens não atende ao tamanho máximo ou ao formato aceitável.'})
+            }
 
             const listing = new Listing(listingBody);
             // listing.setStatus("pendente");
@@ -56,6 +60,42 @@ class ListingCtrl {
 
     sendResponse = (res, statusCode, msg) => {
         res.status(statusCode).json(msg);
+    }
+
+    validImgs = (files) => {
+
+        if(files['logo']) {
+            const logo = files['logo'][0];
+            const imgValid = helper.validImg(logo);
+            if(imgValid.invalid) {
+                return false
+            }
+            
+            this.logoImg = imgValid;
+        }
+        
+        if(files['cover']) {
+            const coverImg = files['cover'][0];
+            const imgValid = helper.validImg(coverImg);
+            if(imgValid.invalid) {
+                return false;
+            }
+            
+            this.imgCover = imgValid;
+        }
+        
+        if(files['gallery']) {
+            const gallery = files['gallery'];
+            for (let i = 0; i < gallery.length; i++) {
+                const element = gallery[i];
+                const imgValid = helper.validImg(gallery[i]);
+                if(imgValid.invalid) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 }
 

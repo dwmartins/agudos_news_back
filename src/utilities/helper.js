@@ -54,7 +54,7 @@ class Helper {
         return code;
     }
 
-    ValidImg = (file) => {
+    validImg = (file) => {
         const contentType = mime.lookup(file.originalname);
         const extension = mime.extension(contentType);
 
