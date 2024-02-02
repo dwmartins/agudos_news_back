@@ -24,7 +24,7 @@ class UserCtrl {
 
                 if(password_hash) {
                     const payload  = { email: user.getEmail() };
-                    const token = jwt.sign(payload, user.getToken(), {expiresIn: 30});
+                    const token = jwt.sign(payload, user.getToken(), {expiresIn: 3600});
                     delete user.token;
                     delete user.password;
                     user.token = token;
