@@ -36,7 +36,8 @@ createServer = () => {
     app.use('/api/codigo-promocional', promotionalCodeRoute);
     app.use('/api/transacoes', transitionRoute);
     app.use('/api/empregos', jobRoute);
-    app.use('/api/testeimg', awsimg)
+
+    app.use('/api/teste', awsimg)
 
     app.get('/', (req, res) => {
         res.status(200).sendFile(path.resolve('index.html'));

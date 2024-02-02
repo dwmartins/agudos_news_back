@@ -16,7 +16,7 @@ class UserDAO {
         try {
             return await this.conn.query(sql, values);
         } catch (error) {
-            logger.log(`error`,`Falha ao inserir o usuário no banco: ${error}`);
+            logger.log(`error`,`Falha ao inserir o usuário no banco: ${error.code}`);
             throw new Error(error);
         }
     }
@@ -33,7 +33,7 @@ class UserDAO {
             await this.conn.query(sql, values);
             return true;
         } catch (error) {
-            logger.log(`error`,`Houve um erro ao atualizar o usuário: ${error}`);
+            logger.log(`error`,`Houve um erro ao atualizar o usuário: ${error.code}`);
             return {error: error}
         }
     }
@@ -45,7 +45,7 @@ class UserDAO {
         try {
            return await this.conn.query(sql, values);
         } catch (error) {
-            logger.log(`error`,`Falha ao atualizar a foto do usuário: ${error}`);
+            logger.log(`error`,`Falha ao atualizar a foto do usuário: ${error.code}`);
             throw new Error(error);
         }
     }
@@ -58,7 +58,7 @@ class UserDAO {
             await this.conn.query(sql, value);
             return true;
         } catch (error) {
-            logger.log(`error`, `Houve um erro ao delete o usuário: ${error}`);
+            logger.log(`error`, `Houve um erro ao delete o usuário: ${error.code}`);
             throw new Error(error);
         }
     }
@@ -69,7 +69,7 @@ class UserDAO {
             const result = await this.conn.query(sql);
             return result[0];
         } catch (error) {
-            logger.log(`error`, `Houve um erro ao buscar os usuários: ${error}`);
+            logger.log(`error`, `Houve um erro ao buscar os usuários: ${error.code}`);
             throw new Error(error);  
         }
     }
@@ -82,7 +82,7 @@ class UserDAO {
             const result = await this.conn.query(sql, value);
             return result[0];
         } catch (error) {
-            logger.log(`error`, `Houve um erro ao buscar os usuários por ID: ${error}`);
+            logger.log(`error`, `Houve um erro ao buscar os usuários por ID: ${error.code}`);
             throw new Error('Houve um erro ao buscar o usuário por ID');
         }
     }
@@ -93,7 +93,7 @@ class UserDAO {
             const values = [action, id];
             return await this.conn.query(sql, values);
         } catch (error) {
-            logger.log(`error`,`Falha ao desabilitar o usuário: ${error}`);
+            logger.log(`error`,`Falha ao desabilitar o usuário: ${error.code}`);
             throw new Error(error);
         }
     }
@@ -106,8 +106,20 @@ class UserDAO {
             const result = await this.conn.query(sql, value);
             return result[0];
         } catch (error) {
-            logger.log(`error`, `Houve um erro ao buscar os usuários por E-mail: ${error}`);
-            return {error: error}
+            logger.log(`error`, `Houve um erro ao buscar os usuários por E-mail: ${error.code}`);
+            throw new Error(error);
+        }
+    }
+
+    getToken = async (user_id) => {
+        try {
+            const sql = `SELECT token FROM users WHERE id =?`;
+            const result = await this.conn.query(sql, [user_id]);
+            return result[0]; 
+        } catch (error) {
+            console.log(error)
+            logger.log(`error`, `Falha ao buscar o token do usuário: ${error.code}`);
+            throw new Error(error);
         }
     }
 }
