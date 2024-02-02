@@ -5,6 +5,8 @@ const User = require("../class/User");
 const UserAccess = require("../class/UserAccess");
 const userDAO = require("../models/userDAO");
 const helper = require("../utilities/helper");
+const helperAuth = require("../utilities/HelpersAuth");
+const helperFile = require("../utilities/helperFile");
 const sendEmail = require("./sendEmail");
 const awsUploadCtrl = require("./awsUploadCtrl");
 
@@ -18,11 +20,11 @@ class UserCtrl {
 
             if(userData.length) {
                 const user = new User(userData[0]);
-                const password_hash = await helper.comparePasswordHash(password, user.password); 
+                const password_hash = await helperAuth.comparePasswordHash(password, user.password); 
 
                 if(password_hash) {
                     const payload  = { email: user.getEmail() };
-                    const token = jwt.sign(payload, user.getToken());
+                    const token = jwt.sign(payload, user.getToken(), {expiresIn: 30});
                     delete user.token;
                     delete user.password;
                     user.token = token;
@@ -59,15 +61,15 @@ class UserCtrl {
             }
 
             if(img) {
-                this.infoIgm = this.ValidImg(img);
+                this.infoIgm = helperFile.validImg(img);
 
                 if(this.infoIgm.invalid) {
                     return this.sendResponse(res, 400, {alert: this.infoIgm.invalid});
                 }
             }
 
-            const encodedPassword = await helper.encodePassword(user.getPassword());
-            const token = helper.newCrypto();
+            const encodedPassword = await helperAuth.encodePassword(user.getPassword());
+            const token = helperAuth.newCrypto();
 
             user.setPassword(encodedPassword);
             user.setToken(token);
@@ -108,7 +110,7 @@ class UserCtrl {
                 }
             }
 
-            const encodedPassword = await helper.encodePassword(user.getPassword());
+            const encodedPassword = await helperAuth.encodePassword(user.getPassword());
             user.setPassword(encodedPassword);
             await user.update();
 
@@ -188,7 +190,7 @@ class UserCtrl {
 
             if(userData.length) {
                 const password = helper.generateAlphanumericCode(6);
-                const encodedPassword = await helper.encodePassword(password);
+                const encodedPassword = await helperAuth.encodePassword(password);
     
                 const user = new User(userData[0]);
                 user.setPassword(encodedPassword);

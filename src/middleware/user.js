@@ -19,6 +19,10 @@ class UserMiddleware {
                     jwt.verify(token, userData[0].token);
                     next();
                 } catch (error) {
+                    if(error.expiredAt) {
+                        return res.status(401).json({expiredToken: "Token expirado."});
+                    }
+                    
                     return res.status(401).json({invalidToken: "Token invalido."});
                 }
             } else {
@@ -65,6 +69,11 @@ class UserMiddleware {
                     jwt.verify(token, userToken[0].token);
                     return res.status(200).json({success: "Autenticado"});
                 } catch (error) {
+
+                    if(error.expiredAt) {
+                        return res.status(401).json({expiredToken: "Token expirado."});
+                    }
+        
                     return res.status(401).json({invalidToken: "Token invalido."});
                 }
             } else {
