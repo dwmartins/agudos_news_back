@@ -9,11 +9,11 @@ class User {
         this.email      = user.email;
         this.password   = user.password;
         this.token      = user.token;
-        this.active     = user.active;
-        this.user_type  = user.user_type;
+        this.active     = user.active ? user.active : 'Y';
+        this.user_type  = user.user_type ? user.user_type : 'common';
         this.photo_url  = user.photo_url;
         this.createdAt  = user.createdAt;
-        this.updatedAt   = user.updatedAt;
+        this.updatedAt  = user.updatedAt;
     }
 
     getId = () => {

@@ -73,8 +73,6 @@ class UserCtrl {
 
             user.setPassword(encodedPassword);
             user.setToken(token);
-            user.setUserType("common");
-            user.setActive("Y");
             user.setPhoto_url(`${process.env.URLDOCS}/${process.env.FOLDERIMGUSERS}/no-image-user.jpeg`);
             const response = await user.save();
 
@@ -127,7 +125,7 @@ class UserCtrl {
             const user = new User(reqBody);
 
             if(img) {
-                this.infoIgm = this.ValidImg(img);
+                this.infoIgm = helperFile.validImg(img);
 
                 if(this.infoIgm.invalid) {
                     return this.sendResponse(res, 400, {alert: this.infoIgm.invalid});
@@ -220,24 +218,6 @@ class UserCtrl {
             return this.sendResponse(res, 500, {erro: `Houve um erro ao buscar o usuário.`});
         }
         
-    }
-
-    ValidImg = (file) => {
-        const contentType = mime.lookup(file.originalname);
-        const extension = mime.extension(contentType);
-
-        const validExtensions = ['png', 'jpg', 'jpeg'];
-        const maxSizeInBytes = 5 * 1024 * 1024;
-
-        if(!validExtensions.includes(extension)) {
-            return {invalid: 'O formato da imagem deve ser (png, jpg, jpeg)'}
-        } 
-
-        if(file.size > maxSizeInBytes) {
-            return {invalid: 'A Imagem deve ter no máximo 5MB'}
-        }
-
-        return {contentType: contentType, extension: extension};
     }
 
     sendResponse = (res, statusCode, msg) => {
