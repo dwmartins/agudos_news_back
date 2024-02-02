@@ -26,17 +26,17 @@ createServer = () => {
     app.use(express.json({limit: '50mb'}));
 
     // Routes
-    app.use('/usuario', userRoutes);
-    app.use('/anuncios', listingRoute);
-    app.use('/anuncios/categorias', categoryRoute);
-    app.use('/anuncios/comentarios', listingCommentRoute);
-    app.use('/anuncios/precos', listingPriceRoute);
-    app.use('/carousel', carouselRoute);
-    app.use('/banner', bannerPriceRoute);
-    app.use('/codigo-promocional', promotionalCodeRoute);
-    app.use('/transacoes', transitionRoute);
-    app.use('/empregos', jobRoute);
-    app.use('/testeimg', awsimg)
+    app.use('/api/usuario', userRoutes);
+    app.use('/api/anuncios', listingRoute);
+    app.use('/api/anuncios/categorias', categoryRoute);
+    app.use('/api/anuncios/comentarios', listingCommentRoute);
+    app.use('/api/anuncios/precos', listingPriceRoute);
+    app.use('/api/carousel', carouselRoute);
+    app.use('/api/banner', bannerPriceRoute);
+    app.use('/api/codigo-promocional', promotionalCodeRoute);
+    app.use('/api/transacoes', transitionRoute);
+    app.use('/api/empregos', jobRoute);
+    app.use('/api/testeimg', awsimg)
 
     app.get('/', (req, res) => {
         res.status(200).sendFile(path.resolve('index.html'));
