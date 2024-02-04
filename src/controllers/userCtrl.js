@@ -23,7 +23,7 @@ class UserCtrl {
                 const password_hash = await helperAuth.comparePasswordHash(password, user.password); 
 
                 if(password_hash) {
-                    const payload  = { email: user.getEmail() };
+                    const payload  = { email: user.getEmail(), user_type: user.getUserType() };
                     const token = jwt.sign(payload, user.getToken(), {expiresIn: 3600});
                     delete user.token;
                     delete user.password;

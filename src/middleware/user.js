@@ -4,6 +4,8 @@ const User = require("../class/User");
 
 class UserMiddleware {
 
+    userData;
+
     authenticateToken = async (req, res, next) => {
         const { user_id, token } = req.headers;
     
@@ -66,8 +68,8 @@ class UserMiddleware {
 
             if(userToken.length) {
                 try {
-                    jwt.verify(token, userToken[0].token);
-                    return res.status(200).json({success: "Autenticado"});
+                    this.userData = jwt.verify(token, userToken[0].token);
+                    return res.status(200).json({success: "Autenticado", userType: this.userData.user_type});
                 } catch (error) {
 
                     if(error.expiredAt) {
