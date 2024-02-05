@@ -136,6 +136,24 @@ class NewTableListing {
         }
     }
 
+    listingPlansInfo = async () => {
+        try {
+            await db.pool.query(`
+                CREATE TABLE IF NOT EXISTS listing_plans_info (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    plansId INT NOT NULL,
+                    active ENUM('Y', 'N') DEFAULT 'Y' NOT NULL,
+                    description VARCHAR(255),
+                    createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                    FOREIGN KEY (plansId) REFERENCES listing_plans(id) ON DELETE CASCADE
+                );
+            `);
+        } catch (error) {
+            logger.log(`error`, `Erro ao criar a tabela (listing_plans_info): ${error}`);
+        }
+    }
+
     // Criar as tabelas em ordem para não houver erro de chaves estrangeras por não existir as tabelas;
     createAll = async () => {
         console.log(`${helper.getDateTime()} - Criando tabela de (listing_category)...`);
@@ -155,6 +173,9 @@ class NewTableListing {
 
         console.log(`${helper.getDateTime()} - Criando tabela de (listing_plans)...`);
         await this.listingPlans();
+
+        console.log(`${helper.getDateTime()} - Criando tabela de (listing_plans_info)...`);
+        await this.listingPlansInfo();
     }
 }
 
