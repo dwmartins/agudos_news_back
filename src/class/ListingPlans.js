@@ -1,6 +1,6 @@
-const listingPriceDAO = require("../models/listingPriceDAO");
+const listingPriceDAO = require("../models/listingPlansDAO");
 
-class ListingPrice {
+class ListingPlans {
     constructor(price) {
         this.id             = price.id;
         this.description    = price.description;
@@ -54,4 +54,4 @@ class ListingPrice {
     }
 }
 
-module.exports = ListingPrice;
+module.exports = ListingPlans;

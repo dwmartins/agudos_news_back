@@ -1,7 +1,7 @@
-const ListingPrice = require("../class/ListingPrice");
-const listingPriceDAO = require("../models/listingPriceDAO");
+const ListingPlans = require("../class/ListingPlans");
+const listingPriceDAO = require("../models/listingPlansDAO");
 
-class ListingPriceCtrl {
+class ListingPlansCtrl {
     new = async (req, res) => {
         try {
             const reqBody = req.body;
@@ -42,4 +42,4 @@ class ListingPriceCtrl {
     }
 }
 
-module.exports = new ListingPriceCtrl;
+module.exports = new ListingPlansCtrl;

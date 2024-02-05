@@ -118,10 +118,10 @@ class NewTableListing {
         }
     }
 
-    listingPrice = async () => {
+    listingPlans = async () => {
         try {
             await db.pool.query(`
-                CREATE TABLE IF NOT EXISTS listing_price (
+                CREATE TABLE IF NOT EXISTS listing_plans (
                     id INT AUTO_INCREMENT PRIMARY KEY,
                     description VARCHAR(255),
                     level VARCHAR(100) NOT NULL,
@@ -132,7 +132,7 @@ class NewTableListing {
                 );    
             `);
         } catch (error) {
-            logger.log(`error`, `Erro ao criar a tabela (listing_price): ${error}`);
+            logger.log(`error`, `Erro ao criar a tabela (listing_plans): ${error}`);
         }
     }
 
@@ -153,8 +153,8 @@ class NewTableListing {
         console.log(`${helper.getDateTime()} - Criando tabela de (listing_galleryImg)...`);
         await this.listingGalleryImg();
 
-        console.log(`${helper.getDateTime()} - Criando tabela de (listing_price)...`);
-        await this.listingPrice();
+        console.log(`${helper.getDateTime()} - Criando tabela de (listing_plans)...`);
+        await this.listingPlans();
     }
 }
 

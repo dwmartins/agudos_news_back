@@ -1,7 +1,7 @@
 const db = require("../../config/dbConnection");
 const logger = require("../../config/logger");
 
-class ListingPriceDAO {
+class ListingPlansDAO {
     constructor () {
         this.conn = db.pool;
     }
@@ -10,7 +10,7 @@ class ListingPriceDAO {
         const fields = Object.keys(price).join(', ');
         const placeholders = Object.keys(price).map(key => `?`).join(', ');
 
-        const sql = `INSERT INTO listing_price (${fields}) VALUES (${placeholders})`;
+        const sql = `INSERT INTO listing_plans (${fields}) VALUES (${placeholders})`;
         const values = Object.values(price);
 
         try {
@@ -27,7 +27,7 @@ class ListingPriceDAO {
         delete price.id;
         const fields = Object.keys(price).join(' = ?, ') + ' = ?';
         
-        const sql = `UPDATE listing_price SET ${fields} WHERE id = ?`;
+        const sql = `UPDATE listing_plans SET ${fields} WHERE id = ?`;
         let values = [...Object.values(price), priceId];
 
         try {
@@ -41,7 +41,7 @@ class ListingPriceDAO {
 
     deleteDAO = async (id) => { 
         try {
-            const sql = `DELETE FROM listing_price WHERE id = ?`;
+            const sql = `DELETE FROM listing_plans WHERE id = ?`;
             const value = [id];
 
             await this.conn.query(sql, value);
@@ -54,7 +54,7 @@ class ListingPriceDAO {
 
     findById = async (id) => {
         try {
-            const sql = `SELECT id FROM listing_price WHERE id = ?`;
+            const sql = `SELECT id FROM listing_plans WHERE id = ?`;
             const value = [id];
 
             const result = await this.conn.query(sql, value);
@@ -68,7 +68,7 @@ class ListingPriceDAO {
 
     findAll = async (status) => {
         try {
-            let sql = `SELECT * FROM listing_price`;
+            let sql = `SELECT * FROM listing_plans`;
 
             if(status) {
                 sql += ` WHERE active = ?`
@@ -85,4 +85,4 @@ class ListingPriceDAO {
     }
 }
 
-module.exports = new ListingPriceDAO;
+module.exports = new ListingPlansDAO;

@@ -10,7 +10,7 @@ require("../src/schedules/Transitions");
 const userRoutes = require("../src/routes/users/userRoute");
 const listingRoute = require("../src/routes/listing/listingRoute");
 const listingCommentRoute = require("../src/routes/listing/listingCommentRoute.js");
-const listingPriceRoute = require("../src/routes/listing/listingPriceRoute.js");
+const listingPlansRoute = require("../src/routes/listing/listingPlansRoute.js");
 const categoryRoute = require("../src/routes/listing/categoryRoute");
 const carouselRoute = require("../src/routes/carousel/carouselRouter");
 const bannerPriceRoute = require("../src/routes/banner/bannerPriceRouter");
@@ -30,7 +30,7 @@ createServer = () => {
     app.use('/api/anuncios', listingRoute);
     app.use('/api/anuncios/categorias', categoryRoute);
     app.use('/api/anuncios/comentarios', listingCommentRoute);
-    app.use('/api/anuncios/precos', listingPriceRoute);
+    app.use('/api/anuncios/precos', listingPlansRoute);
     app.use('/api/carousel', carouselRoute);
     app.use('/api/banner', bannerPriceRoute);
     app.use('/api/codigo-promocional', promotionalCodeRoute);
