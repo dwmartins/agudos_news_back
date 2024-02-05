@@ -1,16 +1,26 @@
 const ListingPlans = require("../class/ListingPlans");
-const listingPriceDAO = require("../models/listingPlansDAO");
+const ListingPlansInfo = require("../class/ListingPlansInfo");
+const listingPlansDAO = require("../models/listingPlansDAO");
+const plansDefault = require("../utilities/plansDefault");
 
 class ListingPlansCtrl {
     new = async (req, res) => {
         try {
             const reqBody = req.body;
-            const price = new ListingPrice(reqBody);
-            await price.save();
+            const plan = new ListingPlans(reqBody);
+            const result = await plan.save();
 
-            return this.sendResponse(res, 201, {success: 'Preço inserido com sucesso.'});
+            for (let i = 0; i < plansDefault.length; i++) {
+                const planInfo = new ListingPlansInfo(plansDefault[i]);
+                planInfo.setPlansId(result[0].insertId);
+                await planInfo.save();
+            }
+            
+            const teste = 'lls,ds';
+
+            return this.sendResponse(res, 201, {success: 'Plano criado com sucesso.'});
         } catch (error) {
-            return this.sendResponse(res, 500, {error: 'Falha ao inserir o preço para os anúncios.'});
+            return this.sendResponse(res, 500, {error: 'Falha ao criar o novo plano'});
         }
     }
 
@@ -20,7 +30,7 @@ class ListingPlansCtrl {
             const price = new ListingPrice(reqBody);
             await price.update();
 
-            return this.sendResponse(res, 201, {success: 'Preço atualizado com sucesso.'});
+            return this.sendResponse(res, 201, {success: 'Plano atualizado com sucesso.'});
         } catch (error) {
             return this.sendResponse(res, 500, {error: 'Falha ao atualizar o preço para os anúncios.'});
         }

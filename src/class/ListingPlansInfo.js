@@ -1,9 +1,12 @@
+const listingPlansDAO = require("../models/listingPlansInfoDAO");
+
 class ListingPlansInfo {
     constructor(plan) {
         this.id             = plan.id;
         this.plansId        = plan.plansId;
         this.active         = plan.active;
         this.description    = plan.description;
+        this.value          = plan.value;
         this.createdAt      = plan.createdAt;
         this.updatedAt      = plan.updatedAt;
     }
@@ -31,7 +34,7 @@ class ListingPlansInfo {
         delete plainObject.updatedAt;
         delete plainObject.id;
 
-        return await listingPriceDAO.saveDAO(plainObject);
+        return await listingPlansDAO.saveDAO(plainObject);
     }
 
     update = async () => {
@@ -42,6 +45,8 @@ class ListingPlansInfo {
         delete plainObject.createdAt;
         delete plainObject.updatedAt;
 
-        return await listingPriceDAO.updateDAO(plainObject);
+        return await listingPlansDAO.updateDAO(plainObject);
     }
 }
+
+module.exports = ListingPlansInfo;

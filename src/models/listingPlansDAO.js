@@ -14,10 +14,9 @@ class ListingPlansDAO {
         const values = Object.values(price);
 
         try {
-            await this.conn.query(sql, values);
-            return true;
+            return await this.conn.query(sql, values);
         } catch (error) {
-            logger.log(`error`,`Falha ao inserir os preços das listing no banco: ${error}`);
+            logger.log(`error`,`Falha ao criar um novo plano: ${error}`);
             throw new Error(error);
         }
     }

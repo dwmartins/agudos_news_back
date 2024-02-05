@@ -144,6 +144,7 @@ class NewTableListing {
                     plansId INT NOT NULL,
                     active ENUM('Y', 'N') DEFAULT 'Y' NOT NULL,
                     description VARCHAR(255),
+                    value INT,
                     createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
                     updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                     FOREIGN KEY (plansId) REFERENCES listing_plans(id) ON DELETE CASCADE
