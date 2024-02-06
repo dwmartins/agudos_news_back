@@ -41,14 +41,14 @@ class ListingPlansDAO {
 
     findByPlanId = async (id) => {
         try {
-            const sql = `SELECT id FROM listing_plans_info WHERE plansId = ?`;
+            const sql = `SELECT * FROM listing_plans_info WHERE plansId = ?`;
             const value = [id];
 
             const result = await this.conn.query(sql, value);
 
             return result[0];
         } catch (error) {
-            logger.log(`error`, `Falha ao buscar o preço do da listing por id: ${error}`);
+            logger.log(`error`, `Falha aas informações do plano: ${error}`);
             throw new Error(error);
         }
     }

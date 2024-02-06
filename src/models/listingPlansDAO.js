@@ -67,7 +67,8 @@ class ListingPlansDAO {
 
     findAll = async (status) => {
         try {
-            let sql = `SELECT * FROM listing_plans`;
+            let sql = `
+                SELECT * FROM listing_plans`;
 
             if(status) {
                 sql += ` WHERE active = ?`

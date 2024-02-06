@@ -1,6 +1,7 @@
 const ListingPlans = require("../class/ListingPlans");
 const ListingPlansInfo = require("../class/ListingPlansInfo");
 const listingPlansDAO = require("../models/listingPlansDAO");
+const listingPlansInfoDAO = require("../models/listingPlansInfoDAO");
 const plansDefault = require("../utilities/plansDefault");
 
 class ListingPlansCtrl {
@@ -37,9 +38,17 @@ class ListingPlansCtrl {
     listPrices = async (req, res) => {
         try {
             const { status } = req.query;
-            const result = await listingPriceDAO.findAll(status);
+            const plans = await listingPlansDAO.findAll(status);
 
-            return this.sendResponse(res, 200, result);
+            for (let i = 0; i < plans.length; i++) {
+                const plansInfos = await listingPlansInfoDAO.findByPlanId(plans[i].id);
+                plans[i].plansInfo = plansInfos;
+                const teste ='dsds'
+                const tesdte ='dsds'
+
+            }
+
+            return this.sendResponse(res, 200, plans);
         } catch (error) {
             return this.sendResponse(res, 500, {error: 'Falha ao buscar os preços de anuncios.'});
         }
