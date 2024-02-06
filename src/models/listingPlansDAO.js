@@ -51,10 +51,15 @@ class ListingPlansDAO {
         }
     }
 
-    findById = async (id) => {
+    findById = async (id, status) => {
         try {
-            const sql = `SELECT id FROM listing_plans WHERE id = ?`;
-            const value = [id];
+            let sql = `SELECT * FROM listing_plans WHERE id = ?`;
+
+            if(status) {
+                sql += ' AND active = ?';
+            }
+
+            const value = [id, status];
 
             const result = await this.conn.query(sql, value);
 

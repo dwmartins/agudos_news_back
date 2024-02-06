@@ -31,14 +31,21 @@ class ListingPlansCtrl {
 
             return this.sendResponse(res, 201, {success: 'Plano atualizado com sucesso.'});
         } catch (error) {
-            return this.sendResponse(res, 500, {error: 'Falha ao atualizar o preço para os anúncios.'});
+            return this.sendResponse(res, 500, {error: 'Falha ao atualizar o plano.'});
         }
     }
 
     listPrices = async (req, res) => {
         try {
-            const { status } = req.query;
-            const plans = await listingPlansDAO.findAll(status);
+            const {listingId, status } = req.query;
+            let plans;
+
+            if(listingId) {
+                plans = await listingPlansDAO.findById(listingId, status);
+            } else {
+                plans = await listingPlansDAO.findAll(status);
+            }
+
 
             for (let i = 0; i < plans.length; i++) {
                 const plansInfos = await listingPlansInfoDAO.findByPlanId(plans[i].id);
@@ -47,7 +54,7 @@ class ListingPlansCtrl {
 
             return this.sendResponse(res, 200, plans);
         } catch (error) {
-            return this.sendResponse(res, 500, {error: 'Falha ao buscar os preços de anuncios.'});
+            return this.sendResponse(res, 500, {error: 'Falha ao buscar os planos.'});
         }
     }
 
