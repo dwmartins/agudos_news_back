@@ -15,8 +15,6 @@ class ListingPlansCtrl {
                 planInfo.setPlansId(result[0].insertId);
                 await planInfo.save();
             }
-            
-            const teste = 'lls,ds';
 
             return this.sendResponse(res, 201, {success: 'Plano criado com sucesso.'});
         } catch (error) {

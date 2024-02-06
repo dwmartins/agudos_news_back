@@ -36,23 +36,39 @@ class UserMiddleware {
     }
 
     checkUserAdmin = async (req, res, next) => {
-        const { user_id } = req.headers;
+        const { user_id, token } = req.headers;
+    
+        if(!token) {
+            return res.status(401).json({invalidToken: "Token não fornecido."});
+        }
 
         try {
             const userData = await userDAO.findById(user_id);
 
             if(userData.length) {
-                const user = new User(userData[0]);
+                try {
+                    const user = new User(userData[0]);
 
-                if(user.getUserType() == 'admin') {
-                    next();
-                } else {
+                    this.userData = jwt.verify(token, user.getToken());
+                    if(this.userData.user_type === "admin") {
+                        next();
+                        return;
+                    }
                     const response = {notPermission: `Você não tem permissão para executar essa ação.`};
-                    res.status(401).json(response);
+                    return res.status(401).json(response);
+
+                } catch (error) {
+                    if(error.expiredAt) {
+                        return res.status(401).json({expiredToken: "Token expirado."});
+                    }
+                    
+                    return res.status(401).json({invalidToken: "Token invalido."});
                 }
+            } else {
+                return res.status(401).json({invalidToken: "Token invalido."});
             }
         } catch (error) {
-            return res.status(500).json({error: "Houve um erro, tente novamente."});  
+            return res.status(500).json({error: "Houve um erro, tente novamente."});   
         }
     }
 
