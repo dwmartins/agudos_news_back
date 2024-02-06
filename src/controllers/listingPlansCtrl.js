@@ -43,9 +43,6 @@ class ListingPlansCtrl {
             for (let i = 0; i < plans.length; i++) {
                 const plansInfos = await listingPlansInfoDAO.findByPlanId(plans[i].id);
                 plans[i].plansInfo = plansInfos;
-                const teste ='dsds'
-                const tesdte ='dsds'
-
             }
 
             return this.sendResponse(res, 200, plans);

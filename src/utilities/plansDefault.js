@@ -21,6 +21,11 @@ const plansInfo = [
     },
     {
         active: "Y",
+        description: "Imagem de logo",
+        value: null
+    },
+    {
+        active: "Y",
         description: "Galeria de imagens",
         value: 8
     },
@@ -42,6 +47,11 @@ const plansInfo = [
     {
         active: "Y",
         description: "Horário de trabalho",
+        value: null
+    },
+    {
+        active: "Y",
+        description: "Descrição resumida",
         value: null
     },
     {
