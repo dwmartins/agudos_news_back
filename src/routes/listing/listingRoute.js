@@ -8,7 +8,7 @@ const storage = multer.memoryStorage();
 const upload = multer({storage: storage});
 
 route.get("/", listingCtrl.listListings);
-route.post("/", upload.fields([{name: 'logo', maxCount: 1}, {name: 'cover', maxCount: 1}, {name: 'gallery', maxCount: 8}]), listingCtrl.new);
+route.post("/", upload.fields([{name: 'logoImage', maxCount: 1}, {name: 'coverImage', maxCount: 1}, {name: 'galleryImage', maxCount: 8}]), listingCtrl.new);
 route.put("/", userMiddleware.authenticateToken, listingCtrl.updateListing);
 
 // Apenas admin

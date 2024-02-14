@@ -16,6 +16,11 @@ const plansInfo = [
     },
     {
         active: "Y",
+        description: "Palavras-chave",
+        value: 10
+    },
+    {
+        active: "Y",
         description: "Imagem de capa",
         value: null
     },

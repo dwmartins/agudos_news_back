@@ -7,14 +7,14 @@ class ListingCtrl {
     new = async (req, res) => {
         try {
             const listingBody = req.body;
-            const imgsValid = this.validImgs(req.files);
+            // const imgsValid = this.validImgs(req.files);
 
-            if(!imgsValid) {
-                return this.sendResponse(res, 400, {imgInvalid: 'Alguma das imagens não atende ao tamanho máximo ou ao formato aceitável.'})
-            }
+            // if(!imgsValid) {
+            //     return this.sendResponse(res, 400, {imgInvalid: 'Alguma das imagens não atende ao tamanho máximo ou ao formato aceitável.'})
+            // }
 
-            const listing = new Listing(listingBody);
-            // listing.setStatus("pendente");
+            // const listing = new Listing(listingBody);
+            // // listing.setStatus("pendente");
             // await listing.save();
             return this.sendResponse(res, 201, {success: 'Anuncio criado com sucesso.'});
         } catch (error) {
