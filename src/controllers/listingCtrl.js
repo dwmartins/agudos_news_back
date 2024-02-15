@@ -2,21 +2,56 @@ const Listing = require("../class/Listing");
 const listingDAO = require("../models/listingDAO");
 const helper = require("../utilities/helper");
 const awsUploadCtrl = require("./awsUploadCtrl");
+const helperFile = require("../utilities/helperFile");
 
 class ListingCtrl {
+
+    infoLogoImage;
+    infoCoverImage;
+
     new = async (req, res) => {
         try {
             const listingBody = req.body;
-            // const imgsValid = this.validImgs(req.files);
+            const logoImage = req.files.logoImage[0];
+            const coverImage = req.files.coverImage[0];
+            const galleryImage = req.files.galleryImage;
 
-            // if(!imgsValid) {
-            //     return this.sendResponse(res, 400, {imgInvalid: 'Alguma das imagens não atende ao tamanho máximo ou ao formato aceitável.'})
-            // }
+            if(logoImage) {
+                this.infoLogoImage = helperFile.validImg(logoImage);
 
-            // const listing = new Listing(listingBody);
-            // // listing.setStatus("pendente");
-            // await listing.save();
-            return this.sendResponse(res, 201, {success: 'Anuncio criado com sucesso.'});
+                if(this.infoLogoImage.invalid) {
+                    return this.sendResponse(res, 400, {alert: this.infoIgm.invalid});
+                }
+            }
+
+            if(coverImage) {
+                this.infoCoverImage = helperFile.validImg(coverImage);
+
+                if(this.infoCoverImage.invalid) {
+                    return this.sendResponse(res, 400, {alert: this.infoIgm.invalid});
+                }
+                
+            }
+
+            if(galleryImage.length) {
+                for (let i = 0; i < galleryImage.length; i++) {
+                    const infoImg = helperFile.validImg(galleryImage[i]);
+                    if(infoImg.invalid) {
+                        return this.sendResponse(res, 400, {alert: infoImg.invalid});
+                        break;
+                    }
+                }
+            }
+
+            const listing = {
+                id: 77,
+                name: 'Martins Refrigeração',
+                payment: 30.99,
+                expiration: '10/08/2024',
+                freePlan: false, // True or false
+            }
+            
+            return this.sendResponse(res, 201, listing);
         } catch (error) {
             return this.sendResponse(res, 500, {error: 'Falha ao criar o anuncio.'});
         }
@@ -60,42 +95,6 @@ class ListingCtrl {
 
     sendResponse = (res, statusCode, msg) => {
         res.status(statusCode).json(msg);
-    }
-
-    validImgs = (files) => {
-
-        if(files['logo']) {
-            const logo = files['logo'][0];
-            const imgValid = helper.validImg(logo);
-            if(imgValid.invalid) {
-                return false
-            }
-            
-            this.logoImg = imgValid;
-        }
-        
-        if(files['cover']) {
-            const coverImg = files['cover'][0];
-            const imgValid = helper.validImg(coverImg);
-            if(imgValid.invalid) {
-                return false;
-            }
-            
-            this.imgCover = imgValid;
-        }
-        
-        if(files['gallery']) {
-            const gallery = files['gallery'];
-            for (let i = 0; i < gallery.length; i++) {
-                const element = gallery[i];
-                const imgValid = helper.validImg(gallery[i]);
-                if(imgValid.invalid) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
     }
 }
 
