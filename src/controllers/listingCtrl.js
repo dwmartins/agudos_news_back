@@ -1,7 +1,6 @@
 const Listing = require("../class/Listing");
 const listingDAO = require("../models/listingDAO");
 const helper = require("../utilities/helper");
-const awsUploadCtrl = require("./awsUploadCtrl");
 const helperFile = require("../utilities/helperFile");
 
 class ListingCtrl {

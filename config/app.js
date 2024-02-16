@@ -26,7 +26,7 @@ createServer = () => {
     app.use(express.json({limit: '50mb'}));
 
     // Routes
-    app.use('/api/usuario', userRoutes);
+    app.use('/api/user', userRoutes);
     app.use('/api/anuncios', listingRoute);
     app.use('/api/anuncios/categorias', categoryRoute);
     app.use('/api/anuncios/comentarios', listingCommentRoute);

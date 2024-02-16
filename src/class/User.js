@@ -99,8 +99,11 @@ class User {
 
         delete plainObject.createdAt;
         delete plainObject.updatedAt;
+
+        const response  = await userDAO.saveDAO(plainObject);
+        this.id = response[0].insertId;
         
-        return await userDAO.saveDAO(plainObject);
+        return response;
     }
 
     update = async () => {

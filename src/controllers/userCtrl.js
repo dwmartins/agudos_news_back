@@ -8,7 +8,7 @@ const helper = require("../utilities/helper");
 const helperAuth = require("../utilities/HelpersAuth");
 const helperFile = require("../utilities/helperFile");
 const sendEmail = require("./sendEmail");
-const awsUploadCtrl = require("./awsUploadCtrl");
+const awsUpload = require("../service/awsUpload");
 
 class UserCtrl {
     infoIgm;
@@ -73,16 +73,17 @@ class UserCtrl {
 
             user.setPassword(encodedPassword);
             user.setToken(token);
-            user.setPhoto_url(`${process.env.URLDOCS}/${process.env.FOLDERIMGUSERS}/no-image-user.jpeg`);
+            // user.setPhoto_url(`${process.env.URLDOCS}/${process.env.FOLDERIMGUSERS}/no-image-user.jpeg`);
             const response = await user.save();
 
             if(img) {
-                const fileName = `${response[0].insertId}_${user.getName()}`;
+                const fileName = `${user.getId()}_${user.getName()}`;
                 const imgUrl = `${process.env.URLDOCS}/${process.env.FOLDERIMGUSERS}/${fileName}.${this.infoIgm.extension}`;
+                user.setPhoto_url(imgUrl);
 
                 await Promise.all([
-                    awsUploadCtrl.uploadPhotoUser(img, fileName),
-                    userDAO.updateImg(imgUrl, response[0].insertId)
+                    awsUpload.uploadPhotoUser(img, fileName),
+                    user.update()
                 ]);
             }
 
@@ -135,7 +136,7 @@ class UserCtrl {
                 const imgUrl = `${process.env.URLDOCS}/${process.env.FOLDERIMGUSERS}/${fileName}.${this.infoIgm.extension}`;
 
                 await Promise.all([
-                    awsUploadCtrl.uploadPhotoUser(img, fileName),
+                    awsUpload.uploadPhotoUser(img, fileName),
                     userDAO.updateImg(imgUrl, user.getId())
                 ]);
 
