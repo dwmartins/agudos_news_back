@@ -2,11 +2,14 @@ const listingDAO = require("../models/listingDAO");
 
 class Listing {
 
+    plan; // plano do anúncio
+    planId;
+
     constructor(listing){
         this.id                 = listing.id;
         this.user_id            = listing.user_id
-        this.name               = listing.name;
-        this.category           = listing.category;
+        this.expiration         = listing.expiration
+        this.title              = listing.title;
         this.summary            = listing.summary;
         this.description        = listing.description;
         this.keywords           = listing.keywords;
@@ -24,7 +27,6 @@ class Listing {
         this.instagram          = listing.instagram;
         this.linkedIn           = listing.linkedIn;
         this.openingHours       = listing.openingHours;
-        this.promotionalCode    = listing.promotionalCode;
         this.paymentId          = listing.paymentId;
         this.logoImage          = listing.logoImage;
         this.coverImage         = listing.coverImage;
@@ -44,12 +46,36 @@ class Listing {
         this.user_id = user_id;
     }
 
-    getName = () => {
-        return this.name;
+    getExpiration = () => {
+        return this.expiration;
     }
 
-    setName = (name) => {
-        this.name = name;
+    setExpiration = (expiration) => {
+        this.expiration = expiration;
+    }
+
+    getPlan = () => {
+        return this.plan;
+    }
+
+    setPlan = (plan) => {
+        this.plan = plan;
+    }
+
+    getPlanId = () => {
+        return this.planId;
+    }
+
+    setPlanId = (planId) => {
+        this.planId = planId;
+    }
+
+    getTitle = () => {
+        return this.title;
+    }
+
+    setTitle = (title) => {
+        this.title = title;
     }
 
     getCategory = () => {
@@ -208,14 +234,6 @@ class Listing {
         this.openingHours = openingHours;
     }
 
-    getPromotionalCode = () => {
-        return this.promotionalCode;
-    }
-
-    setPromotionalCode = (promotionalCode) => {
-        this.promotionalCode = promotionalCode;
-    }
-
     getPayment = () => {
         return this.payment;
     }
@@ -274,7 +292,10 @@ class Listing {
     }
 
     delete = async () => {
-        return await listingDAO.deleteDAO(this.getId);
+        const response = await listingDAO.deleteDAO(this.getId);
+        this.id = response[0].insertId;
+        
+        return response;
     }
 }
 
