@@ -6,6 +6,7 @@ const listingPlansDAO = require("../models/listingPlansDAO");
 const ListingPlans = require("../class/ListingPlans");
 const awsUpload = require("../service/awsUpload");
 const { v4: uuidv4 } = require('uuid');
+const ListingPayment = require("../class/ListingPayment");
 
 class ListingCtrl {
 
@@ -51,11 +52,14 @@ class ListingCtrl {
             const listingBody = req.body;
             const listing = new Listing(listingBody);
 
-            const plan = await listingPlansDAO.findById(listingBody.plan_id);
-            const listingPlan = new ListingPlans(plan[0]);
+            const plan = new ListingPlans((await listingPlansDAO.findById(listingBody.plan_id))[0]);
 
-            listing.setPlan(listingPlan.level);
-            listing.setPlanId(listingPlan.id);
+            listing.setPlan(plan.getLevel());
+            listing.setPlanId(plan.getId());
+
+            if(plan.getLevel() === "GRÁTIS") {
+                listing.status("Y");
+            }
 
             if(listingBody.categories) {
                 const categories = JSON.parse(listingBody.categories);
@@ -66,7 +70,7 @@ class ListingCtrl {
                 listing.setKeywords(listingBody.keywords);
             }
 
-            await listing.save();
+            // await listing.save();
 
             // if(this.logoImage) {
             //     await awsUpload.uploadPhotoListing(this.logoImage, `${listing.getId()}_logoImage`);
