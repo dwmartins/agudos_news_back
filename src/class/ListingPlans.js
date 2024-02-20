@@ -5,6 +5,7 @@ class ListingPlans {
         this.id             = price.id;
         this.description    = price.description;
         this.level          = price.level;
+        this.isFree         = price.isFree;
         this.active         = price.active;
         this.price          = price.price
         this.createdAt      = price.createdAt;
@@ -18,6 +19,9 @@ class ListingPlans {
 
     getLevel = () => this.level;
     setLevel = (level) => this.level = level;
+
+    getIsFree = () => this.isFree;
+    setIsFree = (free) => this.isFree = free;
 
     getActive = () => this.active;
     setActive = (active) => this.active = active;
