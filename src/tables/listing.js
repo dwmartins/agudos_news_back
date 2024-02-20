@@ -37,7 +37,6 @@ class NewTableListing {
                     url VARCHAR(255),
                     phone VARCHAR(20),
                     address VARCHAR(255),
-                    number VARCHAR(50),
                     city VARCHAR(100),
                     complement VARCHAR(255),
                     zipCode VARCHAR(20),
@@ -47,8 +46,8 @@ class NewTableListing {
                     facebook VARCHAR(255),
                     instagram VARCHAR(255),
                     linkedIn VARCHAR(255),
-                    openingHours LONGTEXT NOT NULL,
-                    paymentId INT NOT NULL,
+                    openingHours LONGTEXT,
+                    paymentId INT,
                     logoImage LONGTEXT,
                     coverImage LONGTEXT,
                     createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -66,14 +65,14 @@ class NewTableListing {
             await db.pool.query(`
                 CREATE TABLE IF NOT EXISTS listing_payment (
                     id INT AUTO_INCREMENT PRIMARY KEY,
-                    userId INT NOT NULL,
                     listingId INT NOT NULL,
                     method VARCHAR(100),
+                    promotionalCode VARCHAR(50),
+                    payment DECIMAL(10,2),
                     status VARCHAR(50),
                     paymentDate DATETIME,
                     createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
                     updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                    FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE,
                     FOREIGN KEY (listingId) REFERENCES listing(id) ON DELETE CASCADE
                 );
             `);

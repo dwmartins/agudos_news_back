@@ -14,8 +14,7 @@ class ListingDAO {
         const values = Object.values(listing);
 
         try {
-            await this.conn.query(sql, values);
-            return true;
+            return await this.conn.query(sql, values);
         } catch (error) {
             logger.log(`error`,`Falha ao inserir a listing no banco: ${error}`);
             throw new Error(error);

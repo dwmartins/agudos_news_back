@@ -2,26 +2,30 @@ const ListingPaymentDAO = require("../models/listingPaymentDAO");
 
 class ListingPayment {
     constructor(payment) {
-        this.id             = payment.id;
-        this.userId         = payment.userId;
-        this.listingId      = payment.listingId;
-        this.method         = payment.method;
-        this.status         = payment.status;
-        this.paymentDate    = payment.paymentDate;
-        this.createdAt      = payment.createdAt;
-        this.updatedAt      = payment.updatedAt;
+        this.id                 = payment.id;
+        this.listingId          = payment.listingId;
+        this.method             = payment.method;
+        this.promotionalCode    = payment.promotionalCode;
+        this.payment            = payment.payment;
+        this.status             = payment.status;
+        this.paymentDate        = payment.paymentDate;
+        this.createdAt          = payment.createdAt;
+        this.updatedAt          = payment.updatedAt;
     }
 
     getId = () => this.id;
-
-    getUserId = () => this.userId;
-    setUserId = (user) => this.userId = user;
 
     getListingId = () => this.listingId;
     setListingId = (listingId) => this.listingId = listingId;
     
     getMethod = () => this.method;
     setMethod = (method) => this.method = method;
+
+    getPromotionalCode = () => this.promotionalCode;
+    setPromotionalCode = (code) => this.promotionalCode = code;
+
+    getPayment = () => this.payment;
+    setPayment = (payment) => this.payment = payment;
 
     getStatus = () => this.status;
     setStatus = (status) => this.status = status;

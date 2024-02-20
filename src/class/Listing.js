@@ -17,7 +17,6 @@ class Listing {
         this.url                = listing.url;
         this.phone              = listing.phone;
         this.address            = listing.address;
-        this.number             = listing.number;
         this.complement         = listing.complement;
         this.city               = listing.city;
         this.zipCode            = listing.zipCode;
@@ -150,14 +149,6 @@ class Listing {
         this.address = address;
     }
 
-    getNumber = () => {
-        return this.number;
-    }
-
-    setNumber = (number) => {
-        this.number = number;
-    }
-
     getComplement = () => {
         return this.complement;
     }
@@ -276,7 +267,9 @@ class Listing {
         delete plainObject.updatedAt;
         delete plainObject.id;
 
-        return await listingDAO.saveDAO(plainObject);
+        const response = await listingDAO.saveDAO(plainObject);
+        this.id = response[0].insertId;
+        return response;
     }
 
 
@@ -292,10 +285,7 @@ class Listing {
     }
 
     delete = async () => {
-        const response = await listingDAO.deleteDAO(this.getId);
-        this.id = response[0].insertId;
-        
-        return response;
+        return await listingDAO.deleteDAO(this.getId());
     }
 }
 

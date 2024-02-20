@@ -7,6 +7,9 @@ const ListingPlans = require("../class/ListingPlans");
 const awsUpload = require("../service/awsUpload");
 const { v4: uuidv4 } = require('uuid');
 const ListingPayment = require("../class/ListingPayment");
+const promotionalCodeCtrl = require("../controllers/promotionalCodeCtrl");
+const promotionalCodeDAO = require("../models/PromotionalCodeDAO");
+const PromotionalCode = require("../class/PromotionalCode");
 
 class ListingCtrl {
 
@@ -16,6 +19,8 @@ class ListingCtrl {
 
     new = async (req, res) => {
         try {
+            const user_id = parseInt(req.headers.user_id);
+
             if(req.files.length) {
                 this.logoImage = req.files.logoImage[0];
                 this.coverImage = req.files.coverImage[0];
@@ -44,33 +49,76 @@ class ListingCtrl {
                     const infoImg = helperFile.validImg(galleryImage[i]);
                     if(infoImg.invalid) {
                         return this.sendResponse(res, 400, {alert: infoImg.invalid});
-                        break;
                     }
                 }
             }
 
-            const listingBody = req.body;
-            const listing = new Listing(listingBody);
+            const reqBody = req.body;
+            const listing = new Listing(reqBody);
+            const plan = new ListingPlans((await listingPlansDAO.findById(reqBody.plan_id))[0]);
 
-            const plan = new ListingPlans((await listingPlansDAO.findById(listingBody.plan_id))[0]);
-
+            listing.setUserId(user_id);
             listing.setPlan(plan.getLevel());
             listing.setPlanId(plan.getId());
 
-            if(plan.getLevel() === "GRÁTIS") {
-                listing.status("Y");
+            if(plan.getIsFree() === "Y") {
+                listing.setStatus("ativo");
+            } else {
+                listing.setStatus("pendente");
             }
 
-            if(listingBody.categories) {
-                const categories = JSON.parse(listingBody.categories);
+            if(reqBody.categories) {
+                const categories = JSON.parse(reqBody.categories);
                 //Inserir na tabela com id do anuncio e id da categoria;
             }
 
-            if(listingBody.keywords) {
-                listing.setKeywords(listingBody.keywords);
+            await listing.save();
+
+            const paymentData = {
+                listingId: listing.getId(),
+                method: plan.getIsFree() === "Y" ? 'Plano grátis' : '',
+                status: plan.getIsFree() === "Y" ? 'finalizado' : 'pendente',
+                paymentDate: plan.getIsFree() === "Y" ? new Date() : null,
+                promotionalCode: reqBody.promotionalCode ? reqBody.promotionalCode : '',
             }
 
-            // await listing.save();
+            const listingPayment = new ListingPayment(paymentData);
+
+            if(reqBody.promotionalCode) {
+                const [existCode] = await promotionalCodeDAO.findByCode(reqBody.promotionalCode);
+                
+                if(existCode) {
+                    const code = new PromotionalCode(existCode);
+
+                    if(promotionalCodeCtrl.checkActive(code.getCode())) {
+                        const discount = code.getDiscount();
+                        const planPrice = parseFloat(plan.getPrice());
+
+                        const discountFactor = 1 - discount / 100;
+                        const discountedPrice = Number((planPrice * discountFactor).toFixed(2));
+
+                        listingPayment.setPayment(discountedPrice);
+
+                        if(code.getDiscount() === 100) {
+                            listing.setStatus("ativo");
+                            listingPayment.setStatus("finalizado");
+                            listingPayment.setMethod("Desconto de 100%");
+                            listingPayment.setPayment(0);
+                            listingPayment.setPaymentDate(new Date());
+
+                            await listing.update();
+                        }
+                    } else {
+                        return this.sendResponse(res, 400, {alert: 'Cupom de desconto invalido.'});
+                    }
+                } else {
+                    return this.sendResponse(res, 400, {alert: 'Cupom de desconto invalido.'});
+                }
+            } else {
+                listingPayment.setPayment(plan.getPrice());
+            }
+
+            await listingPayment.save();
 
             // if(this.logoImage) {
             //     await awsUpload.uploadPhotoListing(this.logoImage, `${listing.getId()}_logoImage`);
