@@ -12,31 +12,36 @@ const promotionalCodeDAO = require("../models/PromotionalCodeDAO");
 const PromotionalCode = require("../class/PromotionalCode");
 
 class ListingCtrl {
+    ENV = process.env;
+    urlDocs = `${this.ENV.URLDOCS}/${this.ENV.FOLDERIMGLISTING}`;
 
     logoImage;
+    infoLogoImage;
     coverImage;
+    infoCoverImage;
     galleryImage;
+    infoGalleryImage;
 
     new = async (req, res) => {
         try {
             const user_id = parseInt(req.headers.user_id);
 
-            if(req.files.length) {
-                this.logoImage = req.files.logoImage[0];
-                this.coverImage = req.files.coverImage[0];
-                this.galleryImage = req.files.galleryImage;
+            if(req.files) {
+                this.logoImage = req.files.logoImage ? req.files.logoImage[0] : null;
+                this.coverImage = req.files.coverImage ? req.files.coverImage[0] : null;
+                this.galleryImage = req.files.galleryImage ? req.files.galleryImage : null;
             }
 
             if(this.logoImage) {
-                const infoLogoImage = helperFile.validImg(logoImage);
+                this.infoLogoImage = helperFile.validImg(this.logoImage);
 
-                if(infoLogoImage.invalid) {
-                    return this.sendResponse(res, 400, {alert: infoLogoImage.invalid});
+                if(this.infoLogoImage.invalid) {
+                    return this.sendResponse(res, 400, {alert: this.infoLogoImage.invalid});
                 }
             }
 
             if(this.coverImage) {
-                const infoCoverImage = helperFile.validImg(coverImage);
+                const infoCoverImage = helperFile.validImg(this.coverImage);
 
                 if(infoCoverImage.invalid) {
                     return this.sendResponse(res, 400, {alert: infoCoverImage.invalid});
@@ -45,8 +50,8 @@ class ListingCtrl {
             }
 
             if(this.galleryImage) {
-                for (let i = 0; i < galleryImage.length; i++) {
-                    const infoImg = helperFile.validImg(galleryImage[i]);
+                for (let i = 0; i < this.galleryImage.length; i++) {
+                    const infoImg = helperFile.validImg(this.galleryImage[i]);
                     if(infoImg.invalid) {
                         return this.sendResponse(res, 400, {alert: infoImg.invalid});
                     }
@@ -120,27 +125,35 @@ class ListingCtrl {
 
             await listingPayment.save();
 
-            // if(this.logoImage) {
-            //     await awsUpload.uploadPhotoListing(this.logoImage, `${listing.getId()}_logoImage`);
-            // }
+            if(this.logoImage) {
+                const fileName = `${listing.getId()}_logoImage`;
+                await awsUpload.uploadPhotoListing(this.logoImage, fileName);
 
-            // if(this.coverImage) {
-            //     await awsUpload.uploadPhotoListing(this.coverImage, `${listing.getId()}_coverImage`);
-            // }
+                const urlImgLogo = `${this.urlDocs}/${fileName}.${this.infoLogoImage.extension}`;
+                listing.setLogoImage(urlImgLogo);
+            }
 
-            // if(this.galleryImage) {
-            //     for (let i = 0; i < this.galleryImage.length; i++) {
-            //         const element = this.galleryImage[i]; 
-            //         await awsUpload.uploadPhotoListing(this.galleryImage[i], `${listing.getId()}_${uuidv4()}`)
-            //     }
-            // }
+            if(this.coverImage) {
+                const fileName = `${listing.getId()}_logoImage`;
+                await awsUpload.uploadPhotoListing(this.coverImage, fileName);
+
+                const urlImgCover = `${this.urlDocs}/${fileName}.${this.infoCoverImage.extension}`;
+                listing.setCoverImage(urlImgCover);
+            }
+
+            if(this.galleryImage) {
+                for (let i = 0; i < this.galleryImage.length; i++) {
+                    const element = this.galleryImage[i]; 
+                    await awsUpload.uploadPhotoListing(this.galleryImage[i], `${listing.getId()}_${uuidv4()}`);
+                }
+            }
 
             const resListing = {
-                id: 77,
-                name: 'Martins Refrigeração',
-                payment: 30.99,
+                id: listing.getId(),
+                title: listing.getTitle(),
+                payment: listingPayment.getPayment(),
                 expiration: '10/08/2024',
-                freePlan: false, // True or false
+                freePlan: listingPayment.getPayment() == 0 ? true : false
             }
             
             return this.sendResponse(res, 201, resListing);
