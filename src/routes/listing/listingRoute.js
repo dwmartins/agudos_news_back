@@ -8,10 +8,12 @@ const storage = multer.memoryStorage();
 const upload = multer({storage: storage});
 
 route.get("/", listingCtrl.listListings);
-route.post("/", upload.fields([{name: 'logoImage', maxCount: 1}, {name: 'coverImage', maxCount: 1}, {name: 'galleryImage', maxCount: 8}]), listingCtrl.new);
+
+// Precisa de autenticação
+route.post("/", userMiddleware.authenticateToken, upload.fields([{name: 'logoImage', maxCount: 1}, {name: 'coverImage', maxCount: 1}, {name: 'galleryImage', maxCount: 8}]), listingCtrl.new);
 route.put("/", userMiddleware.authenticateToken, listingCtrl.updateListing);
 
 // Apenas admin
-route.delete("/:id",userMiddleware.checkUserAdmin ,userMiddleware.authenticateToken, listingCtrl.deleteListing)
+route.delete("/:id",userMiddleware.checkUserAdmin, listingCtrl.deleteListing)
 
 module.exports = route;
