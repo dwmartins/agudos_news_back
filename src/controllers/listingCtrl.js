@@ -148,6 +148,10 @@ class ListingCtrl {
                 }
             }
 
+            if(this.logoImage || this.coverImage || this.galleryImage) {
+                await listing.update();
+            }
+
             const resListing = {
                 id: listing.getId(),
                 title: listing.getTitle(),
