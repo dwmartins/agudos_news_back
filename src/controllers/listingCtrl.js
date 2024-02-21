@@ -41,10 +41,10 @@ class ListingCtrl {
             }
 
             if(this.coverImage) {
-                const infoCoverImage = helperFile.validImg(this.coverImage);
+                this.infoCoverImage = helperFile.validImg(this.coverImage);
 
-                if(infoCoverImage.invalid) {
-                    return this.sendResponse(res, 400, {alert: infoCoverImage.invalid});
+                if(this.infoCoverImage.invalid) {
+                    return this.sendResponse(res, 400, {alert: this.infoCoverImage.invalid});
                 }
                 
             }
@@ -134,7 +134,7 @@ class ListingCtrl {
             }
 
             if(this.coverImage) {
-                const fileName = `${listing.getId()}_logoImage`;
+                const fileName = `${listing.getId()}_coverImage`;
                 await awsUpload.uploadPhotoListing(this.coverImage, fileName);
 
                 const urlImgCover = `${this.urlDocs}/${fileName}.${this.infoCoverImage.extension}`;
