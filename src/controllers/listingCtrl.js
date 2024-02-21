@@ -133,7 +133,7 @@ class ListingCtrl {
                 listing.setLogoImage(urlImgLogo);
             }
 
-            if(this.coverImage) {
+            if(this.coverImage && (plan.getIsFree() === "N")) {
                 const fileName = `${listing.getId()}_coverImage`;
                 await awsUpload.uploadPhotoListing(this.coverImage, fileName);
 
@@ -141,7 +141,7 @@ class ListingCtrl {
                 listing.setCoverImage(urlImgCover);
             }
 
-            if(this.galleryImage) {
+            if(this.galleryImage && (plan.getIsFree() === "N")) {
                 for (let i = 0; i < this.galleryImage.length; i++) {
                     const element = this.galleryImage[i]; 
                     await awsUpload.uploadPhotoListing(this.galleryImage[i], `${listing.getId()}_${uuidv4()}`);
