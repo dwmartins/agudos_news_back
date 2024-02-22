@@ -23,6 +23,23 @@ class ListingCtrl {
     galleryImage;
     infoGalleryImage;
 
+    list = async (req, res) => {
+        try {
+            const { status, category } = req.query;
+            let listings;
+
+            if(category) {
+                listings = await listingDAO.findByCategory(category, status);
+                return this.sendResponse(res, 200, listings);
+            }
+
+            listings = await listingDAO.findAll(status);
+            return this.sendResponse(res, 200, listings);
+        } catch (error) {
+            return this.sendResponse(res, 500, {error: 'Houve um erro ao listar os anúncios.'});
+        }
+    }
+
     new = async (req, res) => {
         try {
             const user_id = parseInt(req.headers.user_id);
@@ -167,7 +184,7 @@ class ListingCtrl {
             
             return this.sendResponse(res, 201, resListing);
         } catch (error) {
-            return this.sendResponse(res, 500, {error:  error.message});
+            return this.sendResponse(res, 500, {error:  'Houve um erro ao criar o anúncio'});
         }
     }
 
@@ -178,10 +195,10 @@ class ListingCtrl {
         const result = await listing.update();
 
         if(result.error) {
-            return this.sendResponse(res, 500, {error: 'Houve um erro ao atualizar o anuncio.'});
+            return this.sendResponse(res, 500, {error: 'Houve um erro ao atualizar o anúncio.'});
         }
 
-        return this.sendResponse(res, 200, {success: 'Anuncio atualizado com sucesso.'});
+        return this.sendResponse(res, 200, {success: 'Anúncio atualizado com sucesso.'});
     }
 
     deleteListing = async (req, res) => {
@@ -190,10 +207,10 @@ class ListingCtrl {
         const result = await listingDAO.deleteDAO(id);
 
         if(result.error) {
-            return this.sendResponse(res, 500, {error: 'Houve um erro ao delete o anuncio.'});
+            return this.sendResponse(res, 500, {error: 'Houve um erro ao delete o anúncio.'});
         }
 
-        return this.sendResponse(res, 200, {success: 'Anuncio deletado com sucesso.'});
+        return this.sendResponse(res, 200, {success: 'Anúncio deletado com sucesso.'});
     }
 
     listListings = async (req, res) => {
@@ -201,7 +218,7 @@ class ListingCtrl {
         const result = await listingDAO.findAllByStatus(status);
 
         if(result.error) {
-            return this.sendResponse(res, 500, {error: 'Houve um erro ao buscar os anuncios.'});
+            return this.sendResponse(res, 500, {error: 'Houve um erro ao buscar os anúncios.'});
         }
 
         return this.sendResponse(res, 200, result);        

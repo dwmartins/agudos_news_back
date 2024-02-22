@@ -65,7 +65,7 @@ class ListingDAO {
         }
     }
 
-    findAllByStatus = async (status) => {
+    findAll = async (status) => {
         let sql = `SELECT * FROM listing`;
 
         if(status) {
@@ -78,7 +78,25 @@ class ListingDAO {
             const result = await this.conn.query(sql, value);
             return result[0];
         } catch (error) {
-            logger.log(`error`, `Houve um erro buscar os anuncios: ${error}`);
+            logger.log(`error`, `Houve um erro buscar os anúncios: ${error}`);
+            throw new Error(error);
+        }
+    }
+
+    findByCategory = async (category, status) => {
+        let  sql = `SELECT listing.* 
+                    FROM listing 
+                    INNER JOIN listingCategory ON listing.id = listingCategory.listing_id
+                    WHERE listingCategory.category_id = ?
+                    AND listing.status = ?`;
+
+        const values = [category, status];
+
+        try {
+            const result = await this.conn.query(sql, values);
+            return result[0];
+        } catch (error) {
+            logger.log(`error`, `Houve um erro buscar os anúncios por categoria: ${error}`);
             throw new Error(error);
         }
     }
