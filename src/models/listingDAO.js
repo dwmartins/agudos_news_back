@@ -101,6 +101,23 @@ class ListingDAO {
         }
     }
 
+    findByKeywords = async (keywords, status) => {
+        let  sql = `SELECT * 
+                    FROM listing 
+                    WHERE keywords LIKE '%${keywords}%'
+                    AND listing.status = ?`;
+
+        const value = [status];
+
+        try {
+            const result = await this.conn.query(sql, value);
+            return result[0];
+        } catch (error) {
+            logger.log(`error`, `Houve um erro buscar os anúncios por categoria: ${error}`);
+            throw new Error(error);
+        }
+    }
+
     findPreviuData = async () => {
         try {
             const sql = 'SELECT * FROM listing WHERE createdAt >= CURDATE() - INTERVAL 1 DAY AND createdAt < CURDATE()';

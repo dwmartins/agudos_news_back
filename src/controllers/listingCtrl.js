@@ -25,11 +25,16 @@ class ListingCtrl {
 
     list = async (req, res) => {
         try {
-            const { status, category } = req.query;
+            const { status, category, keywords } = req.query;
             let listings;
 
             if(category) {
                 listings = await listingDAO.findByCategory(category, status);
+                return this.sendResponse(res, 200, listings);
+            }
+
+            if(keywords) {
+                listings = await listingDAO.findByKeywords(keywords, status);
                 return this.sendResponse(res, 200, listings);
             }
 
