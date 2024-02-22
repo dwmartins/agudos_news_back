@@ -10,6 +10,7 @@ const ListingPayment = require("../class/ListingPayment");
 const promotionalCodeCtrl = require("../controllers/promotionalCodeCtrl");
 const promotionalCodeDAO = require("../models/PromotionalCodeDAO");
 const PromotionalCode = require("../class/PromotionalCode");
+const ListingAndCategory = require("../class/ListingAndCategory");
 
 class ListingCtrl {
     ENV = process.env;
@@ -72,12 +73,16 @@ class ListingCtrl {
                 listing.setStatus("pendente");
             }
 
+            await listing.save();
+
             if(reqBody.categories) {
                 const categories = JSON.parse(reqBody.categories);
-                //Inserir na tabela com id do anuncio e id da categoria;
-            }
 
-            await listing.save();
+                for (let i = 0; i < categories.length; i++) {
+                    const categoryAndListing = new ListingAndCategory(listing.getId(), categories[i].id);
+                    await categoryAndListing.save();
+                }
+            }
 
             const paymentData = {
                 listingId: listing.getId(),
