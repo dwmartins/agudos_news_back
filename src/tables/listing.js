@@ -60,6 +60,21 @@ class NewTableListing {
         }
     }
 
+    ListingCategory = async () => {
+        try {
+            await db.pool.query(`
+                CREATE TABLE IF NOT EXISTS listingCategory(
+                    listing_id INT NOT NULL,
+                    category_id INT NOT NULL,
+                    FOREIGN KEY (listing_id) REFERENCES listing(id) ON DELETE CASCADE,
+                    FOREIGN KEY (category_id) REFERENCES listing_category(id) ON DELETE CASCADE
+                );
+            `);
+        } catch (error) {
+            logger.log(`error`, `Erro ao criar a tabela (listingCategory): ${error}`);
+        }
+    }
+
     listingPayment = async () => {
         try {
             await db.pool.query(`
@@ -125,7 +140,7 @@ class NewTableListing {
                     id INT AUTO_INCREMENT PRIMARY KEY,
                     description VARCHAR(255),
                     level VARCHAR(100) NOT NULL,
-                    isFree ENUM('Y', 'N') NOT NULL
+                    isFree ENUM('Y', 'N') NOT NULL,
                     active ENUM('Y', 'N') DEFAULT 'Y' NOT NULL,
                     price DECIMAL(10,2),
                     createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -163,6 +178,9 @@ class NewTableListing {
 
         console.log(`${helper.getDateTime()} - Criando tabela de (listing)...`);
         await this.listing();
+
+        console.log(`${helper.getDateTime()} - Criando tabela de (listingCategory)...`);
+        await this.ListingCategory();
 
         console.log(`${helper.getDateTime()} - Criando tabela de (listing_payment)...`);
         await this.listingPayment();
