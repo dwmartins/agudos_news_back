@@ -11,6 +11,8 @@ const promotionalCodeCtrl = require("../controllers/promotionalCodeCtrl");
 const promotionalCodeDAO = require("../models/PromotionalCodeDAO");
 const PromotionalCode = require("../class/PromotionalCode");
 const ListingAndCategory = require("../class/ListingAndCategory");
+const ListingGalleryImg = require("../class/ListingGalleryImg");
+const mime = require("mime-types");
 
 class ListingCtrl {
     ENV = process.env;
@@ -170,8 +172,7 @@ class ListingCtrl {
 
             if(this.galleryImage && (plan.getIsFree() === "N")) {
                 for (let i = 0; i < this.galleryImage.length; i++) {
-                    const element = this.galleryImage[i]; 
-                    await awsUpload.uploadPhotoListing(this.galleryImage[i], `${listing.getId()}_${uuidv4()}`);
+                    this.setImgGallery(this.galleryImage[i], listing);
                 }
             }
 
@@ -191,6 +192,21 @@ class ListingCtrl {
         } catch (error) {
             return this.sendResponse(res, 500, {error:  'Houve um erro ao criar o anúncio'});
         }
+    }
+
+    setImgGallery = async (file, listing) => {
+        const imgName = `${listing.getId()}_${uuidv4()}`; 
+        const contentType = mime.lookup(file.originalname);
+        const extension = mime.extension(contentType);
+        await awsUpload.uploadPhotoListing(file, imgName);
+
+        const img = {
+            listingId: listing.getId(),
+            imgUrl: `${this.urlDocs}/${imgName}.${extension}`
+        }
+
+        const imgGallery = new ListingGalleryImg(img);
+        imgGallery.save();
     }
 
     updateListing = async (req, res) => {
