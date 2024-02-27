@@ -95,6 +95,7 @@ class ListingCtrl {
                 listing.setStatus("ativo");
             } else {
                 listing.setStatus("pendente");
+                listing.setExpiration(helper.getDateAfterThirtyDays());
             }
 
             await listing.save();
@@ -184,7 +185,7 @@ class ListingCtrl {
                 id: listing.getId(),
                 title: listing.getTitle(),
                 payment: listingPayment.getPayment(),
-                expiration: '10/08/2024',
+                expiration: listing.getExpiration(),
                 freePlan: listingPayment.getPayment() == 0 ? true : false
             }
             

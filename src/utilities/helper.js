@@ -1,18 +1,22 @@
 class Helper {
 
-    getDateTime = () => {
-        const dataAtual = new Date();
+    getDateTime = (data = new Date()) => {
+        const year = data.getFullYear();
+        const month = String(data.getMonth() + 1).padStart(2, '0');
+        const day = String(data.getDate()).padStart(2, '0');
+        const hours = String(data.getHours()).padStart(2, '0');
+        const minutes = String(data.getMinutes()).padStart(2, '0');
+        const seconds = String(data.getSeconds()).padStart(2, '0');
     
-        const year = dataAtual.getFullYear();
-        const month = String(dataAtual.getMonth() + 1).padStart(2, '0');
-        const day = String(dataAtual.getDate()).padStart(2, '0');
-        const hours = String(dataAtual.getHours()).padStart(2, '0');
-        const minutes = String(dataAtual.getMinutes()).padStart(2, '0');
-        const seconds = String(dataAtual.getSeconds()).padStart(2, '0');
-    
-        const dateTimeFormatted = `${day}-${month}-${year} ${hours}:${minutes}:${seconds}`;
-    
-        return dateTimeFormatted
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    }
+
+    getDateAfterThirtyDays = () => {
+        const today = new Date();
+        const thirtyDaysLater = new Date();
+        thirtyDaysLater.setDate(today.getDate() + 30);
+
+        return this.getDateTime(thirtyDaysLater);
     }
     
     generateAlphanumericCode = (size) => {
