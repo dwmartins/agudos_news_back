@@ -27,7 +27,9 @@ class ListingCtrl {
 
     list = async (req, res) => {
         try {
-            const { status, category, keywords } = req.query;
+            const { status, keywords } = req.query;
+            const category = parseInt(req.query.category);
+            
             let listings;
 
             if(category) {

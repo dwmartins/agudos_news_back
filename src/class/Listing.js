@@ -19,6 +19,7 @@ class Listing {
         this.address            = listing.address;
         this.complement         = listing.complement;
         this.city               = listing.city;
+        this.state              = listing.state;
         this.zipCode            = listing.zipCode;
         this.status             = listing.status;
         this.observation        = listing.observation;

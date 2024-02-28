@@ -38,6 +38,7 @@ class NewTableListing {
                     phone VARCHAR(20),
                     address VARCHAR(255),
                     city VARCHAR(100),
+                    state VARCHAR(50),
                     complement VARCHAR(255),
                     zipCode VARCHAR(20),
                     country VARCHAR(50),
