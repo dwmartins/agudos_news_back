@@ -37,7 +37,7 @@ class ListingCtrl {
                 return this.sendResponse(res, 200, listings);
             }
 
-            if(keywords) {
+            if(keywords && keywords != 'null') {
                 listings = await listingDAO.findByKeywords(keywords, status);
                 return this.sendResponse(res, 200, listings);
             }

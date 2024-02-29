@@ -22,6 +22,7 @@ class Listing {
         this.state              = listing.state;
         this.zipCode            = listing.zipCode;
         this.status             = listing.status;
+        this.plan               = listing.plan;
         this.observation        = listing.observation;
         this.facebook           = listing.facebook;
         this.instagram          = listing.instagram;
