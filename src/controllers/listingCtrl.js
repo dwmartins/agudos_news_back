@@ -29,6 +29,7 @@ class ListingCtrl {
         try {
             const { status, keywords } = req.query;
             const category = parseInt(req.query.category);
+            const listingId = parseInt(req.query.listingId);
             
             let listings;
 
@@ -39,6 +40,11 @@ class ListingCtrl {
 
             if(keywords && keywords != 'null') {
                 listings = await listingDAO.findByKeywords(keywords, status);
+                return this.sendResponse(res, 200, listings);
+            }
+
+            if(listingId) {
+                [listings] = await listingDAO.findById(listingId);
                 return this.sendResponse(res, 200, listings);
             }
 

@@ -53,10 +53,10 @@ class ListingDAO {
 
     findById = async (id) => {
         try {
-            const sql = `SELECT id FROM listing WHERE id = ?`;
+            const sql = `SELECT * FROM listing WHERE id = ?`;
             const value = [id];
 
-            const result = this.conn.query(sql, value);
+            const result = await this.conn.query(sql, value);
 
             return result[0];
         } catch (error) {
