@@ -64,6 +64,11 @@ const plansInfo = [
         description: "Descrição detalhada",
         value: null
     },
+    {
+        active: "Y",
+        description: "Mapa",
+        value: null
+    },
 ]
 
 module.exports = plansInfo;
