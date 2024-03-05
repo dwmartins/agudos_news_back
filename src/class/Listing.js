@@ -21,6 +21,7 @@ class Listing {
         this.city               = listing.city;
         this.state              = listing.state;
         this.zipCode            = listing.zipCode;
+        this.map                = listing.map;
         this.status             = listing.status;
         this.plan               = listing.plan;
         this.observation        = listing.observation;
@@ -173,6 +174,14 @@ class Listing {
 
     setZipCode = (zipCode) => {
         this.zipCode = zipCode;
+    }
+
+    getMap = () => {
+        return this.map;
+    }
+
+    setMap = (map) => {
+        this.map = map;
     }
 
     /**
