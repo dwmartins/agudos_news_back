@@ -12,6 +12,7 @@ const promotionalCodeDAO = require("../models/PromotionalCodeDAO");
 const PromotionalCode = require("../class/PromotionalCode");
 const ListingAndCategory = require("../class/ListingAndCategory");
 const ListingGalleryImg = require("../class/ListingGalleryImg");
+const listingGalleryImgDAO = require("../models/listingGalleryImgDAO");
 const mime = require("mime-types");
 
 class ListingCtrl {
@@ -35,16 +36,28 @@ class ListingCtrl {
 
             if(category) {
                 listings = await listingDAO.findByCategory(category, status);
+
+                for (let i = 0; i < listings.length; i++) {
+                    listings[i].galleryImage = await listingGalleryImgDAO.findByListingId(listings[i].id);
+                }
+
                 return this.sendResponse(res, 200, listings);
             }
 
             if(keywords && keywords != 'null') {
                 listings = await listingDAO.findByKeywords(keywords, status);
+
+                for (let i = 0; i < listings.length; i++) {
+                    listings[i].galleryImage = await listingGalleryImgDAO.findByListingId(listings[i].id);
+
+                }
                 return this.sendResponse(res, 200, listings);
             }
 
             if(listingId) {
                 [listings] = await listingDAO.findById(listingId);
+                listings.galleryImage = await listingGalleryImgDAO.findByListingId(listings.id);
+
                 return this.sendResponse(res, 200, listings);
             }
 

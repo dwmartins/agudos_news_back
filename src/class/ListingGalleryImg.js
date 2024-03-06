@@ -1,4 +1,4 @@
-const listingGalleryImgDAO = require("../models/listingGalleryImg");
+const listingGalleryImgDAO = require("../models/listingGalleryImgDAO");
 
 class ListingGalleryImg {
     constructor(img) {

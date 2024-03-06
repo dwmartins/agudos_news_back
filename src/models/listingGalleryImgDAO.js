@@ -51,6 +51,18 @@ class ListingGalleryImgDAO {
             throw new Error(error);
         }
     }
+
+    findByListingId = async (id) => {
+        try {
+            const sql = `SELECT * FROM listing_galleryImg WHERE listingId = ?`;
+            const value = [id];
+            const result  = await this.conn.query(sql, value);
+            return result[0];
+        } catch (error) {
+            logger.log(`error`, `Falha ao buscar as imagens de galeria da listing: ${error}`);
+            throw new Error(error);
+        }
+    }
 }
 
 module.exports = new ListingGalleryImgDAO;
