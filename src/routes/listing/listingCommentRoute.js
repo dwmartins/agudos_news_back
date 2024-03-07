@@ -3,7 +3,7 @@ const route = express.Router();
 const listingCommentCtrl = require("../../controllers/listingCommentCtrl");
 const userMiddleware = require("../../middleware/user");
 
-route.get("/:id", listingCommentCtrl.listCommentByListing);
+route.get("/", listingCommentCtrl.listCommentByListing);
 route.post("/", userMiddleware.authenticateToken, listingCommentCtrl.new);
 route.put("/", userMiddleware.authenticateToken, listingCommentCtrl.updateComment);
 

@@ -29,7 +29,7 @@ createServer = () => {
     app.use('/api/user', userRoutes);
     app.use('/api/anuncios', listingRoute);
     app.use('/api/anuncios/categorias', categoryRoute);
-    app.use('/api/anuncios/comentarios', listingCommentRoute);
+    app.use('/api/anuncios/avaliacoes', listingCommentRoute);
     app.use('/api/anuncios/precos', listingPlansRoute);
     app.use('/api/carousel', carouselRoute);
     app.use('/api/banner', bannerPriceRoute);

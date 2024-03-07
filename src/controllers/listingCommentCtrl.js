@@ -39,8 +39,8 @@ class ListingCommentCtrl {
 
     listCommentByListing = async (req, res) => {
         try {
-            const { listingId } = req.params;
-            const comment = listingCommentDAO.findByListing(listingId);
+            const { listingId } = req.query;
+            const comment = await listingCommentDAO.findByListing(listingId);
             return this.sendResponse(res, 200, comment);
         } catch (error) {
             return this.sendResponse(res, 500, {error: 'Falha ao buscar as avaliações.'});

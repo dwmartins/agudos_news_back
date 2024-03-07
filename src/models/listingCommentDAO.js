@@ -55,16 +55,17 @@ class ListingCommentDAO {
     findByListing = async (listingId) => {
         try {
             const sql = `
-                SELECT listing_comment.*, user.name as userName
-                FROM listing_comment
-                INNER JOIN users ON listing_comment.user = user.id
-                WHERE listing_comment.id = ?`;
+                SELECT  comment.user, comment.comment, comment.assessment, comment.createdAt, users.name, users.lastName, users.photo_url
+                FROM listing_comment AS comment
+                INNER JOIN users ON comment.user = users.id
+                WHERE comment.listing = ?`;
 
             const values = [listingId];
 
-            const results = this.conn.query(sql, values);
+            const results = await this.conn.query(sql, values);
             return results[0];
         } catch (error) {
+            logger.log(`error`, `Falha ao buscar o comentário da listing: ${error}`);
             throw new Error(error);
         }
     }
