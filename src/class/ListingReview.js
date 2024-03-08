@@ -16,8 +16,8 @@ class ListingReview {
     getUser = () => this.user;
     setUser = (user) => this.user = user;
     
-    getAssessment = () => this.review;
-    setAssessment = (review) => this.review = review;
+    getReview = () => this.review;
+    setReview = (review) => this.review = review;
 
     getComment = () => this.comment;
     setComment = (comment) => this.comment = comment;
