@@ -55,7 +55,7 @@ class ListingCommentDAO {
     findByListing = async (listingId) => {
         try {
             const sql = `
-                SELECT  comment.user, comment.comment, comment.assessment, comment.createdAt, users.name, users.lastName, users.photo_url
+                SELECT  comment.id, comment.user, comment.comment, comment.assessment, comment.createdAt, users.name, users.lastName, users.photo_url
                 FROM listing_comment AS comment
                 INNER JOIN users ON comment.user = users.id
                 WHERE comment.listing = ?`;
