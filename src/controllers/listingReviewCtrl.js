@@ -1,12 +1,12 @@
-const ListingComment = require("../class/ListingComment");
-const listingCommentDAO = require("../models/listingCommentDAO");;
+const ListingReview = require("../class/ListingReview");
+const listingReviewDAO = require("../models/listingReviewDAO");;
 
-class ListingCommentCtrl {
+class ListingReviewCtrl {
     new = async (req, res) => {
         try {
             const reqBody = req.body;
-            const listingComment = new ListingComment(reqBody);
-            await listingComment.save();
+            const review = new ListingReview(reqBody);
+            await review.save();
 
             return this.sendResponse(res, 201, {success: 'Sua avaliação foi inserida com sucesso.'});
         } catch (error) {
@@ -14,11 +14,11 @@ class ListingCommentCtrl {
         }
     }
 
-    updateComment = async (req, res) => {
+    updateReview = async (req, res) => {
         try {
             const reqBody = req.body;
-            const listingComment = new ListingComment(reqBody);
-            await listingComment.update();
+            const review = new ListingReview(reqBody);
+            await review.update();
 
             return this.sendResponse(res, 201, {success: 'Sua avaliação foi atualizada com sucesso.'});
         } catch (error) {
@@ -26,10 +26,10 @@ class ListingCommentCtrl {
         }
     }
 
-    deleteComment = async (req, res) => {
+    deleteReview = async (req, res) => {
         try {
             const { id } = req.params;
-            await listingCommentDAO.deleteDAO(id);
+            await listingReviewDAO.deleteDAO(id);
 
             return this.sendResponse(res, 200, {success: 'Avaliação excluída com sucesso.'});
         } catch (error) {
@@ -37,11 +37,11 @@ class ListingCommentCtrl {
         }
     }
 
-    listCommentByListing = async (req, res) => {
+    listReviewByListing = async (req, res) => {
         try {
             const { listingId } = req.query;
-            const comment = await listingCommentDAO.findByListing(listingId);
-            return this.sendResponse(res, 200, comment);
+            const review = await listingReviewDAO.findByListing(listingId);
+            return this.sendResponse(res, 200, review);
         } catch (error) {
             return this.sendResponse(res, 500, {error: 'Falha ao buscar as avaliações.'});
         }
@@ -52,4 +52,4 @@ class ListingCommentCtrl {
     }
 }
 
-module.exports = new ListingCommentCtrl;
+module.exports = new ListingReviewCtrl;

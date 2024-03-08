@@ -1,14 +1,14 @@
-const listingCommentDAO = require("../models/listingCommentDAO");
+const listingCommentDAO = require("../models/listingReviewDAO");
 
-class ListingComment {
-    constructor(comment) {
-        this.id         = comment.id;
-        this.user       = comment.user;
-        this.listing    = comment.listing;
-        this.assessment = comment.assessment;
-        this.comment    = comment.comment;
-        this.createdAt  = comment.createdAt;
-        this.updatedAt  = comment.updatedAt;
+class ListingReview {
+    constructor(review) {
+        this.id         = review.id;
+        this.user       = review.user;
+        this.listing    = review.listing;
+        this.review     = review.review;
+        this.comment    = review.comment;
+        this.createdAt  = review.createdAt;
+        this.updatedAt  = review.updatedAt;
     }
 
     getId = () => this.id;
@@ -16,8 +16,8 @@ class ListingComment {
     getUser = () => this.user;
     setUser = (user) => this.user = user;
     
-    getAssessment = () => this.assessment;
-    setAssessment = (assessment) => this.assessment = assessment;
+    getAssessment = () => this.review;
+    setAssessment = (review) => this.review = review;
 
     getComment = () => this.comment;
     setComment = (comment) => this.comment = comment;
@@ -50,4 +50,4 @@ class ListingComment {
     }
 }
 
-module.exports = ListingComment;
+module.exports = ListingReview;

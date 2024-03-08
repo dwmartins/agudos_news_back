@@ -1,11 +1,11 @@
 const express = require("express");
 const route = express.Router();
-const listingCommentCtrl = require("../../controllers/listingCommentCtrl");
+const listingReviewCtrl = require("../../controllers/listingReviewCtrl");
 const userMiddleware = require("../../middleware/user");
 
-route.get("/", listingCommentCtrl.listCommentByListing);
-route.post("/", userMiddleware.authenticateToken, listingCommentCtrl.new);
-route.put("/", userMiddleware.authenticateToken, listingCommentCtrl.updateComment);
-route.delete("/:id", userMiddleware.authenticateToken, listingCommentCtrl.deleteComment);
+route.get("/", listingReviewCtrl.listReviewByListing);
+route.post("/", userMiddleware.authenticateToken, listingReviewCtrl.new);
+route.put("/", userMiddleware.authenticateToken, listingReviewCtrl.updateReview);
+route.delete("/:id", userMiddleware.authenticateToken, listingReviewCtrl.deleteReview);
 
 module.exports = route;

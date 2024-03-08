@@ -97,14 +97,14 @@ class NewTableListing {
         }
     }
 
-    listingComment = async () => {
+    listingReview = async () => {
         try {
             await db.pool.query(`
-                CREATE TABLE IF NOT EXISTS listing_comment (
+                CREATE TABLE IF NOT EXISTS listing_review (
                     id INT AUTO_INCREMENT PRIMARY KEY,
                     user INT NOT NULL,
                     listing INT NOT NULL,
-                    assessment INT NOT NULL,
+                    review INT NOT NULL,
                     comment VARCHAR(255) NOT NULL,
                     createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
                     updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -113,7 +113,7 @@ class NewTableListing {
                 );
             `);
         } catch (error) {
-            logger.log(`error`, `Erro ao criar a tabela (listing_comment): ${error}`);
+            logger.log(`error`, `Erro ao criar a tabela (listing_review): ${error}`);
         }
     }
 
@@ -186,8 +186,8 @@ class NewTableListing {
         console.log(`${helper.getDateTime()} - Criando tabela de (listing_payment)...`);
         await this.listingPayment();
 
-        console.log(`${helper.getDateTime()} - Criando tabela de (listing_comment)...`);
-        await this.listingComment();
+        console.log(`${helper.getDateTime()} - Criando tabela de (listing_review)...`);
+        await this.listingReview();
 
         console.log(`${helper.getDateTime()} - Criando tabela de (listing_galleryImg)...`);
         await this.listingGalleryImg();

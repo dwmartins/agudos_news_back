@@ -1,17 +1,17 @@
 const db = require("../../config/dbConnection");
 const logger = require("../../config/logger");
 
-class ListingCommentDAO {
+class ListingReviewDAO {
     constructor () {
         this.conn = db.pool;
     }
 
-    saveDAO = async (comment) => {
-        const fields = Object.keys(comment).join(', ');
-        const placeholders = Object.keys(comment).map(key => `?`).join(', ');
+    saveDAO = async (review) => {
+        const fields = Object.keys(review).join(', ');
+        const placeholders = Object.keys(review).map(key => `?`).join(', ');
 
-        const sql = `INSERT INTO listing_comment (${fields}) VALUES (${placeholders})`;
-        const values = Object.values(comment);
+        const sql = `INSERT INTO listing_review (${fields}) VALUES (${placeholders})`;
+        const values = Object.values(review);
 
         try {
             const result = await this.conn.query(sql, values);
@@ -22,13 +22,13 @@ class ListingCommentDAO {
         } 
     }
 
-    updateDAO = async (comment) => {
-        const commentId = comment.id;
-        delete comment.id;
-        const fields = Object.keys(comment).join(' = ?, ') + ' = ?';
+    updateDAO = async (review) => {
+        const reviewId = review.id;
+        delete review.id;
+        const fields = Object.keys(review).join(' = ?, ') + ' = ?';
         
-        const sql = `UPDATE listing_comment SET ${fields} WHERE id = ?`;
-        let values = [...Object.values(comment), commentId];
+        const sql = `UPDATE listing_review SET ${fields} WHERE id = ?`;
+        let values = [...Object.values(review), reviewId];
 
         try {
             await this.conn.query(sql, values);
@@ -41,7 +41,7 @@ class ListingCommentDAO {
 
     deleteDAO = async (id) => { 
         try {
-            const sql = `DELETE FROM listing_comment WHERE id = ?`;
+            const sql = `DELETE FROM listing_review WHERE id = ?`;
             const value = [id];
 
             await this.conn.query(sql, value);
@@ -55,10 +55,10 @@ class ListingCommentDAO {
     findByListing = async (listingId) => {
         try {
             const sql = `
-                SELECT  comment.id, comment.user, comment.comment, comment.assessment, comment.createdAt, users.name, users.lastName, users.photo_url
-                FROM listing_comment AS comment
-                INNER JOIN users ON comment.user = users.id
-                WHERE comment.listing = ?`;
+                SELECT  review.id, review.user, review.review, review.comment, review.createdAt, users.name, users.lastName, users.photo_url
+                FROM listing_review AS review
+                INNER JOIN users ON review.user = users.id
+                WHERE review.listing = ?`;
 
             const values = [listingId];
 
@@ -72,7 +72,7 @@ class ListingCommentDAO {
 
     findById = async (id) => {
         try {
-            const sql = `SELECT id FROM listing_comment WHERE id = ?`;
+            const sql = `SELECT id FROM listing_review WHERE id = ?`;
             const value = [id];
 
             const result = this.conn.query(sql, value);
@@ -85,7 +85,7 @@ class ListingCommentDAO {
     }
 
     findAll = async () => {
-        const sql = `SELECT * FROM listing_comment`;
+        const sql = `SELECT * FROM listing_review`;
 
         try {
             const result = await this.conn.query(sql);
@@ -97,4 +97,4 @@ class ListingCommentDAO {
     }
 }
 
-module.exports = new ListingCommentDAO;
+module.exports = new ListingReviewDAO;
