@@ -68,6 +68,16 @@ class ListingCtrl {
         }
     }
 
+    listByUser = async (req, res) => {
+        try {
+            const userId = parseInt(req.query.userId);
+            const listings = await listingDAO.findByUser(userId);
+            return this.sendResponse(res, 200, listings);
+        } catch (error) {
+            return this.sendResponse(res, 500, {error: 'Houve um erro ao buscar o anúncio do usuário.'});
+        }
+    }
+
     new = async (req, res) => {
         try {
             const user_id = parseInt(req.headers.user_id);

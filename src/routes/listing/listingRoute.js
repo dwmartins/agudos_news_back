@@ -8,6 +8,7 @@ const storage = multer.memoryStorage();
 const upload = multer({storage: storage});
 
 route.get("/", listingCtrl.list);
+route.get("/usuario", listingCtrl.listByUser);
 
 // Precisa de autenticação
 route.post("/", userMiddleware.authenticateToken, upload.fields([{name: 'logoImage', maxCount: 1}, {name: 'coverImage', maxCount: 1}, {name: 'galleryImage', maxCount: 8}]), listingCtrl.new);

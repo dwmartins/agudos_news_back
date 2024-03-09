@@ -83,6 +83,19 @@ class ListingDAO {
         }
     }
 
+    findByUser = async (userId) => {
+        let sql = `SELECT * FROM listing WHERE user_id = ?`;
+        const value = [userId]
+
+        try {
+            const result = await this.conn.query(sql, value);
+            return result[0];
+        } catch (error) {
+            logger.log(`error`, `Houve um erro buscar o anúncio por usuário: ${error}`);
+            throw new Error(error);
+        }
+    }
+
     findByCategory = async (category, status) => {
         let  sql = `SELECT listing.* 
                     FROM listing 
