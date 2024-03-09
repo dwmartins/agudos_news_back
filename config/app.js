@@ -9,7 +9,7 @@ require("../src/schedules/Transitions");
 
 const userRoutes = require("../src/routes/users/userRoute");
 const listingRoute = require("../src/routes/listing/listingRoute");
-const listingCommentRoute = require("../src/routes/listing/listingCommentRoute.js");
+const listingReviewRoute = require("../src/routes/listing/listingReviewRoute.js");
 const listingPlansRoute = require("../src/routes/listing/listingPlansRoute.js");
 const categoryRoute = require("../src/routes/listing/categoryRoute");
 const carouselRoute = require("../src/routes/carousel/carouselRouter");
@@ -17,7 +17,6 @@ const bannerPriceRoute = require("../src/routes/banner/bannerPriceRouter");
 const promotionalCodeRoute = require("../src/routes/promotionalCode/promotionalCodeRoute");
 const transitionRoute = require("../src/routes/transition/transitionRoute");
 const jobRoute = require("../src/routes/jobs/jobRoute");
-const awsimg = require("../src/routes/awsimgteste.js");
 
 createServer = () => {
     const app = express();
@@ -29,15 +28,13 @@ createServer = () => {
     app.use('/api/user', userRoutes);
     app.use('/api/anuncios', listingRoute);
     app.use('/api/anuncios/categorias', categoryRoute);
-    app.use('/api/anuncios/avaliacoes', listingCommentRoute);
-    app.use('/api/anuncios/precos', listingPlansRoute);
+    app.use('/api/anuncios/avaliacoes', listingReviewRoute);
+    app.use('/api/anuncios/planos', listingPlansRoute);
     app.use('/api/carousel', carouselRoute);
     app.use('/api/banner', bannerPriceRoute);
     app.use('/api/codigo-promocional', promotionalCodeRoute);
     app.use('/api/transacoes', transitionRoute);
     app.use('/api/empregos', jobRoute);
-
-    app.use('/api/teste', awsimg)
 
     app.get('/', (req, res) => {
         res.status(200).sendFile(path.resolve('index.html'));
