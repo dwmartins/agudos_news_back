@@ -105,6 +105,8 @@ class ListingDAO {
         let  sql = `SELECT * 
                     FROM listing 
                     WHERE keywords LIKE '%${keywords}%'
+                    OR summary LIKE '%${keywords}%'
+                    OR description LIKE '%${keywords}%'
                     AND listing.status = ?`;
 
         const value = [status];
