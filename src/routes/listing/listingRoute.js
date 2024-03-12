@@ -13,6 +13,6 @@ route.get("/usuario", listingCtrl.listByUser);
 // Precisa de autenticação
 route.post("/", userMiddleware.authenticateToken, upload.fields([{name: 'logoImage', maxCount: 1}, {name: 'coverImage', maxCount: 1}, {name: 'galleryImage', maxCount: 8}]), listingCtrl.new);
 route.put("/", userMiddleware.authenticateToken, listingCtrl.updateListing);
-route.delete("/:id",userMiddleware.checkUserAdmin, listingCtrl.deleteListing);
+route.delete("/:id",userMiddleware.authenticateToken, listingCtrl.deleteListing);
 
 module.exports = route;

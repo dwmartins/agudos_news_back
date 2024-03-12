@@ -261,15 +261,14 @@ class ListingCtrl {
     }
 
     deleteListing = async (req, res) => {
-        const { id } = req.params;
-
-        const result = await listingDAO.deleteDAO(id);
-
-        if(result.error) {
+        try {
+            const id = parseInt(req.params.id);
+            await listingDAO.deleteDAO(id);
+            return this.sendResponse(res, 200, {success: 'Anúncio deletado com sucesso.'});
+            
+        } catch (error) {
             return this.sendResponse(res, 500, {error: 'Houve um erro ao delete o anúncio.'});
         }
-
-        return this.sendResponse(res, 200, {success: 'Anúncio deletado com sucesso.'});
     }
 
     listListings = async (req, res) => {
