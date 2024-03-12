@@ -13,6 +13,7 @@ const PromotionalCode = require("../class/PromotionalCode");
 const ListingAndCategory = require("../class/ListingAndCategory");
 const ListingGalleryImg = require("../class/ListingGalleryImg");
 const listingGalleryImgDAO = require("../models/listingGalleryImgDAO");
+const listingReviewDAO = require("../models/listingReviewDAO");
 const mime = require("mime-types");
 
 class ListingCtrl {
@@ -72,6 +73,11 @@ class ListingCtrl {
         try {
             const userId = parseInt(req.query.userId);
             const listings = await listingDAO.findByUser(userId);
+
+            for (let i = 0; i < listings.length; i++) {
+                listings[i].reviews = await listingReviewDAO.findByListing(listings[i].id);
+            }
+
             return this.sendResponse(res, 200, listings);
         } catch (error) {
             return this.sendResponse(res, 500, {error: 'Houve um erro ao buscar o anúncio do usuário.'});
