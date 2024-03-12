@@ -49,11 +49,7 @@ createServer = () => {
     app.use((error, req, res, next) => {
         logger.log(`error`, error);
         res.status(error.status || 500);
-        return res.json({
-            erro: {
-                erro: error.message
-            }
-        });
+        return res.json({error: error.message});
     });
 
     return app;

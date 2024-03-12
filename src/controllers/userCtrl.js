@@ -11,7 +11,7 @@ const sendEmail = require("./sendEmail");
 const awsUpload = require("../service/awsUpload");
 
 class UserCtrl {
-    infoIgm;
+    infoImg;
 
     login = async (req, res) => {
         try {
@@ -44,7 +44,7 @@ class UserCtrl {
 
             return this.sendResponse(res, 200, {alert: `Usuário ou senha inválidos.`});
         } catch (error) {
-            return this.sendResponse(res, 500, {erro: `Houve um erro ao realizar o login.`});
+            return this.sendResponse(res, 500, {error: `Houve um erro ao realizar o login.`});
         }
     }
 
@@ -115,7 +115,7 @@ class UserCtrl {
 
             return this.sendResponse(res, 201, {success: 'Usuário atualizado com sucesso.'});
         } catch (error) {
-            return this.sendResponse(res, 500, {erro: `Houve um erro ao atualizar o usuário.`});
+            return this.sendResponse(res, 500, {error: `Houve um erro ao atualizar o usuário.`});
         }
     }
 
@@ -126,24 +126,25 @@ class UserCtrl {
             const user = new User(reqBody);
 
             if(img) {
-                this.infoIgm = helperFile.validImg(img);
+                this.infoImg = helperFile.validImg(img);
 
-                if(this.infoIgm.invalid) {
-                    return this.sendResponse(res, 400, {alert: this.infoIgm.invalid});
+                if(this.infoImg.invalid) {
+                    return this.sendResponse(res, 400, {alert: this.infoImg.invalid});
                 }
 
                 const fileName = `${user.getId()}_${user.getName()}`;
-                const imgUrl = `${process.env.URLDOCS}/${process.env.FOLDERIMGUSERS}/${fileName}.${this.infoIgm.extension}`;
+                const imgUrl = `${process.env.URLDOCS}/${process.env.FOLDERIMGUSERS}/${fileName}.${this.infoImg.extension}`;
+                user.setPhoto_url(imgUrl);
 
                 await Promise.all([
                     awsUpload.uploadPhotoUser(img, fileName),
-                    userDAO.updateImg(imgUrl, user.getId())
+                    user.updateImg()
                 ]);
 
-                return this.sendResponse(res, 201, {success: 'Foto atualizada com sucesso.'});
+                return this.sendResponse(res, 201, user);
             }
         } catch (error) {
-            return this.sendResponse(res, 500, {erro: `Falha ao atualizar a foto.`});
+            return this.sendResponse(res, 500, {error: `Falha ao atualizar a foto.`});
         }
     }
 
@@ -166,7 +167,7 @@ class UserCtrl {
             this.sendResponse(res, 200, users);
             
         } catch (error) {
-            return this.sendResponse(res, 500, {erro: `Houve um erro ao buscar os usuários.`}); 
+            return this.sendResponse(res, 500, {error: `Houve um erro ao buscar os usuários.`}); 
         }
     }
 
@@ -178,7 +179,7 @@ class UserCtrl {
 
             return this.sendResponse(res, 200, {success: `Usuário ${userAction} com sucesso.`});
         } catch (error) {
-            return this.sendResponse(res, 500, {erro: `Falha ao mudar o status do usuário.`});
+            return this.sendResponse(res, 500, {error: `Falha ao mudar o status do usuário.`});
         }
     }
 

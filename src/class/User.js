@@ -116,6 +116,10 @@ class User {
 
         return await userDAO.updateDAO(plainObject);
     }
+
+    updateImg = async () => {
+        await userDAO.updateImg(this.photo_url, this.id);
+    }
 }
 
 module.exports = User;
