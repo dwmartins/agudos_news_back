@@ -19,6 +19,7 @@ class UserMiddleware {
             if(userData.length) {
                 try {
                     jwt.verify(token, userData[0].token);
+                    req.userData = userData;
                     next();
                 } catch (error) {
                     if(error.expiredAt) {
@@ -51,6 +52,7 @@ class UserMiddleware {
 
                     this.userData = jwt.verify(token, user.getToken());
                     if(this.userData.user_type === "admin") {
+                        req.userData = userData;
                         next();
                         return;
                     }

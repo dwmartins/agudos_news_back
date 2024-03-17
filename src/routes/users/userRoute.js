@@ -17,6 +17,7 @@ route.post("/new-password", userCtrl.sendNewPassword);
 
 // Rotas que precisa de autenticação
 route.put("/update", userMiddleware.authenticateToken, userCtrl.updateUser);
+route.put("/update-password", userMiddleware.authenticateToken, userCtrl.updatePassword);
 route.put("/update-photo", userMiddleware.authenticateToken, upload.single('photo'), userCtrl.updateUserImg);
 route.delete("/delete/:id", userMiddleware.authenticateToken, userCtrl.deleteUser);
 route.get("/:id", userMiddleware.authenticateToken, userCtrl.getUser);

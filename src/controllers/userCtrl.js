@@ -98,7 +98,6 @@ class UserCtrl {
     updateUser = async (req, res) => {
         try {
             const reqBody = req.body;
-            const img = req.file;
             const user = new User(reqBody);
 
             const emailExists = await userDAO.findByEmail(user.getEmail());
@@ -116,6 +115,25 @@ class UserCtrl {
             return this.sendResponse(res, 201, {success: 'Usuário atualizado com sucesso.'});
         } catch (error) {
             return this.sendResponse(res, 500, {error: `Houve um erro ao atualizar o usuário.`});
+        }
+    }
+
+    updatePassword = async (req, res) => {
+        try {
+            const user = new User(req.userData);
+            const {password, newPassword} = req.body;
+            const password_hash = await helperAuth.comparePasswordHash(password, user.getPassword()); 
+
+            if(password_hash) {
+                const encodedPassword = await helperAuth.encodePassword(newPassword);
+                user.setPassword(encodedPassword);
+                await user.updatePassword();
+                return this.sendResponse(res, 201, {success: 'Senha alterada com sucesso.'});
+            }
+
+            return this.sendResponse(res, 401, {alert: `Senha atual invalida.`});
+        } catch (error) {
+            return this.sendResponse(res, 500, {error: `Houve um erro ao atualizar sua senha.`});
         }
     }
 
@@ -194,7 +212,7 @@ class UserCtrl {
     
                 const user = new User(userData[0]);
                 user.setPassword(encodedPassword);
-                await user.update();
+                await user.updatePassword();
     
                 await sendEmail.newPassword(user.getEmail(), password, user.getName());
 

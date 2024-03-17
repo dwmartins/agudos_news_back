@@ -113,8 +113,13 @@ class User {
 
         delete plainObject.createdAt;
         delete plainObject.updatedAt;
+        delete plainObject.password;
 
         return await userDAO.updateDAO(plainObject);
+    }
+
+    updatePassword = async () => {
+        return await userDAO.updatePasswordDAO(this.getPassword(), this.getId());
     }
 
     updateImg = async () => {

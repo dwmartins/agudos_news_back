@@ -12,7 +12,6 @@ class DBConnection {
     checkConnection = async () => {
         try {
             await this.pool.query('SELECT 1+1');
-            console.log("Conexão com o banco de dados estabelecida com sucesso.");
         } catch (error) {
             this.getErrorConnection(error.code);
         }
