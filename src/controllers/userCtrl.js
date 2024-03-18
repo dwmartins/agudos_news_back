@@ -120,7 +120,7 @@ class UserCtrl {
 
     updatePassword = async (req, res) => {
         try {
-            const user = new User(req.userData);
+            const user = new User(req.userData[0]);
             const {password, newPassword} = req.body;
             const password_hash = await helperAuth.comparePasswordHash(password, user.getPassword()); 
 
@@ -131,9 +131,9 @@ class UserCtrl {
                 return this.sendResponse(res, 201, {success: 'Senha alterada com sucesso.'});
             }
 
-            return this.sendResponse(res, 401, {alert: `Senha atual invalida.`});
+            return this.sendResponse(res, 401, {error: `Senha atual inválida.`});
         } catch (error) {
-            return this.sendResponse(res, 500, {error: `Houve um erro ao atualizar sua senha.`});
+            return this.sendResponse(res, 500, {error: `Falha ao atualizar sua senha.`});
         }
     }
 
