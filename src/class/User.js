@@ -12,6 +12,14 @@ class User {
         this.active     = user.active ? user.active : 'Y';
         this.user_type  = user.user_type ? user.user_type : 'common';
         this.photo_url  = user.photo_url;
+        this.aboutMe    = user.aboutMe;
+        this.address    = user.address;
+        this.complement = user.complement;
+        this.country    = user.country;
+        this.state      = user.state;
+        this.city       = user.city;
+        this.cep        = user.cep;
+        this.phone      = user.phone;
         this.createdAt  = user.createdAt;
         this.updatedAt  = user.updatedAt;
     }
@@ -82,6 +90,70 @@ class User {
 
     setPhoto_url = (photo_url) => {
         this.photo_url = photo_url;
+    }
+
+    getAboutMe = () => {
+        return this.aboutMe;
+    }
+
+    setAboutMe = (aboutMe) => {
+        this.aboutMe = aboutMe;
+    }
+
+    getAddress = () => {
+        return this.address;
+    }
+
+    setAddress = (address) => {
+        this.address = address;
+    }
+
+    getComplement = () => {
+        return this.complement;
+    }
+
+    setComplement = (complement) => {
+        this.complement = complement;
+    }
+
+    getCountry = () => {
+        return this.country;
+    }
+
+    setCountry = (country) => {
+        this.country = country;
+    }
+
+    getState = () => {
+        return this.state;
+    }
+
+    setState = (state) => {
+        this.state = state;
+    }
+
+    getCity = () => {
+        return this.city;
+    }
+
+    setCity = (city) => {
+        this.city = city;
+    }
+
+    getCep = () => {
+        return this.cep;
+    }
+
+    setCep = (cep) => {
+        this.cep = cep;
+    }
+
+    getPhone = () => {
+        return this.phone;
+    }
+
+    setPhone = (phone) => {
+        this.phone = phone;
     }
 
     getCreatedAt = () => {
