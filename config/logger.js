@@ -5,7 +5,7 @@ const logger = winston.createLogger({
   level: 'info',
   format: winston.format.combine(
     winston.format.printf(({ level, message }) => {
-      return `${level}: ${helper.getDateTime()} ${message}`;
+      return `${level}: [${helper.getDateTime()}] ${message}`;
     })
   ),
   transports: [

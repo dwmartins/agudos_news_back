@@ -1,6 +1,6 @@
 require('dotenv').config();
+const logger = require("../../config/logger");
 const jwt = require("jsonwebtoken");
-const mime = require("mime-types");
 const User = require("../class/User");
 const UserAccess = require("../class/UserAccess");
 const userDAO = require("../models/userDAO");
@@ -17,6 +17,11 @@ class UserCtrl {
     login = async (req, res) => {
         try {
             const { email, password } = req.body;
+
+            if(!validator.validEmail(email)) {
+                return this.sendResponse(res, 400, {error: "Formato do e-mail invalido."});
+            }
+            
             const userData = await userDAO.findByEmail(email);
 
             if(userData.length) {
@@ -43,8 +48,9 @@ class UserCtrl {
                 }
             }
 
-            return this.sendResponse(res, 200, {alert: `Usuário ou senha inválidos.`});
+            return this.sendResponse(res, 404, {error: `Usuário ou senha inválidos.`});
         } catch (error) {
+            logger.log(`error`, error);
             return this.sendResponse(res, 500, {error: `Houve um erro ao realizar o login.`});
         }
     }
@@ -55,17 +61,23 @@ class UserCtrl {
             const img = req.file;
             const user = new User(reqBody);
 
+            const errors = validator.validUser(user);
+
+            if(errors) {
+                return this.sendResponse(res, 400, {error: errors.error});
+            }
+
             const existsEmail = await userDAO.findByEmail(user.getEmail());
 
             if(existsEmail.length) {
-                return this.sendResponse(res, 200, {alert: 'Este e-mail já está em uso.'});
+                return this.sendResponse(res, 409, {error: 'Este e-mail já está em uso.'});
             }
 
             if(img) {
                 this.infoIgm = helperFile.validImg(img);
 
                 if(this.infoIgm.invalid) {
-                    return this.sendResponse(res, 400, {alert: this.infoIgm.invalid});
+                    return this.sendResponse(res, 400, {error: this.infoIgm.invalid});
                 }
             }
 
@@ -74,8 +86,7 @@ class UserCtrl {
 
             user.setPassword(encodedPassword);
             user.setToken(token);
-            // user.setPhoto_url(`${process.env.URLDOCS}/${process.env.FOLDERIMGUSERS}/no-image-user.jpeg`);
-            const response = await user.save();
+            await user.save();
 
             if(img) {
                 const fileName = `${user.getId()}_${user.getName()}`;
@@ -92,7 +103,8 @@ class UserCtrl {
 
             return this.sendResponse(res, 201, {success: 'Usuário criado com sucesso.'});
         } catch (error) {
-            return this.sendResponse(res, 500, {error: 'Houve um erro ao criar o usuário'});
+            logger.log(`error`, error);
+            return this.sendResponse(res, 500, {error: 'Falha ao criar o usuário'});
         }
     }
 
@@ -100,6 +112,12 @@ class UserCtrl {
         try {
             const reqBody = req.body;
             const user = new User(reqBody);
+
+            const errors = validator.validUser(user);
+
+            if(errors) {
+                return this.sendResponse(res, 400, {error: errors.error});
+            }
 
             const emailExists = await userDAO.findByEmail(user.getEmail());
 
@@ -113,6 +131,7 @@ class UserCtrl {
 
             return this.sendResponse(res, 201, {success: 'Usuário atualizado com sucesso.'});
         } catch (error) {
+            logger.log(`error`, error);
             return this.sendResponse(res, 500, {error: `Falha ao atualizar o usuário.`});
         }
     }
@@ -132,6 +151,7 @@ class UserCtrl {
 
             return this.sendResponse(res, 401, {error: `Senha atual inválida.`});
         } catch (error) {
+            logger.log(`error`, error);
             return this.sendResponse(res, 500, {error: `Falha ao atualizar sua senha.`});
         }
     }
@@ -161,6 +181,7 @@ class UserCtrl {
                 return this.sendResponse(res, 201, user);
             }
         } catch (error) {
+            logger.log(`error`, error);
             return this.sendResponse(res, 500, {error: `Falha ao atualizar a foto.`});
         }
     }
@@ -174,6 +195,7 @@ class UserCtrl {
             return this.sendResponse(res, 200, {success: `Usuário deletado com sucesso.`});
             
         } catch (error) {
+            logger.log(`error`, error);
             return this.sendResponse(res, 500, {erro: `Falha ao deletar o usuário.`});
         }   
     }
@@ -184,6 +206,7 @@ class UserCtrl {
             this.sendResponse(res, 200, users);
             
         } catch (error) {
+            logger.log(`error`, error);
             return this.sendResponse(res, 500, {error: `Houve um erro ao buscar os usuários.`}); 
         }
     }
@@ -196,6 +219,7 @@ class UserCtrl {
 
             return this.sendResponse(res, 200, {success: `Usuário ${userAction} com sucesso.`});
         } catch (error) {
+            logger.log(`error`, error);
             return this.sendResponse(res, 500, {error: `Falha ao mudar o status do usuário.`});
         }
     }
@@ -217,12 +241,12 @@ class UserCtrl {
 
                 const response = `Foi envido uma nova senha temporária em seu e-mail.`;
                 return this.sendResponse(res, 200, {success: response});
+            } 
 
-            } else if(!userData.length && !userData.error){
-                return this.sendResponse(res, 200, {alert: 'E-mail não encontrado'});
-            }
+            return this.sendResponse(res, 404, {error: 'E-mail não encontrado'});
 
         } catch (error) {
+            logger.log(`error`, error);
             return this.sendNewPassword(res, 500, {error: `Falha, tente novamente ou entre em contato com o suporte.`});
         }
     }
@@ -234,9 +258,9 @@ class UserCtrl {
             const user = await userDAO.findById(id);
             this.sendResponse(res, 200, user[0]);
         } catch (error) {
+            logger.log(`error`, error);
             return this.sendResponse(res, 500, {erro: `Houve um erro ao buscar o usuário.`});
         }
-        
     }
 
     sendResponse = (res, statusCode, msg) => {
