@@ -9,6 +9,7 @@ const helperAuth = require("../utilities/HelpersAuth");
 const helperFile = require("../utilities/helperFile");
 const sendEmail = require("./sendEmail");
 const awsUpload = require("../service/awsUpload");
+const validator = require("../utilities/validator");
 
 class UserCtrl {
     infoImg;
