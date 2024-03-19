@@ -186,6 +186,7 @@ class User {
         delete plainObject.createdAt;
         delete plainObject.updatedAt;
         delete plainObject.password;
+        delete plainObject.token;
 
         return await userDAO.updateDAO(plainObject);
     }

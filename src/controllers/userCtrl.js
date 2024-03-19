@@ -103,18 +103,16 @@ class UserCtrl {
             const emailExists = await userDAO.findByEmail(user.getEmail());
 
             if(emailExists.length) {
-                if(emailExists[0].email != user.getEmail()) {
-                    return this.sendResponse(res, 200, {alert: 'Este e-mail já está em uso.'});
+                if(emailExists[0].id != user.getId()) {
+                    return this.sendResponse(res, 409, {error: 'Este e-mail já está em uso.'});
                 }
             }
 
-            const encodedPassword = await helperAuth.encodePassword(user.getPassword());
-            user.setPassword(encodedPassword);
             await user.update();
 
             return this.sendResponse(res, 201, {success: 'Usuário atualizado com sucesso.'});
         } catch (error) {
-            return this.sendResponse(res, 500, {error: `Houve um erro ao atualizar o usuário.`});
+            return this.sendResponse(res, 500, {error: `Falha ao atualizar o usuário.`});
         }
     }
 
