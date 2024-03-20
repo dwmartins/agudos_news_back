@@ -191,6 +191,10 @@ class User {
         return await userDAO.updateDAO(plainObject);
     }
 
+    delete = async () => {
+        await userDAO.deleteDAO(this.getId());
+    }
+
     updatePassword = async () => {
         return await userDAO.updatePasswordDAO(this.getPassword(), this.getId());
     }

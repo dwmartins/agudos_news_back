@@ -189,14 +189,16 @@ class UserCtrl {
     deleteUser = async (req, res) => {
         try {
             const { id } = req.params;
+            const [searchUser] = await userDAO.findById(id);
+            const user = new User(searchUser);
 
-            await userDAO.deleteDAO(id);
+            await user.delete();
 
-            return this.sendResponse(res, 200, {success: `Usuário deletado com sucesso.`});
+            return this.sendResponse(res, 200, {success: `Usuário excluído com sucesso.`});
             
         } catch (error) {
             logger.log(`error`, error);
-            return this.sendResponse(res, 500, {erro: `Falha ao deletar o usuário.`});
+            return this.sendResponse(res, 500, {erro: `Falha ao excluir o usuário.`});
         }   
     }
 
