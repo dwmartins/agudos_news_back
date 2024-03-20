@@ -128,8 +128,11 @@ class UserCtrl {
             }
 
             await user.update();
+            const [updatedUser] = await userDAO.findById(user.getId());
+            delete updatedUser.password;
+            delete updatedUser.token;
 
-            return this.sendResponse(res, 201, {success: 'Usuário atualizado com sucesso.'});
+            return this.sendResponse(res, 201, updatedUser);
         } catch (error) {
             logger.log(`error`, error);
             return this.sendResponse(res, 500, {error: `Falha ao atualizar o usuário.`});
