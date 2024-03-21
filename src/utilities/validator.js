@@ -8,20 +8,36 @@ class Validator {
     regexNumber = /^[0-9]+$/;
 
     validFullText = (text) => {
-        return this.regexFullText.test(text);
+        if(text) {
+            return this.regexFullText.test(text);
+        }
+
+        return true;
     }
 
     validText = (text) => {
-        return validator.isAlpha(text, 'pt-BR', { ignore: 'áàâãéèêíìîóòôõúùûçÁÀÂÃÉÈÊÍÌÎÓÒÔÕÚÙÛÇ ' });
+        if(text) {
+            return validator.isAlpha(text, 'pt-BR', { ignore: 'áàâãéèêíìîóòôõúùûçÁÀÂÃÉÈÊÍÌÎÓÒÔÕÚÙÛÇ ' });
+        }
+
+        return true;
     }
 
     validNumber(number) {
-        const stringValue = String(number);
-        return validator.isNumeric(stringValue);
+        if(number) {
+            const stringValue = String(number);
+            return validator.isNumeric(stringValue)
+        }
+
+        return true;
     }
 
     validEmail = (email) => {
-        return validator.isEmail(email);
+        if(email) {
+            return validator.isEmail(email);
+        }
+
+        return true;
     }
 
     validUser = (user) => {
@@ -29,11 +45,11 @@ class Validator {
             return {error: "Formato do e-mail inválido."};
         }
 
-        if(!this.validFullText(user.getName())) {
+        if(!this.validText(user.getName())) {
             return {error: "O campo 'Nome' contém caracteres inválidos."};
         }
 
-        if(!this.validFullText(user.getLastName())) {
+        if(!this.validText(user.getLastName())) {
             return {error: "O campo 'Sobrenome' contém caracteres inválidos."};
         }
 
