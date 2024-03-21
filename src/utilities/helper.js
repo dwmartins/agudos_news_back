@@ -11,10 +11,10 @@ class Helper {
         return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     }
 
-    getDateAfterThirtyDays = () => {
+    getDateAfterThirtyDays = (days) => {
         const today = new Date();
         const thirtyDaysLater = new Date();
-        thirtyDaysLater.setDate(today.getDate() + 30);
+        thirtyDaysLater.setDate(today.getDate() + days);
 
         return this.getDateTime(thirtyDaysLater);
     }

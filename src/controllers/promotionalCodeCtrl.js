@@ -60,9 +60,9 @@ class PromotionalCodeCtrl {
                 } 
             }
 
-            return this.sendResponse(res, 200, {alert: 'Este código não é valido.'});
+            return this.sendResponse(res, 400, {error: 'Cupom de desconto invalido.'});
         } catch (error) {
-            return this.sendResponse(res, 500, {alert: 'Falha ao aplicar o código promocional.'});
+            return this.sendResponse(res, 500, {error: 'Falha ao aplicar o código promocional.'});
         }
     }
 

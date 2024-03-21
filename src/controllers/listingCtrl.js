@@ -98,7 +98,7 @@ class ListingCtrl {
                 this.infoLogoImage = helperFile.validImg(this.logoImage);
 
                 if(this.infoLogoImage.invalid) {
-                    return this.sendResponse(res, 400, {alert: this.infoLogoImage.invalid});
+                    return this.sendResponse(res, 400, {error: this.infoLogoImage.invalid});
                 }
             }
 
@@ -106,7 +106,7 @@ class ListingCtrl {
                 this.infoCoverImage = helperFile.validImg(this.coverImage);
 
                 if(this.infoCoverImage.invalid) {
-                    return this.sendResponse(res, 400, {alert: this.infoCoverImage.invalid});
+                    return this.sendResponse(res, 400, {error: this.infoCoverImage.invalid});
                 }
                 
             }
@@ -115,7 +115,7 @@ class ListingCtrl {
                 for (let i = 0; i < this.galleryImage.length; i++) {
                     const infoImg = helperFile.validImg(this.galleryImage[i]);
                     if(infoImg.invalid) {
-                        return this.sendResponse(res, 400, {alert: infoImg.invalid});
+                        return this.sendResponse(res, 400, {error: infoImg.invalid});
                     }
                 }
             }
@@ -132,7 +132,7 @@ class ListingCtrl {
                 listing.setStatus("ativo");
             } else {
                 listing.setStatus("pendente");
-                listing.setExpiration(helper.getDateAfterThirtyDays());
+                listing.setExpiration(helper.getDateAfterThirtyDays(31));
             }
 
             await listing.save();
@@ -181,10 +181,10 @@ class ListingCtrl {
                             await listing.update();
                         }
                     } else {
-                        return this.sendResponse(res, 400, {alert: 'Cupom de desconto invalido.'});
+                        return this.sendResponse(res, 400, {error: 'Cupom de desconto invalido.'});
                     }
                 } else {
-                    return this.sendResponse(res, 400, {alert: 'Cupom de desconto invalido.'});
+                    return this.sendResponse(res, 400, {error: 'Cupom de desconto invalido.'});
                 }
             } else {
                 listingPayment.setPayment(plan.getPrice());
