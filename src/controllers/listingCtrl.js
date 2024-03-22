@@ -1,3 +1,4 @@
+const logger = require("../../config/logger");
 const Listing = require("../class/Listing");
 const listingDAO = require("../models/listingDAO");
 const helper = require("../utilities/helper");
@@ -38,8 +39,11 @@ class ListingCtrl {
             if(category) {
                 listings = await listingDAO.findByCategory(category, status);
 
-                for (let i = 0; i < listings.length; i++) {
-                    listings[i].galleryImage = await listingGalleryImgDAO.findByListingId(listings[i].id);
+                if(listings.length) {
+                    for (let i = 0; i < listings.length; i++) {
+                        listings[i].galleryImage = await listingGalleryImgDAO.findByListingId(listings[i].id);
+                        listings[i].reviews = await listingReviewDAO.findByListing(listings[i].id);
+                    }
                 }
 
                 return this.sendResponse(res, 200, listings);
@@ -47,24 +51,38 @@ class ListingCtrl {
 
             if(keywords && keywords != 'null') {
                 listings = await listingDAO.findByKeywords(keywords, status);
-
-                for (let i = 0; i < listings.length; i++) {
-                    listings[i].galleryImage = await listingGalleryImgDAO.findByListingId(listings[i].id);
-
+                
+                if(listings.length) {
+                    for (let i = 0; i < listings.length; i++) {
+                        listings[i].galleryImage = await listingGalleryImgDAO.findByListingId(listings[i].id);
+                        listings[i].reviews = await listingReviewDAO.findByListing(listings[i].id);
+                    }
                 }
+
                 return this.sendResponse(res, 200, listings);
             }
 
             if(listingId) {
                 [listings] = await listingDAO.findById(listingId);
-                listings.galleryImage = await listingGalleryImgDAO.findByListingId(listings.id);
+                if(listings) {
+                    listings.galleryImage = await listingGalleryImgDAO.findByListingId(listings.id);
+                }
 
                 return this.sendResponse(res, 200, listings);
             }
 
             listings = await listingDAO.findAll(status);
+            
+            if(listings.length) {
+                for (let i = 0; i < listings.length; i++) {
+                    listings[i].galleryImage = await listingGalleryImgDAO.findByListingId(listings[i].id);
+                    listings[i].reviews = await listingReviewDAO.findByListing(listings[i].id);
+                }
+            }
+            
             return this.sendResponse(res, 200, listings);
         } catch (error) {
+            logger.log(`error`, error);
             return this.sendResponse(res, 500, {error: 'Houve um erro ao listar os anúncios.'});
         }
     }
@@ -80,6 +98,7 @@ class ListingCtrl {
 
             return this.sendResponse(res, 200, listings);
         } catch (error) {
+            logger.log(`error`, error);
             return this.sendResponse(res, 500, {error: 'Houve um erro ao buscar o anúncio do usuário.'});
         }
     }
@@ -228,6 +247,7 @@ class ListingCtrl {
             
             return this.sendResponse(res, 201, resListing);
         } catch (error) {
+            logger.log(`error`, error);
             return this.sendResponse(res, 500, {error:  'Houve um erro ao criar o anúncio'});
         }
     }
@@ -267,19 +287,9 @@ class ListingCtrl {
             return this.sendResponse(res, 200, {success: 'Anúncio deletado com sucesso.'});
             
         } catch (error) {
+            logger.log(`error`, error);
             return this.sendResponse(res, 500, {error: 'Houve um erro ao delete o anúncio.'});
         }
-    }
-
-    listListings = async (req, res) => {
-        const { status } = req.query;
-        const result = await listingDAO.findAllByStatus(status);
-
-        if(result.error) {
-            return this.sendResponse(res, 500, {error: 'Houve um erro ao buscar os anúncios.'});
-        }
-
-        return this.sendResponse(res, 200, result);        
     }
 
     sendResponse = (res, statusCode, msg) => {
