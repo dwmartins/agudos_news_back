@@ -10,6 +10,7 @@ const helperFile = require("../utilities/helperFile");
 const sendEmail = require("./sendEmail");
 const awsUpload = require("../service/awsUpload");
 const validator = require("../utilities/validator");
+const UploadFileCtrl = require("./uploadFileCtrl");
 
 class UserCtrl {
     infoImg;
@@ -74,10 +75,10 @@ class UserCtrl {
             }
 
             if(img) {
-                this.infoIgm = helperFile.validImg(img);
+                this.infoImg = helperFile.validImg(img);
 
-                if(this.infoIgm.invalid) {
-                    return this.sendResponse(res, 400, {error: this.infoIgm.invalid});
+                if(this.infoImg.invalid) {
+                    return this.sendResponse(res, 400, {error: this.infoImg.invalid});
                 }
             }
 
@@ -89,14 +90,13 @@ class UserCtrl {
             await user.save();
 
             if(img) {
-                const fileName = `${user.getId()}_${user.getName()}`;
-                const imgUrl = `${process.env.URLDOCS}/${process.env.FOLDERIMGUSERS}/${fileName}.${this.infoIgm.extension}`;
-                user.setPhoto_url(imgUrl);
+                const fileName = `${user.getId()}_perfil.${this.infoImg.extension}`;
 
-                await Promise.all([
-                    awsUpload.uploadPhotoUser(img, fileName),
-                    user.update()
-                ]);
+                UploadFileCtrl.uploadFile(img.buffer, fileName, 'user_photos');
+                
+                user.setPhoto_url(fileName);
+
+                await user.update();
             }
 
             await sendEmail.welcome(user.getEmail(), user.getName());
