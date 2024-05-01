@@ -15,4 +15,6 @@ database.json
 googledrive.json
 
 # uploads
-src/uploads
+src/uploads/user_photos
+src/uploads/listing_cover
+src/uploads/listing_gallery

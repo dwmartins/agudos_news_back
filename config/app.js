@@ -36,10 +36,10 @@ createServer = () => {
     app.use('/api/transacoes', transitionRoute);
     app.use('/api/empregos', jobRoute);
 
-    app.use("/files/system_photo", express.static("src/uploads/system_photo"));
-    app.use("/files/user_photos", express.static("src/uploads/user_photos"));
-    app.use("/files/listing_cover", express.static("src/uploads/listing_cover"));
-    app.use("/files/listing_gallery", express.static("src/uploads/listing_gallery"));
+    app.use("/api/files/system_photos", express.static("src/uploads/system_photos"));
+    app.use("/api/files/user_photos", express.static("src/uploads/user_photos"));
+    app.use("/api/files/listing_cover", express.static("src/uploads/listing_cover"));
+    app.use("/api/files/listing_gallery", express.static("src/uploads/listing_gallery"));
 
     app.get('/', (req, res) => {
         res.status(200).sendFile(path.resolve('index.html'));
