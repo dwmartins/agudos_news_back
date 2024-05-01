@@ -92,7 +92,7 @@ class UserCtrl {
             if(img) {
                 const fileName = `${user.getId()}_perfil.${this.infoImg.extension}`;
 
-                UploadFileCtrl.uploadFile(img.buffer, fileName, 'user_photos');
+                UploadFileCtrl.uploadFile(img, fileName, 'user_photos');
                 
                 user.setPhoto(fileName);
 

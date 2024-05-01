@@ -11,7 +11,7 @@ class UploadFileCtrl {
 
         const pathComplete = path.join(`src/uploads/${directory}`, fileName);
 
-        fs.writeFileSync(pathComplete, file);
+        fs.writeFileSync(pathComplete, file.buffer);
     }
 }
 

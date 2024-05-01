@@ -15,6 +15,7 @@ const ListingAndCategory = require("../class/ListingAndCategory");
 const ListingGalleryImg = require("../class/ListingGalleryImg");
 const listingGalleryImgDAO = require("../models/listingGalleryImgDAO");
 const listingReviewDAO = require("../models/listingReviewDAO");
+const UploadFileCtrl = require("./uploadFileCtrl");
 const mime = require("mime-types");
 
 class ListingCtrl {
@@ -212,19 +213,15 @@ class ListingCtrl {
             await listingPayment.save();
 
             if(this.logoImage) {
-                const fileName = `${listing.getId()}_logoImage`;
-                await awsUpload.uploadPhotoListing(this.logoImage, fileName);
-
-                const urlImgLogo = `${this.urlDocs}/${fileName}.${this.infoLogoImage.extension}`;
-                listing.setLogoImage(urlImgLogo);
+                const fileName = `${listing.getId()}_logoImage.${this.infoLogoImage.extension}`;
+                UploadFileCtrl.uploadFile(this.logoImage, fileName, 'listing_logo');
+                listing.setLogoImage(fileName);
             }
 
             if(this.coverImage && (plan.getIsFree() === "N")) {
-                const fileName = `${listing.getId()}_coverImage`;
-                await awsUpload.uploadPhotoListing(this.coverImage, fileName);
-
-                const urlImgCover = `${this.urlDocs}/${fileName}.${this.infoCoverImage.extension}`;
-                listing.setCoverImage(urlImgCover);
+                const fileName = `${listing.getId()}_coverImage.${this.infoCoverImage.extension}`;
+                UploadFileCtrl.uploadFile(this.coverImage, fileName, 'listing_cover');
+                listing.setCoverImage(fileName);
             }
 
             if(this.galleryImage && (plan.getIsFree() === "N")) {
@@ -256,15 +253,16 @@ class ListingCtrl {
         const imgName = `${listing.getId()}_${uuidv4()}`; 
         const contentType = mime.lookup(file.originalname);
         const extension = mime.extension(contentType);
-        await awsUpload.uploadPhotoListing(file, imgName);
+
+        UploadFileCtrl.uploadFile(file, `${imgName}.${extension}`, 'listing_gallery');
 
         const img = {
             listingId: listing.getId(),
-            imgUrl: `${this.urlDocs}/${imgName}.${extension}`
+            imgUrl: `${imgName}.${extension}`
         }
 
         const imgGallery = new ListingGalleryImg(img);
-        imgGallery.save();
+        await imgGallery.save();
     }
 
     updateListing = async (req, res) => {

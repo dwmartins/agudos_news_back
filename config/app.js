@@ -38,6 +38,7 @@ createServer = () => {
 
     app.use("/api/files/system_photos", express.static("src/uploads/system_photos"));
     app.use("/api/files/user_photos", express.static("src/uploads/user_photos"));
+    app.use("/api/files/listing_logo", express.static("src/uploads/listing_logo"));
     app.use("/api/files/listing_cover", express.static("src/uploads/listing_cover"));
     app.use("/api/files/listing_gallery", express.static("src/uploads/listing_gallery"));
 
