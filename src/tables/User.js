@@ -16,7 +16,7 @@ class NewTableUser {
                     token TEXT NOT NULL,
                     active ENUM('Y', 'N') DEFAULT 'Y',
                     user_type VARCHAR(50) NOT NULL,
-                    photo_url VARCHAR(255),
+                    photo TEXT,
                     createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
                     updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP);`
                 );

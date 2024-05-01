@@ -94,7 +94,7 @@ class UserCtrl {
 
                 UploadFileCtrl.uploadFile(img.buffer, fileName, 'user_photos');
                 
-                user.setPhoto_url(fileName);
+                user.setPhoto(fileName);
 
                 await user.update();
             }
@@ -174,7 +174,7 @@ class UserCtrl {
 
                 const fileName = `${user.getId()}_${user.getName()}`;
                 const imgUrl = `${process.env.URLDOCS}/${process.env.FOLDERIMGUSERS}/${fileName}.${this.infoImg.extension}`;
-                user.setPhoto_url(imgUrl);
+                user.setPhoto(imgUrl);
 
                 await Promise.all([
                     awsUpload.uploadPhotoUser(img, fileName),

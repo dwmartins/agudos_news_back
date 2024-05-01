@@ -15,17 +15,9 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db, callback) {
-
   const sql = `
-    ALTER TABLE users 
-    MODIFY COLUMN aboutMe LONGTEXT AFTER photo_url,
-    MODIFY COLUMN address VARCHAR(255) AFTER aboutMe,
-    MODIFY COLUMN complement VARCHAR(255) AFTER address,
-    MODIFY COLUMN country VARCHAR(100) AFTER complement,
-    MODIFY COLUMN state VARCHAR(100) AFTER country,
-    MODIFY COLUMN city VARCHAR(100) AFTER state,
-    MODIFY COLUMN cep VARCHAR(20) AFTER city,
-    MODIFY COLUMN phone VARCHAR(20) AFTER cep
+    ALTER TABLE users
+    CHANGE photo_url photo TEXT;
   `;
 
   db.runSql(sql, function (err) {

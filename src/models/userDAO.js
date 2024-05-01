@@ -53,7 +53,7 @@ class UserDAO {
     }
 
     updateImg = async (imgName, userId) => {
-        const sql = `UPDATE ${this.table} SET photo_url = ? WHERE id = ?`;
+        const sql = `UPDATE ${this.table} SET photo = ? WHERE id = ?`;
         const values = [imgName, userId];
 
         try {

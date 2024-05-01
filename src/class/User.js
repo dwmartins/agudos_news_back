@@ -11,7 +11,7 @@ class User {
         this.token      = user.token;
         this.active     = user.active ? user.active : 'Y';
         this.user_type  = user.user_type ? user.user_type : 'common';
-        this.photo_url  = user.photo_url;
+        this.photo  = user.photo;
         this.aboutMe    = user.aboutMe;
         this.address    = user.address;
         this.complement = user.complement;
@@ -84,12 +84,12 @@ class User {
         this.user_type = user_type;
     }
 
-    getPhoto_url = () => {
-        return this.photo_url;
+    getphoto = () => {
+        return this.photo;
     }
 
-    setPhoto_url = (photo_url) => {
-        this.photo_url = photo_url;
+    setphoto = (photo) => {
+        this.photo = photo;
     }
 
     getAboutMe = () => {
@@ -200,7 +200,7 @@ class User {
     }
 
     updateImg = async () => {
-        await userDAO.updateImg(this.photo_url, this.id);
+        await userDAO.updateImg(this.photo, this.id);
     }
 }
 
