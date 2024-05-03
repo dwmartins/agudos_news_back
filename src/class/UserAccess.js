@@ -6,7 +6,7 @@ class UserAccess {
         this.id = access.id;
         this.user_id = access.user_id;
         this.email = access.email;
-        this.ip = access.email;
+        this.ip = access.ip;
         this.createdAt = access.createdAt;
     }
 
