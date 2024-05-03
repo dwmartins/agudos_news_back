@@ -10,7 +10,7 @@ class UploadFileCtrl {
             fs.mkdirSync(`src/uploads/${directory}`, { recursive: true });
         }
 
-        const pathComplete = path.join(`src/uploads/${directory}`, fileName);
+        const pathComplete = path.join('src', 'uploads', directory, fileName);
 
         fs.writeFileSync(pathComplete, file.buffer);
     }

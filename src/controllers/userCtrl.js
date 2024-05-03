@@ -87,6 +87,7 @@ class UserCtrl {
 
             user.setPassword(encodedPassword);
             user.setToken(token);
+            user.setPhoto('');
             await user.save();
 
             if(img) {
@@ -172,8 +173,11 @@ class UserCtrl {
                     return this.sendResponse(res, 400, {alert: this.infoImg.invalid});
                 }
 
+                if(user.getPhoto()) {
+                    UploadFileCtrl.deleteFile(user.getPhoto(), this.userImagesFolder);
+                }
+                
                 const fileName = `${user.getId()}_perfil.${this.infoImg.extension}`;
-                UploadFileCtrl.deleteFile(user.getPhoto(), this.userImagesFolder);
                 UploadFileCtrl.uploadFile(img, fileName, this.userImagesFolder);
 
                 user.setPhoto(fileName);

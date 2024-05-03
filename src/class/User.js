@@ -1,23 +1,24 @@
 const userDAO = require("../models/userDAO");
+const HelperString = require("../utilities/helperString");
 
 //Table "users";
 class User {
     constructor(user) {
         this.id         = user.id;
-        this.name       = user.name;
-        this.lastName   = user.lastName;
+        this.name       = HelperString.firstLetterCapitalized(user.name);
+        this.lastName   = HelperString.firstLetterCapitalized(user.lastName);
         this.email      = user.email;
         this.password   = user.password;
         this.token      = user.token;
         this.active     = user.active ? user.active : 'Y';
         this.user_type  = user.user_type ? user.user_type : 'common';
-        this.photo  = user.photo;
+        this.photo      = user.photo ? user.photo : '';
         this.aboutMe    = user.aboutMe;
-        this.address    = user.address;
+        this.address    = HelperString.firstLetterCapitalizedAll(user.address);
         this.complement = user.complement;
-        this.country    = user.country;
-        this.state      = user.state;
-        this.city       = user.city;
+        this.country    = HelperString.firstLetterCapitalized(user.country);
+        this.state      = HelperString.firstLetterCapitalized(user.state);
+        this.city       = HelperString.firstLetterCapitalized(user.city);
         this.cep        = user.cep;
         this.phone      = user.phone;
         this.createdAt  = user.createdAt;
@@ -33,7 +34,7 @@ class User {
     }
 
     setName = (name) => {
-        this.name = name;
+        this.name = HelperString.firstLetterCapitalized(name);
     }
 
     getLastName = () => {
@@ -41,7 +42,7 @@ class User {
     }
 
     setLastName = (lastName) => {
-        this.lastName = lastName;
+        this.lastName = HelperString.firstLetterCapitalized(lastName);
     }
 
     getEmail = () => {
@@ -105,7 +106,7 @@ class User {
     }
 
     setAddress = (address) => {
-        this.address = address;
+        this.address = HelperString.firstLetterCapitalized(address);
     }
 
     getComplement = () => {
@@ -121,7 +122,7 @@ class User {
     }
 
     setCountry = (country) => {
-        this.country = country;
+        this.country = HelperString.firstLetterCapitalized(country);
     }
 
     getState = () => {
@@ -129,7 +130,7 @@ class User {
     }
 
     setState = (state) => {
-        this.state = state;
+        this.state = HelperString.firstLetterCapitalized(state);
     }
 
     getCity = () => {
@@ -137,7 +138,7 @@ class User {
     }
 
     setCity = (city) => {
-        this.city = city;
+        this.city = HelperString.firstLetterCapitalized(city);
     }
 
     getCep = () => {

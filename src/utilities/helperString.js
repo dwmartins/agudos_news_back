@@ -11,17 +11,20 @@ class HelperString {
 
     // Retorna com todas as palavras com a primeira letra maiúscula
     firstLetterCapitalizedAll = (text) => {
-        const words = text.split(' ');
 
-        const capitalizedWords = words.map(word => {
-            if (!word || word[0] === word[0].toUpperCase()) {
-              return word;
-            }
-            
-            return word.charAt(0).toUpperCase() + word.slice(1);
-        });
+        if(text) {
+            const words = text.split(' ');
 
-        return capitalizedWords.join(' ');
+            const capitalizedWords = words.map(word => {
+                if (!word || word[0] === word[0].toUpperCase()) {
+                  return word;
+                }
+                
+                return word.charAt(0).toUpperCase() + word.slice(1);
+            });
+    
+            return capitalizedWords.join(' ');
+        }
     }
 }
 
