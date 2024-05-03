@@ -14,6 +14,7 @@ const UploadFileCtrl = require("./uploadFileCtrl");
 
 class UserCtrl {
     infoImg;
+    userImagesFolder = "user_photos";
 
     login = async (req, res) => {
         try {
@@ -92,7 +93,7 @@ class UserCtrl {
             if(img) {
                 const fileName = `${user.getId()}_perfil.${this.infoImg.extension}`;
 
-                UploadFileCtrl.uploadFile(img, fileName, 'user_photos');
+                UploadFileCtrl.uploadFile(img, fileName, this.userImagesFolder);
                 
                 user.setPhoto(fileName);
 
@@ -172,14 +173,12 @@ class UserCtrl {
                     return this.sendResponse(res, 400, {alert: this.infoImg.invalid});
                 }
 
-                const fileName = `${user.getId()}_${user.getName()}`;
-                const imgUrl = `${process.env.URLDOCS}/${process.env.FOLDERIMGUSERS}/${fileName}.${this.infoImg.extension}`;
-                user.setPhoto(imgUrl);
+                const fileName = `${user.getId()}_perfil.${this.infoImg.extension}`;
+                UploadFileCtrl.deleteFile(user.getPhoto(), this.userImagesFolder);
+                UploadFileCtrl.uploadFile(img, fileName, this.userImagesFolder);
 
-                await Promise.all([
-                    awsUpload.uploadPhotoUser(img, fileName),
-                    user.updateImg()
-                ]);
+                user.setPhoto(fileName);
+                user.updateImg();
 
                 return this.sendResponse(res, 201, user);
             }

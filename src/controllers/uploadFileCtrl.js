@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const logger = require('../../config/logger');
 
 
 class UploadFileCtrl {
@@ -12,6 +13,14 @@ class UploadFileCtrl {
         const pathComplete = path.join(`src/uploads/${directory}`, fileName);
 
         fs.writeFileSync(pathComplete, file.buffer);
+    }
+
+    deleteFile = (fileName, directory) => {
+        const filePath = path.join('src', 'uploads', directory, fileName);
+
+        if (fs.existsSync(filePath)) {
+            fs.unlinkSync(filePath);
+        }
     }
 }
 

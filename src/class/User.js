@@ -84,11 +84,11 @@ class User {
         this.user_type = user_type;
     }
 
-    getphoto = () => {
+    getPhoto = () => {
         return this.photo;
     }
 
-    setphoto = (photo) => {
+    setPhoto = (photo) => {
         this.photo = photo;
     }
 
