@@ -8,7 +8,6 @@ const helper = require("../utilities/helper");
 const helperAuth = require("../utilities/HelpersAuth");
 const helperFile = require("../utilities/helperFile");
 const sendEmail = require("./sendEmail");
-const awsUpload = require("../service/awsUpload");
 const validator = require("../utilities/validator");
 const UploadFileCtrl = require("./uploadFileCtrl");
 

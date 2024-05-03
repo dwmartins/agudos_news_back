@@ -5,7 +5,6 @@ const helper = require("../utilities/helper");
 const helperFile = require("../utilities/helperFile");
 const listingPlansDAO = require("../models/listingPlansDAO");
 const ListingPlans = require("../class/ListingPlans");
-const awsUpload = require("../service/awsUpload");
 const { v4: uuidv4 } = require('uuid');
 const ListingPayment = require("../class/ListingPayment");
 const promotionalCodeCtrl = require("../controllers/promotionalCodeCtrl");
@@ -19,8 +18,10 @@ const UploadFileCtrl = require("./uploadFileCtrl");
 const mime = require("mime-types");
 
 class ListingCtrl {
-    ENV = process.env;
-    urlDocs = `${this.ENV.URLDOCS}/${this.ENV.FOLDERIMGLISTING}`;
+
+    logoImageFolderListings = "listing_logo";
+    coverImageFolderListing = "listing_cover";
+    galleryImageFolderListing = "listing_gallery";
 
     logoImage;
     infoLogoImage;
@@ -214,13 +215,13 @@ class ListingCtrl {
 
             if(this.logoImage) {
                 const fileName = `${listing.getId()}_logoImage.${this.infoLogoImage.extension}`;
-                UploadFileCtrl.uploadFile(this.logoImage, fileName, 'listing_logo');
+                UploadFileCtrl.uploadFile(this.logoImage, fileName, this.logoImageFolderListings);
                 listing.setLogoImage(fileName);
             }
 
             if(this.coverImage && (plan.getIsFree() === "N")) {
                 const fileName = `${listing.getId()}_coverImage.${this.infoCoverImage.extension}`;
-                UploadFileCtrl.uploadFile(this.coverImage, fileName, 'listing_cover');
+                UploadFileCtrl.uploadFile(this.coverImage, fileName, this.coverImageFolderListing);
                 listing.setCoverImage(fileName);
             }
 
@@ -254,7 +255,7 @@ class ListingCtrl {
         const contentType = mime.lookup(file.originalname);
         const extension = mime.extension(contentType);
 
-        UploadFileCtrl.uploadFile(file, `${imgName}.${extension}`, 'listing_gallery');
+        UploadFileCtrl.uploadFile(file, `${imgName}.${extension}`, this.galleryImageFolderListing);
 
         const img = {
             listingId: listing.getId(),
