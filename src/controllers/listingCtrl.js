@@ -267,16 +267,20 @@ class ListingCtrl {
     }
 
     updateListing = async (req, res) => {
-        const listingBody = req.body;
+        try {
+            const data = req.body;            
+            const listing = new Listing(data);
 
-        const listing = new Listing(listingBody);
-        const result = await listing.update();
+            if(listing.getKeywords()) {
+                listing.setKeywords(JSON.stringify(listing.getKeywords()));
+            }
 
-        if(result.error) {
-            return this.sendResponse(res, 500, {error: 'Houve um erro ao atualizar o anúncio.'});
-        }
-
-        return this.sendResponse(res, 200, {success: 'Anúncio atualizado com sucesso.'});
+            await listing.update();
+            return this.sendResponse(res, 200, {success: 'Anúncio atualizado com sucesso.'});
+        } catch (error) {
+            logger.log(`error`, error);
+            return this.sendResponse(res, 500, {error:  'Houve um erro ao atualizar o anúncio'});
+        }    
     }
 
     deleteListing = async (req, res) => {

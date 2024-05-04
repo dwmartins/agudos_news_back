@@ -289,6 +289,13 @@ class Listing {
             Object.entries(this).filter(([key, value]) => typeof value !== 'function')
         );
 
+        delete plainObject.expiration;
+        delete plainObject.plan;
+        delete plainObject.planId;
+        delete plainObject.status;
+        delete plainObject.logoImage;
+        delete plainObject.coverImage;
+        delete plainObject.observation;
         delete plainObject.createdAt;
         delete plainObject.updatedAt;
 
