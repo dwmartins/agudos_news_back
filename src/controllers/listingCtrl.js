@@ -232,7 +232,7 @@ class ListingCtrl {
             }
 
             if(this.logoImage || this.coverImage || this.galleryImage) {
-                await listing.update();
+                await listing.updateImages();
             }
 
             const resListing = {

@@ -306,6 +306,10 @@ class Listing {
         return await listingDAO.updateStatusDAO(this.getStatus(), this.getId());
     }
 
+    updateImages = async () => {
+        return await listingDAO.updateImagesDAO(this.getLogoImage(), this.getCoverImage(), this.getId());
+    }
+
     delete = async () => {
         return await listingDAO.deleteDAO(this.getId());
     }

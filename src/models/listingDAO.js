@@ -52,6 +52,20 @@ class ListingDAO {
         }
     }
 
+    updateImagesDAO = async (logoImage, coverImage, listingId) => {
+        try {
+            const sql = `UPDATE listing SET logoImage = ?, coverImage = ? WHERE id = ?`;
+
+            let values = [logoImage, coverImage,listingId]; 
+            await this.conn.query(sql, values);
+            return true;
+
+        } catch (error) {
+            logger.log('error', error);
+            throw new Error(error);
+        }
+    }
+
     deleteDAO = async (id) => { 
         try {
             const sql = `DELETE FROM listing WHERE id = ?`;
