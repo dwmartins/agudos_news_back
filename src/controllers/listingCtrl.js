@@ -285,8 +285,15 @@ class ListingCtrl {
 
     deleteListing = async (req, res) => {
         try {
-            const id = parseInt(req.params.id);
-            await listingDAO.deleteDAO(id);
+            const [data] = await listingDAO.findById(parseInt(req.params.id));
+            const listing = new Listing(data);
+
+            UploadFileCtrl.deleteFile(listing.getLogoImage(), this.logoImageFolderListings);
+            UploadFileCtrl.deleteFile(listing.getCoverImage(), this.coverImageFolderListing);
+
+            // Excluir as imagens de galeria.
+
+            await listing.delete();
             return this.sendResponse(res, 200, {success: 'Anúncio deletado com sucesso.'});
             
         } catch (error) {

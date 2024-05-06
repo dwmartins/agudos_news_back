@@ -197,6 +197,8 @@ class UserCtrl {
             const [searchUser] = await userDAO.findById(id);
             const user = new User(searchUser);
 
+            UploadFileCtrl.deleteFile(user.getPhoto(), this.userImagesFolder)
+
             await user.delete();
 
             return this.sendResponse(res, 200, {success: `Usuário excluído com sucesso.`});
