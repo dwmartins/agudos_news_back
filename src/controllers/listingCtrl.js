@@ -199,7 +199,7 @@ class ListingCtrl {
                             listingPayment.setPayment(0);
                             listingPayment.setPaymentDate(new Date());
 
-                            await listing.update();
+                            await listing.updateStatus();
                         }
                     } else {
                         return this.sendResponse(res, 400, {error: 'Cupom de desconto invalido.'});

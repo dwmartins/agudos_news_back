@@ -302,6 +302,10 @@ class Listing {
         return await listingDAO.updateDAO(plainObject);
     }
 
+    updateStatus = async () => {
+        return await listingDAO.updateStatusDAO(this.getStatus(), this.getId());
+    }
+
     delete = async () => {
         return await listingDAO.deleteDAO(this.getId());
     }

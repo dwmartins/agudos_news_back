@@ -38,6 +38,20 @@ class ListingDAO {
         }
     }
 
+    updateStatusDAO = async (status, listingId) => {
+        try {
+            const sql = `UPDATE listing SET status = ? WHERE id = ?`;
+
+            let values = [status, listingId]; 
+            await this.conn.query(sql, values);
+            return true;
+
+        } catch (error) {
+            logger.log('error', error);
+            throw new Error(error);
+        }
+    }
+
     deleteDAO = async (id) => { 
         try {
             const sql = `DELETE FROM listing WHERE id = ?`;
