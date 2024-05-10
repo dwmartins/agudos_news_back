@@ -333,6 +333,36 @@ class ListingCtrl {
         }
     }
 
+    updateCoverImage = async (req, res) => {
+        try {
+            if(req.file) {
+                this.coverImage = req.file ? req.file : null;
+            }
+    
+            if(this.coverImage) {
+                this.infoCoverImage = helperFile.validImg(this.coverImage);
+    
+                if(this.infoCoverImage.invalid) {
+                    return this.sendResponse(res, 400, {error: this.infoCoverImage.invalid});
+                }
+    
+                const [data] = await listingDAO.findById(req.params.id);
+                const listing = new Listing(data);
+    
+                UploadFileCtrl.deleteFile(listing.getCoverImage(), this.coverImageFolderListing);
+                UploadFileCtrl.uploadFile(this.coverImage, listing.getCoverImage(), this.coverImageFolderListing);
+    
+                return this.sendResponse(res, 200, {success: 'Imagem de capa atualiza com sucesso.'});
+            }
+    
+            return this.sendResponse(res, 400, {error: 'É necessário enviar pelo menos uma imagem para prosseguir.'});
+
+        } catch (error) {
+            logger.log(`error`, error);
+            return this.sendResponse(res, 500, {error: 'Houve um erro ao atualizar a imagem de capa do anúncio.'});
+        }
+    }
+
     sendResponse = (res, statusCode, msg) => {
         res.status(statusCode).json(msg);
     }

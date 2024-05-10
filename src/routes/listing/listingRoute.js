@@ -15,6 +15,7 @@ route.post("/", userMiddleware.authenticateToken, upload.fields([{name: 'logoIma
 route.put("/", userMiddleware.authenticateToken, listingCtrl.updateListing);
 route.delete("/:id", userMiddleware.authenticateToken, listingCtrl.deleteListing);
 
-route.put("/updatelogo/:id", userMiddleware.authenticateToken, upload.single('logoImage'), listingCtrl.updateLogoImage)
+route.put("/updatelogoimage/:id", userMiddleware.authenticateToken, upload.single('logoImage'), listingCtrl.updateLogoImage)
+route.put("/updatecoverimage/:id", userMiddleware.authenticateToken, upload.single('coverImage'), listingCtrl.updateCoverImage)
 
 module.exports = route;
