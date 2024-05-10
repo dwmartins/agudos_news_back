@@ -47,7 +47,7 @@ createServer = () => {
     });
 
     app.use((req, res, next) => {
-        const error = new Error('Rota não encontrada!');
+        const error = new Error(`Rota não encontrada - BaseUrl: '${req.originalUrl}', Method: '${req.method}'`);
         error.status = 404;
         next(error);
     });

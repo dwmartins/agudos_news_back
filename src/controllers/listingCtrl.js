@@ -302,6 +302,37 @@ class ListingCtrl {
         }
     }
 
+    updateLogoImage = async (req, res) => {
+        try {
+            if(req.file) {
+                this.logoImage = req.file ? req.file : null;
+            }
+
+            if(this.logoImage) {
+                this.infoLogoImage = helperFile.validImg(this.logoImage);
+
+                if(this.infoLogoImage.invalid) {
+                    return this.sendResponse(res, 400, {error: this.infoLogoImage.invalid});
+                }
+
+                const [data] = await listingDAO.findById(req.params.id);
+                const listing = new Listing(data);
+
+                UploadFileCtrl.deleteFile(listing.getLogoImage(), this.logoImageFolderListings);
+                UploadFileCtrl.uploadFile(this.logoImage, listing.getLogoImage(), this.logoImageFolderListings);
+
+                return this.sendResponse(res, 200, {success: 'logotipo atualizo com sucesso.'});
+            } 
+
+
+            return this.sendResponse(res, 400, {error: 'É necessário enviar pelo menos uma imagem para prosseguir.'});
+
+        } catch (error) {
+            logger.log(`error`, error);
+            return this.sendResponse(res, 500, {error: 'Houve um erro ao atualizar o logotipo do anúncio.'});
+        }
+    }
+
     sendResponse = (res, statusCode, msg) => {
         res.status(statusCode).json(msg);
     }

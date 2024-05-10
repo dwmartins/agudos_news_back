@@ -257,7 +257,7 @@ class Listing {
     }
 
     /**
-     * // 1920 x 480 px (JPG, JPEG or PNG) max 5MB
+     * // 1526 x 430 px (JPG, JPEG or PNG) max 5MB
      * @returns  String/ image URL
      */
     getCoverImage = () => {
