@@ -199,7 +199,7 @@ class ListingCtrl {
                             listingPayment.setPayment(0);
                             listingPayment.setPaymentDate(new Date());
 
-                            await listing.updateStatus();
+                            await listingDAO.updateStatusDAO(listing.getStatus(), listing.getId());
                         }
                     } else {
                         return this.sendResponse(res, 400, {error: 'Cupom de desconto invalido.'});
@@ -232,7 +232,7 @@ class ListingCtrl {
             }
 
             if(this.logoImage || this.coverImage || this.galleryImage) {
-                await listing.updateImages();
+                await listingDAO.updateAllImagesDAO(listing.getLogoImage(), listing.getCoverImage(), listing.getId());
             }
 
             const resListing = {
@@ -288,8 +288,13 @@ class ListingCtrl {
             const [data] = await listingDAO.findById(parseInt(req.params.id));
             const listing = new Listing(data);
 
-            UploadFileCtrl.deleteFile(listing.getLogoImage(), this.logoImageFolderListings);
-            UploadFileCtrl.deleteFile(listing.getCoverImage(), this.coverImageFolderListing);
+            if(listing.getLogoImage()) {
+                UploadFileCtrl.deleteFile(listing.getLogoImage(), this.logoImageFolderListings);
+            }
+
+            if(listing.getCoverImage()) {
+                UploadFileCtrl.deleteFile(listing.getCoverImage(), this.coverImageFolderListing);
+            }
 
             // Excluir as imagens de galeria.
 
@@ -318,8 +323,15 @@ class ListingCtrl {
                 const [data] = await listingDAO.findById(req.params.id);
                 const listing = new Listing(data);
 
-                UploadFileCtrl.deleteFile(listing.getLogoImage(), this.logoImageFolderListings);
-                UploadFileCtrl.uploadFile(this.logoImage, listing.getLogoImage(), this.logoImageFolderListings);
+                if(listing.getLogoImage()) {
+                    UploadFileCtrl.deleteFile(listing.getLogoImage(), this.logoImageFolderListings);
+                }
+
+                const fileName = `${listing.getId()}_logoImage.${this.infoLogoImage.extension}`;
+                UploadFileCtrl.uploadFile(this.logoImage, fileName, this.logoImageFolderListings);
+
+                listing.setLogoImage(fileName);
+                await listingDAO.updateLogoImageDAO(fileName, listing.getId());
 
                 return this.sendResponse(res, 200, {success: 'logotipo atualizo com sucesso.'});
             } 
@@ -330,6 +342,28 @@ class ListingCtrl {
         } catch (error) {
             logger.log(`error`, error);
             return this.sendResponse(res, 500, {error: 'Houve um erro ao atualizar o logotipo do anúncio.'});
+        }
+    }
+
+    deleteLogoImage = async (req, res) => {
+        try {
+            const [data] = await listingDAO.findById(req.params.id);
+            const listing = new Listing(data);
+            
+            if(listing.getLogoImage()) {
+                UploadFileCtrl.deleteFile(listing.getLogoImage(), this.logoImageFolderListings);
+
+                listing.setLogoImage('');
+                await listingDAO.updateLogoImageDAO(listing.getLogoImage(), listing.getId());
+
+                return this.sendResponse(res, 200, {success: 'logotipo deletado com sucesso.'});
+            }
+            
+            return this.sendResponse(res, 400, {error: 'Logotipo não encontrada.'});
+
+        } catch (error) {
+            logger.log(`error`, error);
+            return this.sendResponse(res, 500, {error: 'Houve um erro ao deletar o logotipo do anúncio.'});
         }
     }
 
@@ -348,11 +382,19 @@ class ListingCtrl {
     
                 const [data] = await listingDAO.findById(req.params.id);
                 const listing = new Listing(data);
-    
-                UploadFileCtrl.deleteFile(listing.getCoverImage(), this.coverImageFolderListing);
-                UploadFileCtrl.uploadFile(this.coverImage, listing.getCoverImage(), this.coverImageFolderListing);
-    
-                return this.sendResponse(res, 200, {success: 'Imagem de capa atualiza com sucesso.'});
+
+                if(listing.getCoverImage()) {
+                    UploadFileCtrl.deleteFile(listing.getCoverImage(), this.coverImageFolderListing);
+                }
+
+                const fileName = `${listing.getId()}_coverImage.${this.infoCoverImage.extension}`;
+                UploadFileCtrl.uploadFile(this.coverImage, fileName, this.coverImageFolderListing);
+
+
+                listing.setCoverImage(fileName);
+                await listingDAO.updateCoverImageDAO(fileName, listing.getId());
+
+                return this.sendResponse(res, 200, {success: 'Imagem de capa atualizada com sucesso.'});
             }
     
             return this.sendResponse(res, 400, {error: 'É necessário enviar pelo menos uma imagem para prosseguir.'});
@@ -360,6 +402,28 @@ class ListingCtrl {
         } catch (error) {
             logger.log(`error`, error);
             return this.sendResponse(res, 500, {error: 'Houve um erro ao atualizar a imagem de capa do anúncio.'});
+        }
+    }
+
+    deleteCoverImage = async (req, res) => {
+        try {
+            const [data] = await listingDAO.findById(req.params.id);
+            const listing = new Listing(data);
+            
+            if(listing.getCoverImage()) {
+                UploadFileCtrl.deleteFile(listing.getCoverImage(), this.coverImageFolderListing);
+
+                listing.setCoverImage('');
+                await listingDAO.updateCoverImageDAO(listing.getCoverImage(), listing.getId());
+
+                return this.sendResponse(res, 200, {success: 'Imagem de capa deletada com sucesso.'});
+            }
+            
+            return this.sendResponse(res, 400, {error: 'Imagem de capa não encontrada.'});
+            
+        } catch (error) {
+            logger.log(`error`, error);
+            return this.sendResponse(res, 500, {error: 'Houve um erro ao deletar a imagem de capa do anúncio.'});
         }
     }
 

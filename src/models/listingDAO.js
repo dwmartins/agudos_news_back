@@ -52,7 +52,35 @@ class ListingDAO {
         }
     }
 
-    updateImagesDAO = async (logoImage, coverImage, listingId) => {
+    updateLogoImageDAO = async (logoImage, listingId) => {
+        try {
+            const sql = `UPDATE listing SET logoImage = ? WHERE id = ?`;
+
+            let values = [logoImage, listingId]; 
+            await this.conn.query(sql, values);
+            return true;
+
+        } catch (error) {
+            logger.log('error', error);
+            throw new Error(error);
+        }
+    }
+
+    updateCoverImageDAO = async (coverImage, listingId) => {
+        try {
+            const sql = `UPDATE listing SET coverImage = ? WHERE id = ?`;
+
+            let values = [coverImage, listingId]; 
+            await this.conn.query(sql, values);
+            return true;
+
+        } catch (error) {
+            logger.log('error', error);
+            throw new Error(error);
+        }
+    }
+
+    updateAllImagesDAO = async (logoImage, coverImage, listingId) => {
         try {
             const sql = `UPDATE listing SET logoImage = ?, coverImage = ? WHERE id = ?`;
 
